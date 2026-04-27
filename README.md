@@ -3,53 +3,56 @@
 The SteenCorp project is a comprehensive, virtualized Windows Enterprise environment. This lab serves as a functional proof-of-concept for core system administration tasks, including identity management, platform migration, and automated provisioning.
 
 ## Phase 1: Core Identity & Management
-🛠 The Technical Pivot: VirtualBox to VMware
-Initially launched in Oracle VirtualBox, the project encountered critical hypervisor display driver failures (Black Screen of Death) during Windows 11 provisioning.
+Initially launched in Oracle VirtualBox, the project encountered critical hypervisor failures (Black Screen of Death) during Windows 11 provisioning.
 
-Troubleshooting Action: Decided to demote the original Domain Controller and perform a full infrastructure migration to VMware Workstation.
+Troubleshooting Action: Performed a full infrastructure migration to VMware Workstation.
 
-Result: Successfully re-established the SteenCorp.Local forest with improved hardware acceleration and network stability.
+Recovery Strategy: Leveraged a "Script-First" approach to quickly re-establish the domain environment on the new platform, ensuring consistency and speed.
 
 Forced removal of the initial domain controller to facilitate a clean migration to VMware.
 
-## Active Directory Architecture & Automation
-Rather than manual entry, I utilized PowerShell scripting to ensure the environment was "Production-Ready" and scalable from Day 1.
+## Automation & Infrastructure as Code(IaC)
+To ensure the environment was "Production-Ready" and easily repeatable, I developed a series of PowerShell scripts to handle the heavy lifting of domain configuration.
 
-Identity Management: Built a logical Organizational Unit (OU) structure under SteenCorp_HQ to manage Departments, Groups, and Workstations.
+1. Directory & Group Provisioning
+Instead of manual OU creation, I authored scripts to build the entire organizational hierarchy and security group infrastructure instantly.
 
-Security Group Strategy: Implemented departmental security groups (e.g., Sales_Users, IT_Staff) to support Role-Based Access Control (RBAC).
+Script: Create-OUs.ps1 - Provisions the SteenCorp_HQ root and departmental sub-OUs (IT, Sales, HR, Accounting, Marketing).
 
-Bulk Provisioning: Authored and executed a Master Automation script to ingest 20+ user objects into their respective OUs and automatically assign them to appropriate security groups.
+Script: Deploy-Groups.ps1 - Establishes departmental security groups to support Role-Based Access Control (RBAC).
 
-Departmental OU hierarchy designed for granular policy application.
+2. Bulk User Ingestion (The Office Simulation)
+To test the environment at scale, I simulated a 20+ employee workforce using a CSV-driven ingestion process.
 
-Provisioned Security Groups to manage resource access via group membership.
+Data Source: Employees.csv - Contains custom objects for employees like Jim Halpert and Dwight Schrute.
 
-The "Master Ingestion" script in action, populating the domain and verifying group membership simultaneously.
+Script: Bulk-Ingestion.ps1 - Automates user creation, assigns secure initial passwords, and maps users to their correct departmental OUs and Security Groups simultaneously.
+
+PowerShell automation script authoring in progress.
+
+Successful bulk ingestion of employee data from CSV into Active Directory.
 
 ## Network & Domain Validation
-Before deploying policies, I performed a "Handshake Validation" to ensure the network stack was resilient.
+Before joining clients to the domain, I automated the local network security posture to ensure reliable communication.
 
-Network Connectivity: Configured static IP addressing (192.168.10.10) and verified low-latency ICMP handshakes between the workstation and DC.
+ICMP Validation: Developed a script to enable ICMP (Ping) through the Windows Firewall, allowing for network diagnostics without compromising the overall security profile.
 
-Lifecycle Management: Successfully performed a Domain Join for SC-WIN11-WK01.
+Domain Integration: Successfully performed a Domain Join for SC-WIN11-WK01.
 
-Privilege Hardening: Verified that Domain Admins were correctly nested into the local Administrators group, ensuring administrative control without compromising the Principle of Least Privilege for standard users.
+Privilege Verification: Verified that Domain Admins were correctly nested into the local Administrators group, ensuring administrative control while maintaining the Principle of Least Privilege for standard users.
 
 Verified Layer 3 connectivity between the Windows 11 client and the Domain Controller.
 
 Official domain join confirmation for the Windows 11 workstation.
 
-Security verification: Ensuring Domain Admins have the correct local permissions.
-
 ## Final Operational Success
-Phase 1 concluded with the successful deployment of a Group Policy Object (GPO) to enforce corporate branding and desktop environments.
+Phase 1 concluded with the successful deployment of a Group Policy Object (GPO) to enforce corporate branding and desktop environments across the new infrastructure.
 
-Validation: Successfully logged in as a standard user (steencorp\jhalpert).
+Validation: Logged in as steencorp\jhalpert.
 
-Enforcement: Confirmed that the "SteenCorp" wallpaper GPO applied automatically upon login.
+Enforcement: Confirmed that the "SteenCorp" wallpaper GPO applied automatically.
 
-Security Check: Verified that standard users were restricted from executing administrative network commands (net session), confirming the security baseline is active.
+Security Baseline: Verified standard users are restricted from administrative commands, confirming a healthy security posture.
 
 Successful login for Jim Halpert with corporate GPO branding and access restrictions in place.
 
