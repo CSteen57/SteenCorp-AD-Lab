@@ -35,13 +35,13 @@ To ensure the environment was scalable and repeatable, I utilized a "Script-Firs
 <details>
   <summary> View Automation & AD Architecture</summary>
 
-  ![OU Structure](Images/01_SteenCorp_OU_Structure.png)
+  ![OU Structure](Images/01%SteenCorp%OU%Structure.png)
   *The logical Organizational Unit hierarchy designed for SteenCorp HQ.*
 
-  ![Security Group Deployment](Images/02_Security_Group_Deployment.png)
+  ![Security Group Deployment](Images/02%Security%Group%Deployment.png)
   *Provisioning departmental security groups to manage resource access.*
 
-  ![Master Automation Proof](Images/04_Master_Automation_Proof.png)
+  ![Master Automation Proof](Images/04%Master%Automation%Proof.png)
   *The Bulk Ingestion script in action, populating the domain in seconds.*
 
   ![Automation Validation](Images/Screenshot%202026-04-27%20113307.png)
