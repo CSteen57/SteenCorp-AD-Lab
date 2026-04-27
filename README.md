@@ -47,12 +47,28 @@ Initially built the lab in VirtualBox but encountered Windows 11 display driver 
 
 Used a script-first approach to simulate real-world onboarding and scalability.
 
-**Key Automations:**
-- Created OU structure programmatically
-- Generated large employee dataset via CSV
-- Bulk-created users and assigned to correct departments
-- Automatically added users to security groups
+### Key Scripts
 
+- [OU Infrastructure Setup](./Scripts/SteenCorp%20OU%20Infrastructure%20Setup.ps1)  
+  → Builds the full Organizational Unit structure for the enterprise
+
+- [Security Group Deployment](./Scripts/SteenCorp%20Group%20Infrastructure.ps1)  
+  → Creates and organizes all departmental security groups
+
+- [Employee CSV Generator](./Scripts/Create%20Mega%20SteenCorp%20Employee%20CSV.ps1)  
+  → Generates large-scale test data for user provisioning
+
+- [Bulk User Provisioning Script](./Scripts/SteenCorp%20Final%20Bulk%20Ingestion.ps1)  
+  → Imports CSV data to create users, assign OUs, and apply group membership
+
+---
+
+### What This Demonstrates
+
+- Infrastructure as Code (IaC) mindset
+- Scalable user onboarding process
+- Automated role-based access control (RBAC)
+- Reduced manual administrative effort
 <details>
 <summary>View Automation & AD Architecture</summary>
 
