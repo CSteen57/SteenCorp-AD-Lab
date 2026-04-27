@@ -65,9 +65,6 @@ Once the directory was live, I performed a "Handshake Validation" to ensure the 
 
   ![Sales Dept Verification](Images/03_Sales_Department_Live.png)
   *Confirmed the Sales department is fully populated with the correct user objects.*
-
-  ![Departmental Verification](Images/Screenshot%202026-04-27%20113314.png)
-  *Final audit of the automated user ingestion across departmental OUs.*
 </details>
 
 ---
