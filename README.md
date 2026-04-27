@@ -35,7 +35,7 @@ To ensure the environment was scalable and repeatable, I utilized a "Script-Firs
 <details>
   <summary> View Automation & AD Architecture</summary>
 
-  ![OU Structure](Images/01%SteenCorp%OU%Structure.png)
+  ![OU Structure](Images/01_SteenCorp_OU_Structure.png)
   *The logical Organizational Unit hierarchy designed for SteenCorp HQ.*
 
   ![Security Group Deployment](Images/02%Security%Group%Deployment.png)
