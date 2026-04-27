@@ -75,7 +75,7 @@ Phase 1 concluded with the successful application of **Group Policy Objects (GPO
 * **Branding:** Deployed the "SteenCorp" corporate wallpaper across the domain.
 * **Security:** Verified that standard users (e.g., `jhalpert`) were restricted from administrative system changes.
 
-![Final Success](Images/V3_Final_Operational_Success.png.jpg)
+![Final Success](Images/V3_Final_Operational_Success.png.png)
 *Successful login for `steencorp\jhalpert` with GPO-enforced wallpaper and security restrictions active.*
 
 ---
