@@ -1,9 +1,9 @@
 # SteenCorp Enterprise Infrastructure Lab
 
-## 📌 Project Overview
+## Project Overview
 The **SteenCorp** project is a comprehensive, virtualized Windows Enterprise environment. This lab serves as a functional proof-of-concept for core system administration tasks, including identity management, platform migration, and high-scale automated provisioning via PowerShell.
 
-## 🛠 Phase 1: Foundation & Platform Migration
+## Phase 1: Foundation & Platform Migration
 
 ### The Technical Pivot: VirtualBox to VMware
 The project initially launched in Oracle VirtualBox. However, during the provisioning of the Windows 11 client, I encountered persistent display driver failures (Black Screen of Death).
@@ -23,7 +23,7 @@ The project initially launched in Oracle VirtualBox. However, during the provisi
 
 ---
 
-## 💻 Infrastructure as Code (PowerShell Automation)
+## Infrastructure as Code (PowerShell Automation)
 To ensure the environment was scalable and repeatable, I utilized a "Script-First" approach to provision the entire domain.
 
 **Featured Scripts:**
@@ -51,7 +51,7 @@ To ensure the environment was scalable and repeatable, I utilized a "Script-Firs
 
 ---
 
-## 🌐 Network & Domain Validation
+## Network & Domain Validation
 Once the directory was live, I performed a "Handshake Validation" to ensure the network stack was resilient and the client integration was complete.
 
 * **Connectivity:** Configured static IP addressing and verified ICMP handshakes.
@@ -76,7 +76,7 @@ Once the directory was live, I performed a "Handshake Validation" to ensure the 
 
 ---
 
-## ✅ Final Operational Success (GPO Deployment)
+##  Final Operational Success (GPO Deployment)
 Phase 1 concluded with the successful application of **Group Policy Objects (GPOs)** to enforce corporate branding and security baselines.
 
 * **Branding:** Deployed the "SteenCorp" corporate wallpaper across the domain.
