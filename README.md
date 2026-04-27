@@ -57,7 +57,7 @@ Once the directory was live, I performed a "Handshake Validation" to ensure the 
 <details>
   <summary> View Network & Verification Evidence</summary>
 
-  ![Network Handshake](Images/V2_05_Network_Handshake_Success.jpg)
+  ![Network Handshake](Images/V2_05_Network_Handshake_Success.png)
   *Verified Layer 3 connectivity between the workstation and the Domain Controller.*
 
   ![Domain Join Confirmation](Images/V2_06_Domain_Verification_Final.png)
