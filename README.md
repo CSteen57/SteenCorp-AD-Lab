@@ -16,8 +16,9 @@ Built a simulated enterprise Active Directory environment using Windows Server 2
 - Designed and implemented Active Directory OU structure (Departments, Groups, Workstations, Admins)
 - Automated user creation and group assignment using PowerShell scripts and CSV ingestion
 - Configured security groups to simulate role-based access control (RBAC)
-- Joined Windows 11 client to domain and validated authentication
-- Tested permissions and enforced least privilege access
+- Engineered a centralized file infrastructure with departmental security silos
+- Deployed Group Policy Objects (GPOs) to automate environment configurations and resource mapping
+- Joined Windows 11 client to domain and validated authentication and permissions
 
 ---
 
@@ -69,6 +70,7 @@ Used a script-first approach to simulate real-world onboarding and scalability.
 - Scalable user onboarding process
 - Automated role-based access control (RBAC)
 - Reduced manual administrative effort
+
 <details>
 <summary>View Automation & AD Architecture</summary>
 
@@ -82,14 +84,39 @@ Used a script-first approach to simulate real-world onboarding and scalability.
 
 ---
 
+## Phase 2: Automated Resource Management (RBAC & GPO)
+
+Established a centralized file infrastructure with departmental security silos, automated via Group Policy Preferences (GPP).
+
+### Key Achievements
+- **Secure File Services:** Established a centralized root share (`SteenCorp_Shares`) with dedicated sub-folders for HR, IT, and Sales.
+- **RBAC Strategy:** Implemented the "Open Gate, Locked Door" model—Share permissions for `Authenticated Users` with strict **NTFS Security Permissions** at the folder level.
+- **Inheritance Management:** Manually disabled permission inheritance to ensure data privacy between departments.
+- **Drive Map Automation:** Engineered and linked department-specific GPOs to Department OUs to automatically mount the **S: Drive** upon user login.
+
+<details>
+<summary>View Resource & Policy Configuration</summary>
+
+| Task | Configuration Evidence |
+| :--- | :--- |
+| **Physical Directory** | ![Directory](Images/Physical%20Directory%20Structure%20for%20Departmental%20Shares.png) |
+| **Share Permissions** | ![RBAC](Images/Applying%20Role-Based%20Access%20Control%20to%20Network%20Shares.png) |
+| **NTFS Security Audit** | ![NTFS Audit](Images/NTFS_Security_Inheritance_Audit.png.png) |
+| **GPO Tree Linking** | ![GPO Tree](Images/Organizational%20Unit%20Hierarchy%20and%20Target-Linked%20Group%20Policies.png) |
+| **Drive Map Logic** | ![Map Settings](Images/GPO%20Drive%20Map%20COnfiguration%20for%20Sales%20Department.png) |
+
+</details>
+
+---
+
 ## Validation & Testing
 
 Validated the environment from a real client perspective:
 
 - Verified network connectivity (ICMP / ping)
 - Confirmed successful domain join
-- Audited user placement across departments
-- Tested permissions and access restrictions
+- Audited user placement and group membership across departments
+- Tested permissions and enforced least privilege access restrictions
 
 <details>
 <summary>View Validation Evidence</summary>
@@ -99,6 +126,10 @@ Validated the environment from a real client perspective:
 ![Domain Join](Images/V2_06_Domain_Verification_Final.png)
 
 ![Department Verification](Images/03_Sales_Department_Live.png)
+
+#### **Live Multi-Departmental Validation**
+Verification of **Mike Ross (HR)** successfully receiving his unique S: Drive. Session identity is confirmed via `whoami`, and policy application is verified via `gpresult /r`.
+![HR Validation](Images/Multi-Departmental%20Resource%20Provisioning%20and%20RBAC%20Validation.png)
 
 </details>
 
@@ -122,6 +153,5 @@ Validated the environment from a real client perspective:
 - Testing from the end-user perspective is essential for validation
 
 ## Future Roadmap
-* **Phase 2:** Automated Resource Management (Mapped Drives & Software Deployment).
 * **Phase 3:** Security Operations (Sysmon Deployment & Event Log Analysis).
 * **Phase 4:** Remote Access Infrastructure (VPN Configuration & Routing).
