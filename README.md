@@ -44,7 +44,7 @@ To ensure the environment was scalable and repeatable, I utilized a "Script-Firs
   ![Master Automation Proof](Images/04_Master_Automation_Proof.png)
   *The Bulk Ingestion script in action, populating the domain in seconds.*
 
-  ![Automation Validation](Images/Screenshot%202026-04-27_20113307.png)
+  ![Automation Validation](Images/Screenshot_202026-04-27_20113307.png)
   *Validating the script-driven creation of the user database within Active Directory.*
 </details>
 
