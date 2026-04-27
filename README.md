@@ -12,7 +12,7 @@ The project initially launched in Oracle VirtualBox. However, during the provisi
 * **Outcome:** Successfully re-established the `SteenCorp.Local` forest with improved hardware acceleration and network stability.
 
 <details>
-  <summary>📸 View Migration Evidence</summary>
+  <summary> View Migration Evidence</summary>
 
   ![VirtualBox Boot Error](Images/Screenshot%202026-04-13%20120545.png)
   *Initial VirtualBox display failure that triggered the platform migration.*
@@ -23,28 +23,28 @@ The project initially launched in Oracle VirtualBox. However, during the provisi
 
 ---
 
-## Infrastructure as Code (PowerShell Automation)
+##  Infrastructure as Code (PowerShell Automation)
 To ensure the environment was scalable and repeatable, I utilized a "Script-First" approach to provision the entire domain.
 
 **Featured Scripts:**
-* [Create-Employee-CSV.ps1](Scripts/Create%20Mega%20SteenCorp%20Employee%20CSV.ps1)
-* [Group-Infrastructure.ps1](Scripts/SteenCorp%OU%Infrastructure%Setup.ps1)
-* [Bulk-Ingestion.ps1](scripts/SteenCorp%20Final%20Bulk%20Ingestion.ps1)
-* [Configure-Firewall.ps1](scripts/Set-NetFirewallRule%20-DisplayName%20Fi.ps1)
+* [SteenCorp OU Infrastructure Setup.ps1](Scripts/SteenCorp%20OU%20Infrastructure%20Setup.ps1) - Automates the creation of the SteenCorp_HQ root and sub-OU hierarchy.
+* [SteenCorp Group Infrastructure.ps1](Scripts/SteenCorp%20Group%20Infrastructure.ps1) - Deploys all departmental security groups for RBAC.
+* [Create Mega SteenCorp Employee CSV.ps1](Scripts/Create%20Mega%20SteenCorp%20Employee%20CSV.ps1) - Generates the expanded employee dataset for large-scale testing.
+* [SteenCorp Final Bulk Ingestion.ps1](Scripts/SteenCorp%20Final%20Bulk%20Ingestion.ps1) - The master script that ingests CSV data to create user objects and assign group memberships.
 
 <details>
-  <summary>📸 View Automation & AD Architecture</summary>
+  <summary> View Automation & AD Architecture</summary>
 
-  ![OU Structure](images/01_SteenCorp_OU_Structure.png)
+  ![OU Structure](Images/01_SteenCorp_OU_Structure.png)
   *The logical Organizational Unit hierarchy designed for SteenCorp HQ.*
 
-  ![Security Group Deployment](images/02_Security_Group_Deployment.png)
+  ![Security Group Deployment](Images/02_Security_Group_Deployment.png)
   *Provisioning departmental security groups to manage resource access.*
 
-  ![Master Automation Proof](images/04_Master_Automation_Proof.png)
+  ![Master Automation Proof](Images/04_Master_Automation_Proof.png)
   *The Bulk Ingestion script in action, populating the domain in seconds.*
 
-  ![Automation Validation](images/Screenshot%202026-04-27%20113307.png)
+  ![Automation Validation](Images/Screenshot%202026-04-27%20113307.png)
   *Validating the script-driven creation of the user database within Active Directory.*
 </details>
 
@@ -58,30 +58,30 @@ Once the directory was live, I performed a "Handshake Validation" to ensure the 
 * **Identity Audit:** Performed a departmental audit to ensure all automated users were correctly placed.
 
 <details>
-  <summary>📸 View Network & Verification Evidence</summary>
+  <summary> View Network & Verification Evidence</summary>
 
-  ![Network Handshake](images/V2_05_Network_Handshake_Success.jpg)
+  ![Network Handshake](Images/V2_05_Network_Handshake_Success.jpg)
   *Verified Layer 3 connectivity between the workstation and the Domain Controller.*
 
-  ![Domain Join Confirmation](images/V2_06_Domain_Verification_Final.png)
+  ![Domain Join Confirmation](Images/V2_06_Domain_Verification_Final.png)
   *Official domain join status for the Windows 11 client.*
 
-  ![Sales Dept Verification](images/03_Sales_Department_Live.png)
+  ![Sales Dept Verification](Images/03_Sales_Department_Live.png)
   *Confirmed the Sales department is fully populated with the correct user objects.*
 
-  ![Departmental Verification](images/Screenshot%202026-04-27%20113314.png)
+  ![Departmental Verification](Images/Screenshot%202026-04-27%20113314.png)
   *Final audit of the automated user ingestion across departmental OUs.*
 </details>
 
 ---
 
-##  Final Operational Success (GPO Deployment)
+## Final Operational Success (GPO Deployment)
 Phase 1 concluded with the successful application of **Group Policy Objects (GPOs)** to enforce corporate branding and security baselines.
 
 * **Branding:** Deployed the "SteenCorp" corporate wallpaper across the domain.
 * **Security:** Verified that standard users (e.g., `jhalpert`) were restricted from administrative system changes.
 
-![Final Success](images/V3_Final_Operational_Success.png.jpg)
+![Final Success](Images/V3_Final_Operational_Success.png.jpg)
 *Successful login for `steencorp\jhalpert` with GPO-enforced wallpaper and security restrictions active.*
 
 ---
@@ -90,7 +90,3 @@ Phase 1 concluded with the successful application of **Group Policy Objects (GPO
 * **Phase 2:** Automated Resource Management (Mapped Drives & Software Deployment).
 * **Phase 3:** Security Operations (Sysmon Deployment & Event Log Analysis).
 * **Phase 4:** Remote Access Infrastructure (VPN Configuration & Routing).
-## 🚀 Future Roadmap
-* **Phase 2:** Mapped Drives & Software Deployment via GPO.
-* **Phase 3:** Security Operations (Sysmon & Event Log Analysis).
-* **Phase 4:** Remote Access (VPN Configuration).
