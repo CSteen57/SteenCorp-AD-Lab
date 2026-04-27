@@ -155,7 +155,7 @@ Verification of **Mike Ross (HR)** receiving the correct mapped drive and permis
 - Corporate branding enforced
 - Standard users restricted from administrative actions
 
-![Final State](Images/V3_Final_Operational_Success.png)
+![Final State](Images/V3_Final_Operational_Success.png.png)
 
 ---
 
