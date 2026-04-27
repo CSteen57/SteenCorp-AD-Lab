@@ -27,9 +27,8 @@ The project initially launched in Oracle VirtualBox. However, during the provisi
 To ensure the environment was scalable and repeatable, I utilized a "Script-First" approach to provision the entire domain.
 
 **Featured Scripts:**
-* [Create-OUs.ps1](scripts/Create%20OUs.ps1)
 * [Create-Employee-CSV.ps1](Scripts/Create%20Mega%20SteenCorp%20Employee%20CSV.ps1)
-* [Group-Infrastructure.ps1](scripts/SteenCorp%20Group%20Infrastructure.ps1)
+* [Group-Infrastructure.ps1](Scripts/SteenCorp%OU%Infrastructure%Setup.ps1)
 * [Bulk-Ingestion.ps1](scripts/SteenCorp%20Final%20Bulk%20Ingestion.ps1)
 * [Configure-Firewall.ps1](scripts/Set-NetFirewallRule%20-DisplayName%20Fi.ps1)
 
