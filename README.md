@@ -1,84 +1,109 @@
 # SteenCorp Enterprise Infrastructure Lab
 
-## Project Overview
-The **SteenCorp** project is a comprehensive, virtualized Windows Enterprise environment. This lab serves as a functional proof-of-concept for core system administration tasks, including identity management, platform migration, and high-scale automated provisioning via PowerShell.
+## Overview
+Built a simulated enterprise Active Directory environment using Windows Server 2022 and VMware. This project demonstrates user provisioning, organizational design, automation with PowerShell, and system validation from a domain-joined client.
 
-## Phase 1: Foundation & Platform Migration
+---
 
-### The Technical Pivot: VirtualBox to VMware
-The project initially launched in Oracle VirtualBox. However, during the provisioning of the Windows 11 client, I encountered persistent display driver failures (Black Screen of Death).
+## Environment
+- Windows Server 2022 (Domain Controller)
+- Windows 11 Pro (Domain Joined)
+- VMware Workstation
 
-* **Action:** Performed a demotion of the original Domain Controller and migrated the entire infrastructure to **VMware Workstation**.
-* **Outcome:** Successfully re-established the `SteenCorp.Local` forest with improved hardware acceleration and network stability.
+---
+
+## Key Responsibilities / What I Built
+- Designed and implemented Active Directory OU structure (Departments, Groups, Workstations, Admins)
+- Automated user creation and group assignment using PowerShell scripts and CSV ingestion
+- Configured security groups to simulate role-based access control (RBAC)
+- Joined Windows 11 client to domain and validated authentication
+- Tested permissions and enforced least privilege access
+
+---
+
+## Major Challenge: VirtualBox Failure → VMware Migration
+
+Initially built the lab in VirtualBox but encountered Windows 11 display driver issues (black screen).  
+
+**Action:**
+- Demoted original Domain Controller
+- Rebuilt entire environment in VMware
+
+**Result:**
+- Improved performance, stability, and network reliability
 
 <details>
-  <summary> View Migration Evidence</summary>
+<summary>View Migration Evidence</summary>
 
-  ![VirtualBox Boot Error](Images/Screenshot%202026-04-13%20120545.png)
-  *Initial VirtualBox display failure that triggered the platform migration.*
+![VirtualBox Boot Error](Images/Screenshot%202026-04-13%20120545.png)
 
-  ![Demoting the Original Domain](Images/00_Demote_Domain.png)
-  *Forced demotion of the initial DC to ensure a clean migration and forest rebuild on VMware.*
+![Domain Demotion](Images/00_Demote_Domain.png)
+
 </details>
 
 ---
 
-##  Infrastructure as Code (PowerShell Automation)
-To ensure the environment was scalable and repeatable, I utilized a "Script-First" approach to provision the entire domain.
+## Automation (PowerShell)
 
-**Featured Scripts:**
-* [SteenCorp OU Infrastructure Setup.ps1](Scripts/SteenCorp%20OU%20Infrastructure%20Setup.ps1) - Automates the creation of the SteenCorp_HQ root and sub-OU hierarchy.
-* [SteenCorp Group Infrastructure.ps1](Scripts/SteenCorp%20Group%20Infrastructure.ps1) - Deploys all departmental security groups for RBAC.
-* [Create Mega SteenCorp Employee CSV.ps1](Scripts/Create%20Mega%20SteenCorp%20Employee%20CSV.ps1) - Generates the expanded employee dataset for large-scale testing.
-* [SteenCorp Final Bulk Ingestion.ps1](Scripts/SteenCorp%20Final%20Bulk%20Ingestion.ps1) - The master script that ingests CSV data to create user objects and assign group memberships.
+Used a script-first approach to simulate real-world onboarding and scalability.
+
+**Key Automations:**
+- Created OU structure programmatically
+- Generated large employee dataset via CSV
+- Bulk-created users and assigned to correct departments
+- Automatically added users to security groups
 
 <details>
-  <summary> View Automation & AD Architecture</summary>
+<summary>View Automation & AD Architecture</summary>
 
-  ![OU Structure](Images/01_SteenCorp_OU_Structure.png)
-  *The logical Organizational Unit hierarchy designed for SteenCorp HQ.*
+![OU Structure](Images/01_SteenCorp_OU_Structure.png)
 
-  ![Security Group Deployment](Images/02_Security_Group_Deployment.png)
-  *Provisioning departmental security groups to manage resource access.*
+![Security Groups](Images/02_Security_Group_Deployment.png)
 
-  ![Master Automation Proof](Images/04_Master_Automation_Proof.png)
-  *The Bulk Ingestion script in action, populating the domain in seconds.*
+![Bulk Provisioning](Images/04_Master_Automation_Proof.png)
+
 </details>
 
 ---
 
-## Network & Domain Validation
-Once the directory was live, I performed a "Handshake Validation" to ensure the network stack was resilient and the client integration was complete.
+## Validation & Testing
 
-* **Connectivity:** Configured static IP addressing and verified ICMP handshakes.
-* **Domain Integration:** Successfully performed a Domain Join for `SC-WIN11-WK01`.
-* **Identity Audit:** Performed a departmental audit to ensure all automated users were correctly placed.
+Validated the environment from a real client perspective:
+
+- Verified network connectivity (ICMP / ping)
+- Confirmed successful domain join
+- Audited user placement across departments
+- Tested permissions and access restrictions
 
 <details>
-  <summary> View Network & Verification Evidence</summary>
+<summary>View Validation Evidence</summary>
 
-  ![Network Handshake](Images/V2_05_Network_Handshake_Success.png)
-  *Verified Layer 3 connectivity between the workstation and the Domain Controller.*
+![Network Connectivity](Images/V2_05_Network_Handshake_Success.png)
 
-  ![Domain Join Confirmation](Images/V2_06_Domain_Verification_Final.png)
-  *Official domain join status for the Windows 11 client.*
+![Domain Join](Images/V2_06_Domain_Verification_Final.png)
 
-  ![Sales Dept Verification](Images/03_Sales_Department_Live.png)
-  *Confirmed the Sales department is fully populated with the correct user objects.*
+![Department Verification](Images/03_Sales_Department_Live.png)
+
 </details>
 
 ---
 
-## Final Operational Success (GPO Deployment)
-Phase 1 concluded with the successful application of **Group Policy Objects (GPOs)** to enforce corporate branding and security baselines.
+## Final Result (GPO + Security Enforcement)
 
-* **Branding:** Deployed the "SteenCorp" corporate wallpaper across the domain.
-* **Security:** Verified that standard users (e.g., `jhalpert`) were restricted from administrative system changes.
+- Deployed Group Policy to enforce corporate branding
+- Verified standard users could NOT perform administrative actions
+- Confirmed least privilege access model
 
-![Final Success](Images/V3_Final_Operational_Success.png.png)
-*Successful login for `steencorp\jhalpert` with GPO-enforced wallpaper and security restrictions active.*
+![Final State](Images/V3_Final_Operational_Success.png.png)
 
 ---
+
+## Key Takeaways
+
+- Rebuilding environments is often faster than troubleshooting broken infrastructure
+- PowerShell automation is critical for scalability in enterprise environments
+- Group-based access control simplifies permission management
+- Testing from the end-user perspective is essential for validation
 
 ## Future Roadmap
 * **Phase 2:** Automated Resource Management (Mapped Drives & Software Deployment).
