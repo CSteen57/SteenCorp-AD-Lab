@@ -14,7 +14,7 @@ The project initially launched in Oracle VirtualBox. However, during the provisi
 <details>
   <summary>📸 View Migration Evidence</summary>
 
-  ![VirtualBox Boot Error] (Images/Screenshot 2026-04-13 120545.png)
+  ![VirtualBox Boot Error] (Images/Screenshot%202026-04-13%20120545.png)
   *Initial VirtualBox display failure that triggered the platform migration.*
 
   ![Demoting the Original Domain](images/00_Demote_Domain.png)
