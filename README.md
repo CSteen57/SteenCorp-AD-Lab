@@ -17,7 +17,7 @@ The project initially launched in Oracle VirtualBox. However, during the provisi
   ![VirtualBox Boot Error](Images/Screenshot%202026-04-13%20120545.png)
   *Initial VirtualBox display failure that triggered the platform migration.*
 
-  ![Demoting the Original Domain](images/00_Demote_Domain.png)
+  ![Demoting the Original Domain](Images/00_Demote_Domain.png)
   *Forced demotion of the initial DC to ensure a clean migration and forest rebuild on VMware.*
 </details>
 
