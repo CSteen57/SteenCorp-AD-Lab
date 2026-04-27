@@ -12,7 +12,7 @@ The project initially launched in Oracle VirtualBox but encountered critical dis
 <details>
   <summary>📸 View Migration Documentation</summary>
 
-  ![Migration Attempt](images/Screenshot%202026-04-13%20120545.png)
+  ![Migration Attempt](Images/Screenshot 2026-04-13 120545.png)
   *Initial VirtualBox boot failure documented during the troubleshooting phase.*
 </details>
 
