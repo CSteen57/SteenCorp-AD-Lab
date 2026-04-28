@@ -5,6 +5,18 @@ Built a simulated enterprise Active Directory environment using Windows Server 2
 
 ---
 
+## Project Objective
+
+This lab simulates a real-world enterprise IT environment to demonstrate:
+
+- Active Directory deployment and management
+- Role-based access control and policy enforcement
+- Core networking services (DNS, DHCP, IP design)
+- Automation using PowerShell
+- System validation from an end-user perspective
+
+---
+
 ## Environment
 - Windows Server 2022 (Domain Controller)
 - Windows 11 Pro (Domain Joined)
