@@ -50,15 +50,11 @@ A structured IP addressing plan was created before implementation:
 
 ### Domain Controller Static Configuration
 
-The Domain Controller (DC01) was assigned a static IP address to act as a stable and reliable network anchor.
-
 ![DC01 Static IP](../Evidence/Infrastructure/DC01_Static_IP_Configuration.png)
 
 ---
 
 ### DHCP Deployment
-
-A DHCP scope was configured to dynamically assign IP addresses to client machines while protecting infrastructure ranges through exclusions.
 
 ![DHCP Scope](../Evidence/Networking/DHCP_Scope_Exclusion_Pool.png)
 
@@ -71,26 +67,13 @@ A complete DNS structure was implemented to support both forward and reverse nam
 - Forward Lookup Zone: `SteenCorp.local`
 - Reverse Lookup Zone: `192.168.10.0/24`
 
-This enables:
-- Hostname → IP resolution
-- IP → Hostname resolution
-
 #### Reverse Lookup Zone Implementation
-
-A Reverse Lookup Zone was created to support PTR (Pointer) records, enabling IP-based identification of hosts.
 
 ![DNS Reverse Lookup](../Evidence/Networking/DNS_Reverse_Lookup_PTR_Record.png)
 
 ---
 
 ### DHCP Reservation (Controlled Addressing)
-
-A DHCP reservation was implemented to ensure the Windows 11 workstation consistently receives the same IP address while still using DHCP.
-
-- Reserved IP: `192.168.10.101`
-- Bound to client MAC address
-
-This reflects real-world enterprise environments where predictable addressing is required without sacrificing centralized control.
 
 ![DHCP Reservation](../Evidence/Networking/Windows_Server_DHCP_Reservation_Config.png)
 
@@ -100,34 +83,17 @@ This reflects real-world enterprise environments where predictable addressing is
 
 ### VMware DHCP Conflict
 
-During initial testing, the client machine received an incorrect IP address from VMware’s internal DHCP service (192.168.217.x range), instead of the intended SteenCorp network.
-
-This resulted in:
-- Incorrect subnet assignment
-- Improper DNS configuration
-- Failed communication with the Domain Controller
-
 ![VMware DHCP Conflict](../Evidence/Validation/DHCP_Validation_VMware_Conflict.png)
 
 ---
 
 ### DHCP Renewal Failure
 
-An attempt to renew the IP configuration failed because the client adapter was still configured with a static IP.
-
-This prevented DHCP from issuing a valid lease.
-
 ![DHCP Renewal Failure](../Evidence/Validation/DHCP_Validation_Fail_Static_Adapter.png)
 
 ---
 
 ### IP Conflict & BAD_ADDRESS Detection
-
-During DHCP testing, an IP conflict was detected and marked as a **BAD_ADDRESS** within the DHCP scope.
-
-This indicated:
-- Duplicate IP detection by DHCP
-- Network interference from VMware NAT configuration
 
 ![DHCP Conflict Detection](../Evidence/Networking/DHCP_IP_Conflict_Detection.png)
 
@@ -137,17 +103,13 @@ This indicated:
 
 ## Resolution
 
-The networking conflict was resolved through a structured troubleshooting process:
-
-- Identified VMware NAT as an external DHCP source
-- Isolated the lab using a dedicated LAN Segment
-- Eliminated competing DHCP broadcasts
-- Reconfigured client adapter for DHCP
-- Implemented DHCP reservation for consistency
+- Identified VMware NAT as an external DHCP source  
+- Isolated the lab using a dedicated LAN Segment  
+- Eliminated competing DHCP broadcasts  
+- Reconfigured client adapter for DHCP  
+- Implemented DHCP reservation for consistency  
 
 ### VMware Network Isolation
-
-The lab environment was moved to an internal LAN segment to simulate an isolated enterprise network.
 
 ![VMware LAN Isolation](../Evidence/Infrastructure/VMware_Internal_LAN_Segment_Isolation.png)
 
@@ -155,20 +117,67 @@ The lab environment was moved to an internal LAN segment to simulate an isolated
 
 ---
 
+## DNS Implementation & Troubleshooting
+
+### DNS Manager State
+
+During DNS configuration, records and zones were reviewed to ensure proper structure and identify inconsistencies.
+
+![DNS Manager State](../Evidence/Networking/DNS_Manager_Polluted_State.png)
+
+---
+
+### DNS Forwarders (External Resolution)
+
+To enable external domain resolution, DNS forwarders were configured on the Domain Controller.
+
+- 8.8.8.8 (Google DNS)  
+- 1.1.1.1 (Cloudflare DNS)  
+
+![DNS Forwarders](../Evidence/Networking/DNS_Forwarders_Validated.png)
+
+---
+
+### DNS Service Troubleshooting
+
+During testing, DNS resolution issues required service-level troubleshooting.
+
+![DNS Service Troubleshooting](../Evidence/Validation/Host_Service_Troubleshooting.png)
+
+---
+
+### DNS Cache Reset & Record Re-Registration
+
+Commands used:
+
+`Stop-Service DNS`  
+`ipconfig /flushdns`  
+`Start-Service DNS`  
+`ipconfig /registerdns`
+
+![DNS Reset](../Evidence/Validation/PowerShell_DNS_Reset_Script.png)
+
+---
+
+### DNS Validation (Forward & Reverse Lookup)
+
+Commands used:
+
+`nslookup dc01`  
+`nslookup 192.168.10.10`
+
+![NSLookup Validation](../Evidence/Validation/NSLookup_Internal_External_Success.png)
+
+---
+
 ## Validation (Current State)
 
 ### Final Network State Verification
 
-After full troubleshooting and reconfiguration, the network reached a stable and functional state.
-
-Key validation results:
-
-- Client receives IP from DHCP scope (`192.168.10.101`)
-- DHCP Server = `192.168.10.10 (DC01)`
-- DNS Server = `192.168.10.10`
-- Gateway = `192.168.10.1`
-- No duplicate IP conflicts
-- Domain communication confirmed
+- IP Address: 192.168.10.101  
+- DHCP Server: 192.168.10.10  
+- DNS Server: 192.168.10.10  
+- Gateway: 192.168.10.1  
 
 ![Final DHCP Success](../Evidence/Validation/Final_VIP_Workstation_IP_Verification.png)
 
@@ -176,23 +185,18 @@ Key validation results:
 
 ## Key Takeaways
 
-- Proper IP planning is critical before deployment
-- Virtual environments can introduce hidden network conflicts
-- DHCP and DNS must be tightly controlled in enterprise environments
-- Troubleshooting is as important as initial configuration
-- Network isolation is essential for lab accuracy and stability
+- Proper IP planning is critical before deployment  
+- Virtual environments can introduce hidden network conflicts  
+- DHCP and DNS must be tightly controlled in enterprise environments  
+- Troubleshooting is as important as initial configuration  
+- Network isolation is essential for lab accuracy and stability  
 
 ---
 
 ## Next Steps (Planned)
 
-The following enhancements will complete Phase 3:
-
-- DNS Forwarders configuration (external resolution)
-- Reverse lookup validation via nslookup
-- Routing table analysis using `route print`
-- Network path verification using `tracert`
-- ARP table validation (`arp -a`)
-- Advanced DHCP validation and monitoring
-
-Additional validation and evidence will be added as these components are implemented.
+- DNS Forwarders validation refinement  
+- Routing table analysis (`route print`)  
+- Network path verification (`tracert`)  
+- ARP table validation (`arp -a`)  
+- Recursive vs Iterative DNS concepts 
