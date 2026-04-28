@@ -17,11 +17,9 @@ Before implementation, a structured IP Address Management (IPAM) plan was create
 | Network              | 192.168.10.0/24      | Core lab subnet (254 usable addresses)   |
 | Gateway              | 192.168.10.1         | Default gateway (VMware virtual router)  |
 | Core Infrastructure  | 192.168.10.2-10      | Domain Controllers, DNS Servers
-|
 | Server Tier          | 192.168.10.11-.20    | Filer Servers, Print Servers, Web Servers
-|
-| Static Range         | 192.168.10.21–50      | Reserved for infrastructure devices     |
-| DHCP Range           | 192.168.10.100–200   | Dynamic allocation for client machines   |
+| Static Range         | 192.168.10.21–50      | Reserved for infrastructure devices     
+| DHCP Range           | 192.168.10.100–200   | Dynamic allocation for client machines   
 
 ### Design Notes
 - Infrastructure devices use static IPs to ensure consistent availability
