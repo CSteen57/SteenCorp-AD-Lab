@@ -50,7 +50,7 @@ Used a script-first approach to simulate real-world onboarding and scalability.
 
 ### Key Scripts
 
-- [OU Infrastructure Setup](./Scripts/SteenCorp%20OU%20Infrastructure%20Setup.ps1)  
+- [OU Infrastructure Setup](./Scripts/Phase1_Infrastructure/SteenCorp%20OU%20Infrastructure%20Setup.ps1)  
   → Builds the full Organizational Unit structure  
 
 - [Security Group Deployment](./Scripts/SteenCorp%20Group%20Infrastructure.ps1)  
