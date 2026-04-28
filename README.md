@@ -53,13 +53,13 @@ Used a script-first approach to simulate real-world onboarding and scalability.
 - [OU Infrastructure Setup](./Scripts/Phase1_Infrastructure/SteenCorp%20OU%20Infrastructure%20Setup.ps1)  
   → Builds the full Organizational Unit structure  
 
-- [Security Group Deployment](./Scripts/SteenCorp%20Group%20Infrastructure.ps1)  
+- [Security Group Deployment](./Scripts/Phase1_Infrastructure/SteenCorp%20Group%20Infrastructure.ps1)  
   → Creates and organizes all departmental security groups  
 
-- [Employee CSV Generator](./Scripts/Create%20Mega%20SteenCorp%20Employee%20CSV.ps1)  
+- [Employee CSV Generator](./Scripts/Phase1_Infrastructure/Create%20Mega%20SteenCorp%20Employee%20CSV.ps1)  
   → Generates large-scale test data  
 
-- [Bulk User Provisioning](./Scripts/SteenCorp%20Final%20Bulk%20Ingestion.ps1)  
+- [Bulk User Provisioning](./Scripts/Phase1_Infrastructure/SteenCorp%20Final%20Bulk%20Ingestion.ps1)  
   → Creates users, assigns OUs, and applies group membership  
 
 ---
