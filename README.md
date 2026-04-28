@@ -30,19 +30,40 @@ This lab simulates a real-world enterprise IT environment to demonstrate:
 - Configured security groups to simulate role-based access control (RBAC)
 - Engineered a centralized file infrastructure with departmental security silos
 - Deployed Group Policy Objects (GPOs) for configuration enforcement and resource mapping
-- Joined Windows 11 client to domain and validated authentication and permissions
+- Built and validated a fully functioning enterprise network (DNS, DHCP, IP schema)
+- Diagnosed and resolved real-world network conflicts (DHCP interference, BAD_ADDRESS)
+- Implemented DNS forwarders for external resolution and validated internal/external name resolution
 
 ---
+
 ## Project Roadmap
 
 | Phase | Status | Focus |
 | :--- | :--- | :--- |
 | [Phase 1](Phases/Phase1_Foundation.md) | Completed | Windows Server, Windows 11, AD DS, VMware migration |
 | [Phase 2](Phases/Phase2_RBAC.md) | Completed | RBAC, file shares, NTFS permissions, GPO drive mapping |
-| [Phase 3](Phases/Phase3_Networking.md) | Next | DNS, DHCP, IP schema, network validation |
+| [Phase 3](Phases/Phase3_Networking.md) | In Progress | DNS, DHCP, IP schema, network troubleshooting & validation |
 | [Phase 4](Phases/Phase4_Automation.md) | Planned | PowerShell automation, health checks, reporting |
 | [Phase 5](Phases/Phase5_Security.md) | Planned | Sysmon, logging, security monitoring |
 | [Phase 6](Phases/Phase6_Helpdesk.md) | Planned | Ticketing simulation, SOPs, troubleshooting |
+
+---
+
+## Networking & Troubleshooting Highlights
+
+Phase 3 introduces real-world networking engineering concepts and problem solving:
+
+- Designed structured IP addressing (192.168.10.0/24)
+- Configured DHCP scope with exclusions and reservations
+- Implemented DNS forward + reverse lookup zones
+- Configured DNS forwarders for external resolution
+- Diagnosed DHCP conflicts caused by VMware NAT
+- Identified and resolved BAD_ADDRESS IP conflicts
+- Isolated lab network using custom VMware LAN segments
+- Performed DNS service resets and cache flushing
+- Validated forward and reverse DNS resolution using `nslookup`
+
+This phase demonstrates not just configuration, but **true troubleshooting and infrastructure understanding**.
 
 ---
 
@@ -75,41 +96,21 @@ Used a script-first approach to simulate real-world onboarding and scalability.
 ### Key Scripts
 
 - [OU Infrastructure Setup](./Scripts/Phase1_Infrastructure/SteenCorp%20OU%20Infrastructure%20Setup.ps1)  
-  → Builds the full Organizational Unit structure  
-
 - [Security Group Deployment](./Scripts/Phase1_Infrastructure/SteenCorp%20Group%20Infrastructure.ps1)  
-  → Creates and organizes all departmental security groups  
-
 - [Employee CSV Generator](./Scripts/Phase1_Infrastructure/Create%20Mega%20SteenCorp%20Employee%20CSV.ps1)  
-  → Generates large-scale test data  
-
 - [Bulk User Provisioning](./Scripts/Phase1_Infrastructure/SteenCorp%20Final%20Bulk%20Ingestion.ps1)  
-  → Creates users, assigns OUs, and applies group membership  
 
 ---
 
 ### What This Demonstrates
-- Infrastructure as Code (IaC) mindset  
+- Infrastructure as Code mindset  
 - Scalable onboarding process  
 - Automated RBAC implementation  
 - Reduced manual administrative effort  
 
-<details>
-<summary>View Automation & AD Architecture</summary>
-
-![OU Structure](Evidence/Infrastructure/01_SteenCorp_OU_Structure.png)
-
-![Security Groups](Evidence/Infrastructure/02_Security_Group_Deployment.png)
-
-![Bulk Provisioning](Evidence/Automation/04_Master_Automation_Proof.png)
-
-</details>
-
 ---
 
 ## Phase 2: RBAC & GPO Implementation
-
-Built a centralized file and access control system using RBAC and Group Policy.
 
 ### Key Achievements
 - Created centralized share: `SteenCorp_Shares`
@@ -120,85 +121,41 @@ Built a centralized file and access control system using RBAC and Group Policy.
 
 ---
 
-<details>
-<summary>View Resource & Policy Configuration</summary>
-
-| Task | Evidence |
-| :--- | :--- |
-| Directory Structure | ![Directory](Evidence/Infrastructure/Physical%20Directory%20Structure%20for%20Departmental%20Shares.png) |
-| Share Permissions | ![RBAC](Evidence/Infrastructure/Applying%20Role-Based%20Access%20Control%20to%20Network%20Shares.png) |
-| NTFS Security | ![NTFS](Evidence/Infrastructure/NTFS_Security_Inheritance_Audit.png.png) |
-| GPO Linking | ![GPO](Evidence/Infrastructure/Organizational%20Unit%20Hierarchy%20and%20Target-Linked%20Group%20Policies.png) |
-| Drive Mapping | ![Mapping](Evidence/Validation/GPO%20Drive%20Map%20COnfiguration%20for%20Sales%20Department.png) |
-
-</details>
-
----
-
 ## Validation & Testing
-
-Performed baseline validation from a client perspective:
 
 - Verified network connectivity (ICMP / ping)
 - Confirmed domain join
 - Checked user placement and group membership
-- Tested basic access controls
-
-<details>
-<summary>View Validation Evidence</summary>
-
-![Network Connectivity](Evidence/Validation/V2_05_Network_Handshake_Success.png)
-
-![Domain Join](Evidence/Validation/V2_06_Domain_Verification_Final.png)
-
-![Department Check](Evidence/Validation/03_Sales_Department_Live.png)
-
-</details>
+- Tested access controls and GPO enforcement
 
 ---
 
-## Final Result (Full Environment Proof)
+## Final Result
 
-Validated full enterprise functionality including authentication, policy enforcement, and access control.
-
-### Multi-Department Access Validation
-
-Verification of **Mike Ross (HR)** receiving the correct mapped drive and permissions.
-
-- Identity confirmed via `whoami`
-- Policy application verified via `gpresult /r`
-- Department isolation successfully enforced
-
-![HR Validation](Evidence/Validation/Multi-Departmental%20Resource%20Provisioning%20and%20RBAC%20Validation.png)
-
----
-
-### Final System State
-
-- GPO applied successfully
-- Corporate branding enforced
-- Standard users restricted from administrative actions
-
-![Final State](Evidence/Validation/V3_Final_Operational_Success.png.png)
+- Domain fully operational  
+- RBAC enforced across departments  
+- GPO policies applied successfully  
+- Network services functioning and validated  
+- Client systems properly authenticated and managed  
 
 ---
 
 ## Key Takeaways
 
-- Rebuilding environments is often faster than troubleshooting broken infrastructure  
-- PowerShell automation enables scalable system administration  
-- RBAC simplifies access management in enterprise environments  
-- Validation from the end-user perspective is critical  
+- Rebuilding environments can be more efficient than patching failures  
+- PowerShell automation enables scalable administration  
+- Networking issues often originate from hidden infrastructure conflicts  
+- DNS and DHCP are critical to domain functionality  
+- Validation from the end-user perspective is essential  
 
 ---
 
 ## Future Roadmap
 
-**Phase 3: Networking & Core Services**
-- DNS configuration and validation (forward lookup zones, name resolution)
-- DHCP scope creation and lease management
-- IP addressing schema and network design
-- Connectivity testing (ping, ipconfig, nslookup)
+**Phase 3 (Finishing):**
+- `tracert`, `route print`, `arp -a`
+- Advanced DNS concepts (recursive vs iterative)
+
 
 **Phase 4: Administrative Automation**
 - PowerShell health checks for domain services
