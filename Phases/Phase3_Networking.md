@@ -18,6 +18,7 @@ In this phase:
 - A structured IP Address Management (IPAM) plan was designed
 - The Domain Controller (DC01) was configured as the central authority
 - DHCP services were implemented for dynamic client configuration
+- DNS services were expanded to include forward and reverse lookup
 - Real-world networking issues were encountered and resolved
 
 This phase emphasizes not just configuration, but **troubleshooting and validation**, which are critical skills in real IT environments.
@@ -63,6 +64,38 @@ A DHCP scope was configured to dynamically assign IP addresses to client machine
 
 ---
 
+### DNS Configuration (Forward + Reverse Lookup)
+
+A complete DNS structure was implemented to support both forward and reverse name resolution within the SteenCorp network.
+
+- Forward Lookup Zone: `SteenCorp.local`
+- Reverse Lookup Zone: `192.168.10.0/24`
+
+This enables:
+- Hostname → IP resolution
+- IP → Hostname resolution
+
+#### Reverse Lookup Zone Implementation
+
+A Reverse Lookup Zone was created to support PTR (Pointer) records, enabling IP-based identification of hosts.
+
+![DNS Reverse Lookup](../Evidence/Networking/DNS_Reverse_Lookup_PTR_Record.png)
+
+---
+
+### DHCP Reservation (Controlled Addressing)
+
+A DHCP reservation was implemented to ensure the Windows 11 workstation consistently receives the same IP address while still using DHCP.
+
+- Reserved IP: `192.168.10.101`
+- Bound to client MAC address
+
+This reflects real-world enterprise environments where predictable addressing is required without sacrificing centralized control.
+
+![DHCP Reservation](../Evidence/Networking/Windows_Server_DHCP_Reservation_Config.png)
+
+---
+
 ## Issues & Troubleshooting
 
 ### VMware DHCP Conflict
@@ -88,47 +121,78 @@ This prevented DHCP from issuing a valid lease.
 
 ---
 
-### Resolution
+### IP Conflict & BAD_ADDRESS Detection
 
-The issue was resolved by:
-- Disabling VMware DHCP interference
-- Reconfiguring the client network adapter to use DHCP
-- Renewing the IP lease from the Domain Controller
+During DHCP testing, an IP conflict was detected and marked as a **BAD_ADDRESS** within the DHCP scope.
+
+This indicated:
+- Duplicate IP detection by DHCP
+- Network interference from VMware NAT configuration
+
+![DHCP Conflict Detection](../Evidence/Validation/DHCP_IP_Conflict_Detection.png)
+
+![BAD ADDRESS](../Evidence/Validation/DHCP_Server_Bad_Address_Quarantine.png)
+
+---
+
+## Resolution
+
+The networking conflict was resolved through a structured troubleshooting process:
+
+- Identified VMware NAT as an external DHCP source
+- Isolated the lab using a dedicated LAN Segment
+- Eliminated competing DHCP broadcasts
+- Reconfigured client adapter for DHCP
+- Implemented DHCP reservation for consistency
+
+### VMware Network Isolation
+
+The lab environment was moved to an internal LAN segment to simulate an isolated enterprise network.
+
+![VMware LAN Isolation](../Evidence/Infrastructure/VMware_Internal_LAN_Segment_Isolation.png)
+
+![VMware NAT Conflict](../Evidence/Infrastructure/VMware_NAT_Configuration_Conflict.png)
 
 ---
 
 ## Validation (Current State)
 
-### Successful DHCP Assignment
+### Final Network State Verification
 
-After resolving configuration conflicts, the client successfully received a valid IP configuration from the Domain Controller.
+After full troubleshooting and reconfiguration, the network reached a stable and functional state.
 
-Key validation points:
-- IP Address assigned within DHCP scope
-- DHCP Server = DC01 (192.168.10.10)
-- DNS Server = DC01
-- Correct subnet and gateway assignment
+Key validation results:
 
-![Final DHCP Success](../Evidence/Validation/Final_DHCP_Validation_Success.png)
+- Client receives IP from DHCP scope (`192.168.10.101`)
+- DHCP Server = `192.168.10.10 (DC01)`
+- DNS Server = `192.168.10.10`
+- Gateway = `192.168.10.1`
+- No duplicate IP conflicts
+- Domain communication confirmed
+
+![Final DHCP Success](../Evidence/Validation/Final_VIP_Workstation_IP_Verification.png)
 
 ---
 
 ## Key Takeaways
 
-- Proper IP planning is essential before deployment
-- Virtual environments can introduce unexpected DHCP conflicts
-- Static vs dynamic configurations must be carefully managed
-- Troubleshooting is a core networking skill
+- Proper IP planning is critical before deployment
+- Virtual environments can introduce hidden network conflicts
+- DHCP and DNS must be tightly controlled in enterprise environments
+- Troubleshooting is as important as initial configuration
+- Network isolation is essential for lab accuracy and stability
 
 ---
 
 ## Next Steps (Planned)
 
-The following enhancements are planned to further develop Phase 3:
+The following enhancements will complete Phase 3:
 
-- DNS Forwarding configuration and external resolution testing
-- Routing table analysis and default gateway validation
-- Network path verification using tracert
-- DHCP Reservations for controlled client addressing
+- DNS Forwarders configuration (external resolution)
+- Reverse lookup validation via nslookup
+- Routing table analysis using `route print`
+- Network path verification using `tracert`
+- ARP table validation (`arp -a`)
+- Advanced DHCP validation and monitoring
 
 Additional validation and evidence will be added as these components are implemented.
