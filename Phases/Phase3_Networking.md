@@ -59,7 +59,7 @@ The Domain Controller (DC01) was assigned a static IP address to act as a stable
 
 A DHCP scope was configured to dynamically assign IP addresses to client machines while protecting infrastructure ranges through exclusions.
 
-![DHCP Scope](Evidence/Networking/DHCP_Scope_Exclusion_Pool.png)
+![DHCP Scope](../Evidence/Networking/DHCP_Scope_Exclusion_Pool.png)
 
 ---
 
@@ -109,7 +109,7 @@ Key validation points:
 - DNS Server = DC01
 - Correct subnet and gateway assignment
 
-![Final DHCP Success](../Evidence/Validation/Final&DHCP&Validation&Success.png)
+![Final DHCP Success](../Evidence/Validation/Final_DHCP_Validation_Success.png)
 
 ---
 
