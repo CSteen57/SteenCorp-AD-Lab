@@ -1,134 +1,134 @@
 # Phase 3 – Networking & Domain Connectivity (In Progress)
 
 ## Status
-🚧 Currently in development
+🚧 In Progress
+
+---
 
 ## Objective
-Build and validate core networking functionality within the SteenCorp lab environment.
+Build and validate core networking functionality within the SteenCorp lab environment by establishing structured IP addressing, centralized DNS, and controlled DHCP services.
+
+---
+
+## Overview
+
+Phase 3 represents the transition from isolated virtual machines into a functional enterprise network.
+
+In this phase:
+- A structured IP Address Management (IPAM) plan was designed
+- The Domain Controller (DC01) was configured as the central authority
+- DHCP services were implemented for dynamic client configuration
+- Real-world networking issues were encountered and resolved
+
+This phase emphasizes not just configuration, but **troubleshooting and validation**, which are critical skills in real IT environments.
 
 ---
 
 ## SteenCorp IP Schema
 
-Before implementation, a structured IP Address Management (IPAM) plan was created to simulate a real-world enterprise network design.
+A structured IP addressing plan was created before implementation:
 
 | Category              | Range / Address        | Purpose                                  |
 |----------------------|----------------------|------------------------------------------|
-| Network              | 192.168.10.0/24      | Core lab subnet (254 usable addresses)   |
-| Gateway              | 192.168.10.1         | Default gateway (VMware virtual router)  |
-| Core Infrastructure  | 192.168.10.2–10      | Domain Controllers, DNS Servers          |
-| Server Tier          | 192.168.10.11–20     | File, Print, and Application Servers     |
-| Static Range         | 192.168.10.21–50     | Reserved for infrastructure devices      |
-| DHCP Range           | 192.168.10.100–200   | Dynamic allocation for client machines   |
+| Network              | 192.168.10.0/24      | Core lab subnet                          |
+| Gateway              | 192.168.10.1         | Default gateway                          |
+| Core Infrastructure  | 192.168.10.2–10      | Domain Controller, DNS                   |
+| Server Tier          | 192.168.10.11–20     | Future servers                           |
+| Static Range         | 192.168.10.21–50     | Reserved infrastructure                  |
+| DHCP Range           | 192.168.10.100–200   | Client devices                           |
 
 ### Design Notes
-- Infrastructure devices use static IPs to ensure consistent availability  
-- Clients receive IP addresses dynamically via DHCP  
-- DNS is centralized on the Domain Controller for domain resolution  
-- Subnetting follows a structured allocation model to support scalability  
+- Static IPs ensure consistent availability for critical services
+- DHCP enables scalable client configuration
+- DNS is centralized on the Domain Controller
+- Structured addressing prevents IP conflicts
 
 ---
 
 ## Implementation
 
-- Assigned static IP configuration to Domain Controller (DC01)  
-- Configured DNS role for internal domain resolution  
-- Deployed DHCP service with controlled address scope  
-- Defined IP exclusions to protect infrastructure devices  
-- Configured Windows 11 client for DHCP-based addressing  
+### Domain Controller Static Configuration
+
+The Domain Controller (DC01) was assigned a static IP address to act as a stable and reliable network anchor.
+
+![DC01 Static IP](../Evidence/Infrastructure/DC01_Static_IP_Configuration.png)
 
 ---
 
-## DHCP Deployment & Conflict Resolution
+### DHCP Deployment
 
-During implementation, a critical networking issue was encountered where VMware’s built-in DHCP service was assigning IP addresses outside of the intended SteenCorp subnet.
+A DHCP scope was configured to dynamically assign IP addresses to client machines while protecting infrastructure ranges through exclusions.
 
-### Issue Identified
-- Client received IP: `192.168.217.x` (VMware NAT network)  
-- Expected subnet: `192.168.10.0/24`  
-- Result: Client could not properly communicate with domain services  
-
-### Root Cause
-- VMware DHCP service was active and overriding intended network configuration  
-- Domain Controller DHCP scope was not being utilized  
+![DHCP Scope](Evidence/Networking/DHCP_Scope_Exclusion_Pool.png)
 
 ---
 
-### Resolution Steps
+## Issues & Troubleshooting
 
-1. **Configured Static IP on Domain Controller (DC01)**
-   - IP Address: `192.168.10.10`  
-   - Subnet Mask: `255.255.255.0`  
-   - Gateway: `192.168.10.1`  
-   - DNS: `127.0.0.1`  
+### VMware DHCP Conflict
 
-2. **Configured DHCP Scope on DC01**
-   - Scope Range: `192.168.10.100 – 192.168.10.200`  
-   - Exclusions: `192.168.10.1 – 192.168.10.99`  
-   - Gateway: `192.168.10.1`  
-   - DNS Server: `192.168.10.10`  
+During initial testing, the client machine received an incorrect IP address from VMware’s internal DHCP service (192.168.217.x range), instead of the intended SteenCorp network.
 
-3. **Adjusted VMware Network Configuration**
-   - Identified VMware DHCP conflict  
-   - Ensured lab network used intended subnet instead of NAT range  
+This resulted in:
+- Incorrect subnet assignment
+- Improper DNS configuration
+- Failed communication with the Domain Controller
 
-4. **Reconfigured Client Network Adapter**
-   - Set to obtain IP address automatically (DHCP)  
-
-5. **Validated DHCP Assignment**
-   - Used:
-     ```
-     ipconfig /release
-     ipconfig /renew
-     ipconfig /all
-     ```
+![VMware DHCP Conflict](../Evidence/Validation/DHCP_Validation_VMware_Conflict.png)
 
 ---
 
-### Final Result
+### DHCP Renewal Failure
 
-- Client successfully received:
-  - IP: `192.168.10.100`  
-  - Gateway: `192.168.10.1`  
-  - DNS: `192.168.10.10`  
+An attempt to renew the IP configuration failed because the client adapter was still configured with a static IP.
 
-- Domain communication restored  
-- DHCP fully controlled by Domain Controller  
+This prevented DHCP from issuing a valid lease.
+
+![DHCP Renewal Failure](../Evidence/Validation/DHCP_Validation_Fail_Static_Adapter.png)
 
 ---
 
-### Key Takeaways
+### Resolution
 
-- DHCP conflicts can silently break domain connectivity  
-- Virtualization platforms introduce hidden networking layers  
-- Proper IP planning prevents infrastructure overlap  
-- Always validate:
-  - IP address range  
-  - Gateway  
-  - DNS source  
+The issue was resolved by:
+- Disabling VMware DHCP interference
+- Reconfiguring the client network adapter to use DHCP
+- Renewing the IP lease from the Domain Controller
 
 ---
 
-## Validation
+## Validation (Current State)
 
-- Successful ping tests between client and Domain Controller  
-- Verified DNS resolution and domain suffix assignment  
-- Confirmed DHCP lease assignment from DC01  
-- Validated domain authentication via `whoami` and login context  
+### Successful DHCP Assignment
 
----
+After resolving configuration conflicts, the client successfully received a valid IP configuration from the Domain Controller.
 
-## Summary
+Key validation points:
+- IP Address assigned within DHCP scope
+- DHCP Server = DC01 (192.168.10.10)
+- DNS Server = DC01
+- Correct subnet and gateway assignment
 
-Phase 3 established the foundational networking layer of the SteenCorp environment.
-
-The lab transitioned from isolated virtual machines into a structured, domain-connected network by assigning a static identity to the Domain Controller (DC01) and configuring it as the authoritative source for DNS and DHCP services.
-
-A DHCP scope was implemented to dynamically assign IP addresses to client systems while reserving a protected range for infrastructure components. During this process, a conflict with VMware’s DHCP service was identified and resolved, reinforcing the importance of network control and validation.
-
-The phase concluded with successful client-to-domain communication, verifying that the Windows 11 workstation was receiving proper network configuration and authentication services directly from the SteenCorp server.
+![Final DHCP Success](../Evidence/Validation/Final&DHCP&Validation&Success.png)
 
 ---
 
-## Upcoming Evidence
-Screenshots and validation outputs will continue to be added as this phase is finalized.
+## Key Takeaways
+
+- Proper IP planning is essential before deployment
+- Virtual environments can introduce unexpected DHCP conflicts
+- Static vs dynamic configurations must be carefully managed
+- Troubleshooting is a core networking skill
+
+---
+
+## Next Steps (Planned)
+
+The following enhancements are planned to further develop Phase 3:
+
+- DNS Forwarding configuration and external resolution testing
+- Routing table analysis and default gateway validation
+- Network path verification using tracert
+- DHCP Reservations for controlled client addressing
+
+Additional validation and evidence will be added as these components are implemented.
