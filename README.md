@@ -38,7 +38,7 @@ Initially built the lab in VirtualBox but encountered Windows 11 display driver 
 
 ![VirtualBox Boot Error](Evidence/Infrastructure/Screenshot%2026-04-13%120545.png)
 
-![Domain Demotion](Evidence/Infrastructure/00_Demote_Domain.png)
+![Domain Demotion](Evidence/Infrastructure/00%Demote%Domain.png)
 
 </details>
 
