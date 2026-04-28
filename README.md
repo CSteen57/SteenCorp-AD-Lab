@@ -194,5 +194,23 @@ Verification of **Mike Ross (HR)** receiving the correct mapped drive and permis
 
 ## Future Roadmap
 
-**Phase 3:** Security Monitoring (Sysmon + Event Analysis)  
-**Phase 4:** Remote Access (VPN + Routing)  
+**Phase 3: Networking & Core Services**
+- DNS configuration and validation (forward lookup zones, name resolution)
+- DHCP scope creation and lease management
+- IP addressing schema and network design
+- Connectivity testing (ping, ipconfig, nslookup)
+
+**Phase 4: Administrative Automation**
+- PowerShell health checks for domain services
+- Automated user lifecycle management (onboarding/offboarding)
+- Reporting scripts for stale accounts and permission audits
+
+**Phase 5: Security Monitoring**
+- Sysmon deployment for endpoint logging
+- Event log analysis and filtering
+- Simulated attack scenarios (brute force, lateral movement basics)
+
+**Phase 6: Help Desk & Support Operations**
+- Ticketing simulation (account lockouts, access issues, DNS failures)
+- Standard Operating Procedures (SOPs)
+- End-user troubleshooting workflows
