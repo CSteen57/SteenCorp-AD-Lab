@@ -78,77 +78,102 @@ A complete DNS structure was implemented to support both forward and reverse nam
 ![DHCP Reservation](../Evidence/Networking/Windows_Server_DHCP_Reservation_Config.png)
 
 ---
-
 ## Issues & Troubleshooting
 
-### VMware DHCP Conflict
+### DHCP Issue – Wrong Network
+
+When I first configured DHCP, the Windows 11 client was not getting an IP from my DC.  
+
+Instead, it was pulling an address in the `192.168.217.x` range.
+
+At that point I knew:
+- That’s not my subnet (`192.168.10.0/24`)
+- Something else was acting as DHCP
 
 ![VMware DHCP Conflict](../Evidence/Validation/DHCP_Validation_VMware_Conflict.png)
 
 ---
 
-### DHCP Renewal Failure
+### First Attempt – Renewing DHCP
+
+I tried forcing a renewal using:
+
+`ipconfig /release`  
+`ipconfig /renew`
+
+That failed.
+
+After checking the adapter, I realized the client was still set to a **static IP**, so DHCP wasn’t even being used.
 
 ![DHCP Renewal Failure](../Evidence/Validation/DHCP_Validation_Fail_Static_Adapter.png)
 
 ---
 
-### IP Conflict & BAD_ADDRESS Detection
+### Second Issue – BAD_ADDRESS
+
+After switching to DHCP, I ran into another issue:
+
+- The IP `192.168.10.101` was marked as **BAD_ADDRESS**
 
 ![DHCP Conflict Detection](../Evidence/Networking/DHCP_IP_Conflict_Detection.png)
-
 ![BAD ADDRESS](../Evidence/Networking/DHCP_Server_Bad_Address_Quarantine.png)
+
+This told me:
+- Something on the network was already using that IP
+- DHCP was correctly detecting a conflict and blocking it
 
 ---
 
-## Resolution
+### Root Cause
 
-- Identified VMware NAT as an external DHCP source  
-- Isolated the lab using a dedicated LAN Segment  
-- Eliminated competing DHCP broadcasts  
-- Reconfigured client adapter for DHCP  
-- Implemented DHCP reservation for consistency  
+At this point I checked VMware networking and found:
 
-### VMware Network Isolation
+- The NAT adapter was still active
+- VMware was running its own DHCP service
+- My lab machines were effectively on two networks at once
+
+That explained:
+- Wrong subnet earlier
+- IP conflicts now
+
+---
+
+### Final Fix – Network Isolation
+
+To fix it, I:
+
+- Moved all VMs to a **custom LAN segment**
+- Removed VMware NAT from the equation entirely
+- Rebooted the client
+- Renewed DHCP again
 
 ![VMware LAN Isolation](../Evidence/Infrastructure/VMware_Internal_LAN_Segment_Isolation.png)
-
 ![VMware NAT Conflict](../Evidence/Infrastructure/VMware_NAT_Configuration_Conflict.png)
+
+After that:
+- DHCP came from DC01 only
+- No more conflicts
+- Client pulled `192.168.10.101` correctly
 
 ---
 
 ## DNS Implementation & Troubleshooting
 
-### DNS Manager State
+### Issue – DNS Not Resolving Properly
 
-During DNS configuration, records and zones were reviewed to ensure proper structure and identify inconsistencies.
+Even after DHCP was working, DNS didn’t behave consistently.
 
-![DNS Manager State](../Evidence/Networking/DNS_Manager_Polluted_State.png)
+Some lookups worked, others didn’t.
 
----
-
-### DNS Forwarders (External Resolution)
-
-To enable external domain resolution, DNS forwarders were configured on the Domain Controller.
-
-- 8.8.8.8 (Google DNS)  
-- 1.1.1.1 (Cloudflare DNS)  
-
-![DNS Forwarders](../Evidence/Networking/DNS_Forwarders_Validated.png)
+I suspected:
+- stale records
+- or DNS service issues
 
 ---
 
-### DNS Service Troubleshooting
+### Fix – Reset DNS + Re-register
 
-During testing, DNS resolution issues required service-level troubleshooting.
-
-![DNS Service Troubleshooting](../Evidence/Validation/Host_Service_Troubleshooting.png)
-
----
-
-### DNS Cache Reset & Record Re-Registration
-
-Commands used:
+I ran:
 
 `Stop-Service DNS`  
 `ipconfig /flushdns`  
@@ -159,25 +184,41 @@ Commands used:
 
 ---
 
-### DNS Validation (Forward & Reverse Lookup)
+### DNS Forwarders
 
-Commands used:
+Then I configured forwarders so the DC could resolve external domains:
+
+- 8.8.8.8  
+- 1.1.1.1  
+
+![DNS Forwarders](../Evidence/Networking/DNS_Forwarders_Validated.png)
+
+---
+
+### Validation
+
+I verified everything using:
 
 `nslookup dc01`  
 `nslookup 192.168.10.10`
 
 ![NSLookup Validation](../Evidence/Validation/NSLookup_Internal_External_Success.png)
 
+Now:
+- Internal resolution works
+- Reverse lookup works
+- External resolution works
+
 ---
 
-## Validation (Current State)
+## Final Validation
 
-### Final Network State Verification
+At the end:
 
-- IP Address: 192.168.10.101  
-- DHCP Server: 192.168.10.10  
-- DNS Server: 192.168.10.10  
-- Gateway: 192.168.10.1  
+- IP = `192.168.10.101`  
+- DHCP = `192.168.10.10`  
+- DNS = `192.168.10.10`  
+- Gateway = `192.168.10.1`  
 
 ![Final DHCP Success](../Evidence/Validation/Final_VIP_Workstation_IP_Verification.png)
 
