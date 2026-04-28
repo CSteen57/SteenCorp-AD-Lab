@@ -77,7 +77,7 @@ Used a script-first approach to simulate real-world onboarding and scalability.
 
 ![Security Groups](Evidence/Infrastructure/02_Security_Group_Deployment.png)
 
-![Bulk Provisioning](Evidence/Infrastructure/04_Master_Automation_Proof.png)
+![Bulk Provisioning](Evidence/Automation/04_Master_Automation_Proof.png)
 
 </details>
 
