@@ -1,41 +1,22 @@
-# Phase 1: Foundation & Infrastructure
+# Phase 1 – Foundation
 
 ## Objective
-Establish a functional enterprise Active Directory environment and deploy core infrastructure components.
+Establish a functioning Active Directory domain and organizational structure.
 
----
-
-## What I Implemented
+## Key Components
 - Windows Server 2022 Domain Controller
-- Windows 11 domain-joined client
 - Active Directory Domain Services (AD DS)
-- Organizational Unit (OU) structure
-- VMware environment migration from VirtualBox
+- Organizational Unit (OU) design
 
----
+## Implementation
 
-## Key Configurations
+### Domain Controller Configuration
+![Domain Setup](../Evidence/Infrastructure/00_Demote_Domain.png)
 
-### Active Directory OU Structure
-Designed a hierarchical OU structure to organize departments, groups, workstations, and administrative roles.
-
+### Organizational Unit Structure
 ![OU Structure](../Evidence/Infrastructure/01_SteenCorp_OU_Structure.png)
 
----
-
-### Bulk User Provisioning (PowerShell)
-Automated user creation using PowerShell and CSV ingestion.
-
-![User Creation Script](../Evidence/Automation/02_PowerShell_Automation_Script.png)
-
----
-
-## Validation
-- Verified domain join from Windows 11 client  
-- Confirmed user creation in ADUC  
-- Tested authentication across domain  
-
----
-
 ## Outcome
-Established a fully functional Active Directory environment that serves as the foundation for all future phases.
+- Domain successfully configured
+- Structured OU hierarchy created
+- Environment ready for user and group deployment
