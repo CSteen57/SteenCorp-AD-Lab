@@ -101,11 +101,11 @@ Built a centralized file and access control system using RBAC and Group Policy.
 
 | Task | Evidence |
 | :--- | :--- |
-| Directory Structure | ![Directory](Images/Physical%20Directory%20Structure%20for%20Departmental%20Shares.png) |
-| Share Permissions | ![RBAC](Images/Applying%20Role-Based%20Access%20Control%20to%20Network%20Shares.png) |
-| NTFS Security | ![NTFS](Images/NTFS_Security_Inheritance_Audit.png.png) |
-| GPO Linking | ![GPO](Images/Organizational%20Unit%20Hierarchy%20and%20Target-Linked%20Group%20Policies.png) |
-| Drive Mapping | ![Mapping](Images/GPO%20Drive%20Map%20COnfiguration%20for%20Sales%20Department.png) |
+| Directory Structure | ![Directory](Evidence/Infrastructure/Physical%20Directory%20Structure%20for%20Departmental%20Shares.png) |
+| Share Permissions | ![RBAC](Evidence/Infrastructure/Applying%20Role-Based%20Access%20Control%20to%20Network%20Shares.png) |
+| NTFS Security | ![NTFS](Evidence/Infrastructure/NTFS_Security_Inheritance_Audit.png.png) |
+| GPO Linking | ![GPO](Evidence/Infrastructure/Organizational%20Unit%20Hierarchy%20and%20Target-Linked%20Group%20Policies.png) |
+| Drive Mapping | ![Mapping](Evidence/Validation/GPO%20Drive%20Map%20COnfiguration%20for%20Sales%20Department.png) |
 
 </details>
 
@@ -123,11 +123,11 @@ Performed baseline validation from a client perspective:
 <details>
 <summary>View Validation Evidence</summary>
 
-![Network Connectivity](Images/V2_05_Network_Handshake_Success.png)
+![Network Connectivity](Evidence/Validation/V2_05_Network_Handshake_Success.png)
 
-![Domain Join](Images/V2_06_Domain_Verification_Final.png)
+![Domain Join](Evidence/Validation/V2_06_Domain_Verification_Final.png)
 
-![Department Check](Images/03_Sales_Department_Live.png)
+![Department Check](Evidence/Validation/03_Sales_Department_Live.png)
 
 </details>
 
@@ -145,7 +145,7 @@ Verification of **Mike Ross (HR)** receiving the correct mapped drive and permis
 - Policy application verified via `gpresult /r`
 - Department isolation successfully enforced
 
-![HR Validation](Images/Multi-Departmental%20Resource%20Provisioning%20and%20RBAC%20Validation.png)
+![HR Validation](Evidence/Validation/Multi-Departmental%20Resource%20Provisioning%20and%20RBAC%20Validation.png)
 
 ---
 
@@ -155,7 +155,7 @@ Verification of **Mike Ross (HR)** receiving the correct mapped drive and permis
 - Corporate branding enforced
 - Standard users restricted from administrative actions
 
-![Final State](Images/V3_Final_Operational_Success.png.png)
+![Final State](Evidence/Validation/V3_Final_Operational_Success.png.png)
 
 ---
 
