@@ -129,9 +129,9 @@ This indicated:
 - Duplicate IP detection by DHCP
 - Network interference from VMware NAT configuration
 
-![DHCP Conflict Detection](../Evidence/Validation/DHCP_IP_Conflict_Detection.png)
+![DHCP Conflict Detection](../Evidence/Networking/DHCP_IP_Conflict_Detection.png)
 
-![BAD ADDRESS](../Evidence/Validation/DHCP_Server_Bad_Address_Quarantine.png)
+![BAD ADDRESS](../Evidence/Networking/DHCP_Server_Bad_Address_Quarantine.png)
 
 ---
 
