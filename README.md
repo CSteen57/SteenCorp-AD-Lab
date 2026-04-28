@@ -73,11 +73,11 @@ Used a script-first approach to simulate real-world onboarding and scalability.
 <details>
 <summary>View Automation & AD Architecture</summary>
 
-![OU Structure](Images/01_SteenCorp_OU_Structure.png)
+![OU Structure](Evidence/Infrastructure/01_SteenCorp_OU_Structure.png)
 
-![Security Groups](Images/02_Security_Group_Deployment.png)
+![Security Groups](Evidence/Infrastructure/02_Security_Group_Deployment.png)
 
-![Bulk Provisioning](Images/04_Master_Automation_Proof.png)
+![Bulk Provisioning](Evidence/Infrastructure/04_Master_Automation_Proof.png)
 
 </details>
 
