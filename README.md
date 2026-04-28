@@ -21,6 +21,18 @@ Built a simulated enterprise Active Directory environment using Windows Server 2
 - Joined Windows 11 client to domain and validated authentication and permissions
 
 ---
+## Project Roadmap
+
+| Phase | Status | Focus |
+| :--- | :--- | :--- |
+| [Phase 1](Phases/Phase1_Foundation.md) | Completed | Windows Server, Windows 11, AD DS, VMware migration |
+| [Phase 2](Phases/Phase2_RBAC.md) | Completed | RBAC, file shares, NTFS permissions, GPO drive mapping |
+| [Phase 3](Phases/Phase3_Networking.md) | Next | DNS, DHCP, IP schema, network validation |
+| [Phase 4](Phases/Phase4_Automation.md) | Planned | PowerShell automation, health checks, reporting |
+| [Phase 5](Phases/Phase5_Security.md) | Planned | Sysmon, logging, security monitoring |
+| [Phase 6](Phases/Phase6_Helpdesk.md) | Planned | Ticketing simulation, SOPs, troubleshooting |
+
+---
 
 ## Major Challenge: VirtualBox Failure → VMware Migration
 
