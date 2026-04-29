@@ -1,163 +1,147 @@
 # SteenCorp Enterprise Infrastructure Lab
 
 ## Objective
+Build and validate a simulated enterprise Active Directory environment that demonstrates real-world system administration, access control, and troubleshooting skills.
 
-Build and validate a simulated enterprise Active Directory environment capable of supporting real-world IT operations, including user management, access control, group policy enforcement, and network services.
+---
 
-This project demonstrates the ability to:
-- Administer Active Directory environments
-- Implement role-based access control (RBAC)
-- Apply Group Policy for system management
-- Configure DNS and DHCP services
-- Troubleshoot real infrastructure issues
-- Support common help desk scenarios
+## What This Project Demonstrates
+
+- Active Directory administration
+- Role-Based Access Control (RBAC)
+- Group Policy configuration and enforcement
+- DNS and DHCP configuration
+- Troubleshooting real infrastructure issues
+- Help desk–level user and access validation
+
 ---
 
 ## Overview
 
-This lab simulates a real enterprise IT environment using Windows Server and a domain-joined client.
+This lab simulates a real enterprise IT environment using a Windows Server domain controller and a domain-joined client.
 
-The focus was not just on building the infrastructure, but on understanding how systems interact and how to troubleshoot when issues occur. Throughout the project, I implemented core services, enforced security policies, and validated functionality through real-world scenarios such as account lockouts, access restrictions, and network failures.
+The focus was not just building infrastructure, but understanding how systems interact — and how to troubleshoot when things break.
 
-This project reflects both system administration and help desk responsibilities..
+Throughout the project, I:
+- Implemented core domain services
+- Applied access control and security policies
+- Diagnosed and resolved real configuration issues
+- Validated functionality from the end-user perspective
 
 ---
 
 ## Environment
+
 - Windows Server 2022 (Domain Controller)
-- Windows 11 Pro (Domain Joined)
+- Windows 11 Pro (Domain-Joined Client)
 - VMware Workstation
 
 ---
+
 ## Project Roadmap
 
-This lab is structured to simulate the build-out of a real enterprise IT environment, progressing from infrastructure deployment to access control and full system validation.
-
 | Phase | Status | Focus | Outcome |
-| :--- | :--- | :--- | :--- |
-| [Phase 1: Foundation](Phases/Phase1_Foundation.md) | Completed | Windows Server deployment, domain setup, virtualization | Built a functional Active Directory domain with a domain-joined client |
-| [Phase 2: Access Control & Connectivity](Phases/Phase2_RBAC.md) | Completed | Users, groups, NTFS permissions, GPO drive mapping, network integration | Implemented RBAC and ensured systems communicate correctly across the domain |
-| [Phase 3: Validation & Troubleshooting](Phases/Phase3_Networking.md) | In Progress | DNS, DHCP, IP schema, system validation, troubleshooting | Verified end-to-end functionality and resolved real-world infrastructure issues |
+|------|--------|------|--------|
+| Phase 1: Foundation | Completed | Domain setup, AD DS, virtualization | Built a fully functional domain environment |
+| Phase 2: RBAC & GPO | Completed | Access control, drive mapping, policy enforcement | Implemented and validated RBAC with real troubleshooting |
+| Phase 3: Networking & Troubleshooting | In Progress | DNS, DHCP, IP management, issue resolution | Validating and troubleshooting core network services |
 
 ---
 
-### Lab Progression
+## Lab Progression
 
-- Phase 1 established the core domain infrastructure  
-- Phase 2 implemented access control and ensured systems could communicate across the network  
-- Phase 3 focuses on validating all services and troubleshooting real-world issues  
+- **Phase 1:** Built the domain and automated identity structure  
+- **Phase 2:** Implemented access control and resolved real GPO/RBAC issues  
+- **Phase 3:** Focused on networking services and infrastructure troubleshooting  
 
-This mirrors how enterprise environments are deployed, tested, and maintained in production.
+This mirrors how real enterprise environments are deployed, validated, and maintained.
 
 ---
-## Phase 1: Foundation & Environment Setup
 
-Established the core infrastructure for a simulated enterprise Active Directory environment.
+## Phase Highlights
 
-- Deployed Windows Server 2022 Domain Controller (`steencorp.local`)
+### Phase 1 – Foundation & Environment Setup
+
+- Deployed domain controller (`steencorp.local`)
 - Configured Active Directory Domain Services (AD DS)
-- Joined Windows 11 client and validated domain authentication
-- Migrated environment from VirtualBox to VMware to improve stability and networking reliability
-- Automated OU, group, and user creation using PowerShell scripts
+- Joined client machine and validated authentication
+- Automated OU, user, and group creation with PowerShell
+- Migrated from VirtualBox → VMware for stability
 
-### Key Outcome
-Successfully deployed and validated a scalable Active Directory domain environment capable of supporting centralized authentication and future access control implementation.
+**Outcome:**  
+A stable, scalable domain environment ready for policy enforcement
 
-➡️ **View Full Phase 1 Documentation:**  
-[Phase 1 – Foundation & Environment Setup](Phases/Phase1_Foundation.md)
-
----
-## Phase 2: Access Control & Connectivity
-
-Implemented role-based access control (RBAC) to simulate how enterprise environments manage and restrict user access to shared resources.
-
-- Created departmental Organizational Units, users, and security groups (Sales, HR, IT)
-- Built a centralized file share (`SteenCorp_Shares`) with department-specific folders
-- Configured NTFS permissions to enforce least privilege access by group membership
-- Disabled inheritance to prevent permission overlap and maintain isolation
-- Implemented Group Policy to automatically map network drives based on user roles
-
-### Key Outcome
-Successfully enforced department-based access control and automated resource access, ensuring users could only interact with authorized data.
-
-➡️ **View Full Phase 2 Documentation:**  
-[Phase 2 – RBAC & GPO Implementation](Phases/Phase2_RBAC.md)
+➡️ [View Full Phase 1 Documentation](Phases/Phase1_Foundation.md)
 
 ---
 
-## Phase 3: Networking & Troubleshooting
+### Phase 2 – RBAC & Group Policy
 
-- Configured DHCP to assign IP addresses and created a reservation for VIP client machines
-- Set up DNS (forward and reverse lookup) so systems could resolve each other correctly
-- Added DNS forwarders to allow external name resolution (internet access)
+- Implemented department-based RBAC using security groups
+- Built centralized file shares with NTFS permissions
+- Configured GPO drive mapping for automated user access
+- Diagnosed and resolved:
+  - Broken UNC paths after server rename
+  - Fragmented GPO design
+  - GPO not applying due to incorrect OU placement
 
-### Networking & Troubleshooting Highlights
+**Outcome:**  
+Fully functional RBAC system with centralized, consistent policy enforcement
 
-- Designed structured IP addressing (192.168.10.0/24)
-- Configured DHCP scope with exclusions and reservations
-- Implemented DNS forward + reverse lookup zones
-- Configured DNS forwarders for external resolution
-- Diagnosed DHCP conflicts caused by VMware NAT
-- Identified and resolved BAD_ADDRESS IP conflicts
-- Isolated lab network using custom VMware LAN segments
-- Performed DNS service resets and cache flushing
-- Validated forward and reverse DNS resolution using `nslookup`
+➡️ [View Full Phase 2 Documentation](Phases/Phase2_RBAC.md)
 
-This phase demonstrates not just configuration, but **true troubleshooting and infrastructure understanding**.
+---
+
+### Phase 3 – Networking & Troubleshooting
+
+- Configured DHCP scopes and reservations
+- Implemented DNS forward and reverse lookup zones
+- Added DNS forwarders for external resolution
+- Diagnosed:
+  - BAD_ADDRESS conflicts
+  - VMware NAT issues
+  - DNS resolution failures
+
+**Outcome:**  
+Validated and stabilized network services supporting the domain
 
 ---
 
 ## Automation (PowerShell)
 
-I started by creating users and groups manually while building the lab, which worked at first but quickly became repetitive.
+- Automated OU and security group creation
+- Used CSV-driven user provisioning
+- Implemented bulk user import scripts
 
-After rebuilding the environment in VMware, I switched to using PowerShell with CSV files to automate user and group creation. This made it much easier to scale and manage multiple accounts at once.
-
-### What I Used
-
-- PowerShell scripts for creating OUs and security groups
-- CSV file to define users and assign them to the correct departments
-- Bulk user creation script to import accounts into Active Directory
-
-### Why This Matters
-
-Working through both the manual and automated approach helped me understand:
-- how Active Directory objects are structured
-- why automation is important in larger environments
-- how repetitive administrative tasks can be simplified with scripting
-
-### Key Scripts
-
-- [OU Infrastructure Setup](./Scripts/Phase1_Infrastructure/SteenCorp%20OU%20Infrastructure%20Setup.ps1)  
-- [Security Group Deployment](./Scripts/Phase1_Infrastructure/SteenCorp%20Group%20Infrastructure.ps1)  
-- [Employee CSV Generator](./Scripts/Phase1_Infrastructure/Create%20Mega%20SteenCorp%20Employee%20CSV.ps1)  
-- [Bulk User Provisioning](./Scripts/Phase1_Infrastructure/SteenCorp%20Final%20Bulk%20Ingestion.ps1)  
+**Why it matters:**  
+Demonstrates ability to scale and manage enterprise environments efficiently
 
 ---
 
 ## Validation & Testing
 
-- Verified network connectivity (ICMP / ping)
-- Confirmed domain join
-- Checked user placement and group membership
-- Tested access controls and GPO enforcement
+- Verified domain join and authentication
+- Tested RBAC and access restrictions
+- Validated GPO enforcement
+- Confirmed DNS and DHCP functionality
+- Performed client-side testing and troubleshooting
 
 ---
 
 ## Final Result
 
-- Domain fully operational  
-- RBAC enforced across departments  
-- GPO policies applied successfully  
-- Network services functioning and validated  
-- Client systems properly authenticated and managed  
+- Fully operational Active Directory domain
+- RBAC enforced across departments
+- Group Policy applied successfully
+- Network services configured and validated
+- Client systems properly authenticated and managed
 
 ---
 
 ## Key Takeaways
 
-- Rebuilding environments can be more efficient than patching failures  
-- PowerShell automation enables scalable administration  
-- Networking issues often originate from hidden infrastructure conflicts  
-- DNS and DHCP are critical to domain functionality  
-- Validation from the end-user perspective is essential 
+- Infrastructure changes can impact dependent services (e.g., GPO paths)
+- Centralized policy design improves consistency and manageability
+- Troubleshooting is as critical as configuration
+- DNS and DHCP are foundational to domain functionality
+- End-user validation is essential for confirming system behavior
