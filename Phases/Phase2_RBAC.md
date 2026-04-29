@@ -70,7 +70,7 @@ While testing from the Windows 11 client:
 
 This resulted in an incomplete and inconsistent RBAC implementation.
 
-![Incorrect Path](../Evidence/Validation/Screenshot%202026-04-29%20123102.png)
+![Incorrect Path](..Evidence/Validation/Incorrect_Path.png)
 
 ---
 
