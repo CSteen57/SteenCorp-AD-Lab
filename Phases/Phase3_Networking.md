@@ -222,10 +222,3 @@ Results:
 - Troubleshooting is as important as configuration
 
 ---
-
-## Next Steps
-
-- Route analysis (`route print`)
-- Path tracing (`tracert`)
-- ARP table validation (`arp -a`)
-- DNS query behavior (recursive vs iterative)
