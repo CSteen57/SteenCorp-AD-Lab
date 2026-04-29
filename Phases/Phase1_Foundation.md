@@ -8,9 +8,9 @@ Set up a working Active Directory environment and build a domain structure that 
 ## What I Set Up
 
 - Windows Server 2022 as the Domain Controller (DC01)
+- Windows 11 VM as a domain-joined client machine
 - Active Directory Domain Services (AD DS)
 - Scripted Organizational Unit (OU) structure for departments, groups, and workstations
-
 ---
 
 ## Implementation
