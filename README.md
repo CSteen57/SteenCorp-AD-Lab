@@ -44,7 +44,8 @@ Throughout the project, I:
 |------|--------|------|--------|
 | Phase 1: Foundation | Completed | Domain setup, AD DS, virtualization | Built a fully functional domain environment |
 | Phase 2: RBAC & GPO | Completed | Access control, drive mapping, policy enforcement | Implemented and validated RBAC with real troubleshooting |
-| Phase 3: Networking & Troubleshooting | In Progress | DNS, DHCP, IP management, issue resolution | Validating and troubleshooting core network services |
+| Phase 3: Networking & Troubleshooting | Complete | DNS, DHCP, IP management, issue resolution | Validating and troubleshooting core network services |
+| Phase 4: Security, Identity, & Enterprise Controls | In Progress | Privileged identity management, GPO security hardening, DHCP deployment | Implementing secure admin practices, enforcing workstation security policies, and automating network configuration |
 
 ---
 
