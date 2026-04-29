@@ -104,10 +104,18 @@ After rebuilding the environment, I transitioned from manual configuration to au
 
 ---
 
-#### Authentication Testing
-- Logged into domain using newly created user accounts  
-- Result: Successful authentication confirmed proper account creation and domain integration  
+#### Authentication & Permission Validation
 
+- Logged into the domain using a standard user account (`jhalpert`)  
+- Verified domain authentication using: `whoami`
+- Tested administrative command restrictions using: `net session`
+
+  
+**Result:**
+- User successfully authenticated as `steencorp\jhalpert`  
+- Administrative command failed with “Access is denied,” confirming proper permission enforcement  
+
+![Domain Authentication and Permission Validation](../Evidence/Validation/V3_Final_Operational_Success.png)
 ---
 ---
 
