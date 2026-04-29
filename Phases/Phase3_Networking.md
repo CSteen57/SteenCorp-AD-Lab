@@ -35,7 +35,7 @@ A structured IP addressing plan was created before implementation:
 | Gateway              | 192.168.10.1         | Default gateway                          |
 | Core Infrastructure  | 192.168.10.2–10      | Domain Controller, DNS                   |
 | Server Tier          | 192.168.10.11–20     | Future servers                           |
-| Static Range         | 192.168.10.21–50     | Reserved infrastructure                  |
+| Static Range         | 192.168.10.21–99     | Reserved infrastructure                  |
 | DHCP Range           | 192.168.10.100–200   | Client devices                           |
 
 ### Design Notes
