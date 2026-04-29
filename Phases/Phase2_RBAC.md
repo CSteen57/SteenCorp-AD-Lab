@@ -37,18 +37,19 @@ I logged in as different users and verified:
 This confirmed that group-based access control was working correctly.
 
 ![Sales Department](../Evidence/Validation/03_Sales_Department_Live.png)
-x
+
 ### Permission Validation (Standard User Restrictions)
 
-To verify that access control was working beyond just file permissions, I tested what a standard user could actually do on the system.
+To test access beyond just file permissions, I logged in as a Sales user (`jhalpert`) and tried running the `net session` command.
 
-I logged in as a Sales user (`jhalpert`) and attempted to run a network-level command.
+This command requires administrative privileges, and the result was:
 
-The result:
-- Command failed with "Access is denied"
-- Confirms the user does not have administrative privileges
+- System error 5 has occurred
+- Access is denied
 
-![Standard User Restricted](../Evidence/Validation/04_Standard_User_Access_Denied.png)
+This confirmed the account is operating as a standard user and does not have elevated permissions.
+
+![Standard User Restricted](../Evidence/Validation/V3_Final_Operational_Success.png)
 ---
 
 ## What I Learned / Why It Matters
