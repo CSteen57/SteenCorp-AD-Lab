@@ -54,35 +54,17 @@ This mirrors how enterprise environments are deployed, tested, and maintained in
 
 Established the core infrastructure for a simulated enterprise Active Directory environment.
 
-- Deployed a Windows Server 2022 system (DC01) and promoted it to a Domain Controller for the SteenCorp.local domain  
-- Configured Active Directory Domain Services (AD DS) and validated domain functionality  
-- Joined a Windows 11 client machine to the domain and verified user authentication across multiple accounts  
-- Built the lab environment in VMware to ensure stability, performance, and network control  
+- Deployed Windows Server 2022 Domain Controller (`steencorp.local`)
+- Configured Active Directory Domain Services (AD DS)
+- Joined Windows 11 client and validated domain authentication
+- Migrated environment from VirtualBox to VMware to improve stability and networking reliability
+- Automated OU, group, and user creation using PowerShell scripts
 
 ### Key Outcome
-Successfully created a stable domain environment capable of supporting centralized authentication, user management, and future policy enforcement.
+Successfully deployed and validated a scalable Active Directory domain environment capable of supporting centralized authentication and future access control implementation.
 
-### Major Challenge: VirtualBox Failure → VMware Migration
-
-Initially built the lab in VirtualBox but encountered Windows 11 display driver issues (black screen).  
-
-**Action:**
-- Demoted original Domain Controller  
-- Rebuilt entire environment in VMware  
-
-**Result:**
-- Improved performance, stability, and network reliability  
-
-<details>
-<summary>View Migration Evidence</summary>
-
-![VirtualBox Boot Error](Evidence/Infrastructure/Screenshot%202026-04-13%20120545.png)
-
-![Domain Demotion](Evidence/Infrastructure/00_Demote_Domain.png)
-
-</details>
-
----
+➡️ **View Full Phase 1 Documentation:**  
+[Phase 1 – Foundation & Environment Setup](Phases/Phase1_Foundation.md)
 
 ## Phase 2: RBAC & GPO Implementation
 
