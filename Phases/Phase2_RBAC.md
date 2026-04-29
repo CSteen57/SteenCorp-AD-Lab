@@ -70,7 +70,7 @@ While testing from the Windows 11 client:
 
 This resulted in an incomplete and inconsistent RBAC implementation.
 
-![Incorrect Path](..Evidence/Validation/Incorrect_Path.png)
+![Incorrect Path](../Evidence/Validation/Incorrect_Path.png))
 
 ---
 
@@ -115,7 +115,7 @@ I ran:
 
 The command completed successfully, but the issue persisted.
 
-![Validation Attempt](../Evidence/Validation/the-aha-moment.png)
+![Validation Attempt](../Evidence/Validation/Validation_Attempt.png)
 
 ---
 
@@ -135,7 +135,9 @@ Because of this:
   SteenCorp_HQ → Workstations
 
 - Forced policy update:
-  gpupdate /force
+  `gpupdate /force`
+  
+![Workstation GPO Update](../Evidence/Validation/The%20Aha%20Moment.png)
 
 ---
 
@@ -145,8 +147,9 @@ Because of this:
 - All mapped drives appeared correctly
 - Users could access only their assigned department drives
 
-![Successful GPUpdate](../Evidence/Validation/11_Success_GPUpdate.png)
-![Mapped Drives](../Evidence/Validation/13_Success_Mapped_Drives.png)
+![Successful GPUpdate](../Evidence/Validation/Final_gpupdate.png)
+
+![Mapped Drives](../Evidence/Validation/V3_Final_Operational_Success%20_2.png)
 
 ---
 
