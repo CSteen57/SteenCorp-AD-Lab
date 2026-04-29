@@ -129,7 +129,7 @@ Account lockout triggered and resolved through administrative intervention.
 - [Phase 1 – Foundation & Environment Setup](./Phases/Phase1_Foundation.md)  
 - [Phase 2 – RBAC & GPO Implementation](./Phases/Phase2_RBAC.md)  
 - [Phase 3 – Networking & Troubleshooting](./Phases/Phase3_Networking.md)  
-- [Phase 4 – Security & Enterprise Controls](./Phases/Phase4_Security.md)  
+- [Phase 4 – Security, Identity & Enterprise Controls](./Phases/Phase4_Security,%20Identity%20%26%20Enterprise%20Controls.md)  
 
 ---
 
