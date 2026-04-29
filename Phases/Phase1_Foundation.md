@@ -1,7 +1,7 @@
 # Phase 1 – Foundation
 
 ## Objective
-Set up a working Active Directory environment and establish a domain controller that I could build the rest of the lab on.
+Set up a working Active Directory environment and build a domain structure that I could actually scale and manage, not just click through.
 
 ---
 
@@ -9,7 +9,7 @@ Set up a working Active Directory environment and establish a domain controller 
 
 - Windows Server 2022 as the Domain Controller (DC01)
 - Active Directory Domain Services (AD DS)
-- Initial Organizational Unit (OU) structure for departments and users
+- Scripted Organizational Unit (OU) structure for departments, groups, and workstations
 
 ---
 
@@ -17,36 +17,45 @@ Set up a working Active Directory environment and establish a domain controller 
 
 ### VirtualBox Issue → Rebuild in VMware
 
-This screenshot shows me removing the original domain I built in VirtualBox.
+I originally built this environment in VirtualBox, but ran into a blocking issue where my Windows 11 client VM would not boot (black screen).
 
-I ran into a persistent issue where the Windows 11 client would not boot correctly (black screen), no matter what troubleshooting steps I tried. Instead of continuing to troubleshoot a broken setup, I decided to rebuild the entire environment in VMware.
+After trying multiple fixes, I decided to stop wasting time troubleshooting the hypervisor and rebuilt the entire lab in VMware.
 
-![Removing Initial Domain (VirtualBox)](../Evidence/Infrastructure/00_Demote_Domain.png)
-
-This ended up being the better choice:
-- More stable performance
-- Better control over networking (which became important later)
+This ended up being the right call:
+- More stable VM performance
+- Better control over networking later in the project
 
 ---
 
 ### Domain Controller Setup (VMware)
 
-After switching to VMware, I rebuilt the environment and installed AD DS, promoting the server to a domain controller and creating the `steencorp.local` domain.
+After switching to VMware, I rebuilt the domain and promoted the server to a Domain Controller for:
 
-
+`steencorp.local`
 
 ---
 
-### Organizational Unit Structure
+### OU Structure (Scripted Instead of Manual)
 
-Once the domain was up and running, I created a basic OU structure to organize users, departments, and workstations.
+After switching hypervisors, I didn’t want to redo everything manually again, so I used a PowerShell script to rebuild the OU structure and make it repeatable.
 
-![OU Structure](../Evidence/Infrastructure/01_SteenCorp_OU_Structure.png)
+This includes:
+- Root OU (`SteenCorp_HQ`)
+- Sub containers (Departments, Groups, Workstations)
+- Department-level OUs (IT, Sales, HR, Accounting, Marketing)
+
+![OU Creation Script](../Evidence/Infrastructure/OU_Script_Creation.png)
+
+This approach made the setup:
+- Repeatable
+- Faster to rebuild if needed
+- More aligned with how larger environments are actually managed
+
 ---
 
 ## Outcome
 
 - Domain successfully configured (`steencorp.local`)
 - Domain Controller fully operational
-- OU structure in place for departments and users
-- Stable environment ready for user, group, and access control configuration
+- OU structure deployed via PowerShell
+- Environment ready for user, group, and access control configuration
