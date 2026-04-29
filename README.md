@@ -12,6 +12,22 @@ This project was built to bridge the gap between certification knowledge and pra
 
 ---
 
+## What This Project Demonstrates
+
+This lab showcases hands-on experience with:
+
+- Active Directory Domain Services (AD DS)
+- Group Policy (GPO) design and troubleshooting
+- Role-Based Access Control (RBAC)
+- DHCP & DNS configuration and debugging
+- Enterprise identity and access management
+- Security hardening and policy enforcement
+- Real-world issue diagnosis and resolution
+
+All configurations were built and validated in a virtualized environment using Windows Server 2022 and Windows 11.
+
+---
+
 ## Lab Design Philosophy
 
 The environment was built as a reusable domain infrastructure rather than a one-off lab.
@@ -24,20 +40,6 @@ This allows additional scenarios to be layered on top of the same system, includ
 - Future infrastructure and service expansion  
 
 This approach reflects how real enterprise environments are continuously developed and maintained.
-
----
-
-
-## Key Skills Demonstrated
-
-- Active Directory Domain Services (AD DS)
-- Organizational Unit (OU) design and automation
-- Role-Based Access Control (RBAC)
-- Group Policy (GPO) configuration and enforcement
-- DNS and DHCP configuration
-- Network troubleshooting and validation
-- Privileged identity management
-- Workstation security hardening
 
 ---
 
@@ -81,18 +83,19 @@ This approach reflects how real enterprise environments are continuously develop
 
 ### Real-World Troubleshooting
 
-- Resolved DHCP conflicts caused by VMware NAT
+- Resolved DHCP conflicts caused by VMware NAT interference
 - Diagnosed incorrect IP assignments and BAD_ADDRESS conflicts
 - Fixed GPO deployment issues caused by incorrect OU placement
+- Identified and corrected DNS resolution inconsistencies
 
 ---
 
 ### Security Implementation
 
 - Dedicated administrative account (tiered admin model)
-- Account lockout policies enforced
-- Login banner and workstation hardening applied
-- Privilege separation between standard and admin accounts
+- Account lockout policy enforcement
+- Login banner and workstation hardening
+- Privilege separation between standard and administrative accounts
 
 ---
 
@@ -107,7 +110,7 @@ Users can only access their assigned department drives.
 
 ### Network Validation
 
-Verified DHCP and DNS configuration from client:
+Verified DHCP and DNS configuration from the client:
 
 ![Network Validation](./Evidence/Validation/Final_VIP_Workstation_IP_Verification.png)
 
@@ -115,7 +118,7 @@ Verified DHCP and DNS configuration from client:
 
 ### Security Enforcement
 
-Account lockout triggered and resolved through admin intervention.
+Account lockout triggered and resolved through administrative intervention.
 
 ![Account Lockout](./Evidence/Validation/Account_Lockout_Triggered.png)
 
@@ -123,16 +126,16 @@ Account lockout triggered and resolved through admin intervention.
 
 ## Project Structure
 
-- [Phase 1 – Foundation & Environment Setup](./Phase1_Foundation.md)  
-- [Phase 2 – RBAC & GPO Implementation](./Phase2_RBAC.md)  
-- [Phase 3 – Networking & Troubleshooting](./Phase3_Networking.md)  
-- [Phase 4 – Security & Enterprise Controls](./Phase4_Security.md)  
+- [Phase 1 – Foundation & Environment Setup](./Phases/Phase1_Foundation.md)  
+- [Phase 2 – RBAC & GPO Implementation](./Phases/Phase2_RBAC.md)  
+- [Phase 3 – Networking & Troubleshooting](./Phases/Phase3_Networking.md)  
+- [Phase 4 – Security & Enterprise Controls](./Phases/Phase4_Security.md)  
 
 ---
 
 ## What I Learned
 
-- Building systems is only part of IT — troubleshooting is critical  
+- Building systems is only one part of IT — troubleshooting is critical  
 - Group Policy and OU structure directly impact system behavior  
 - Virtual environments can introduce real-world networking issues  
 - Security must be implemented and validated, not assumed  
@@ -143,11 +146,12 @@ Account lockout triggered and resolved through admin intervention.
 
 This environment is designed to serve as a long-term foundation for additional labs and real-world scenarios.
 
-Future expansions will build on this domain and be documented as separate projects, including:
+Planned expansions include:
 
-- Network Diagnostics Lab (tracert, routing, ARP analysis)
-- Help Desk Simulation Lab (user issues, permissions, troubleshooting workflows)
-- Security Expansion (AppLocker, auditing, logging, policy enforcement)
-- Additional infrastructure services and enterprise scenarios
+- Network Diagnostics Lab (routing, ARP, path analysis)
+- Help Desk Simulation Lab (user issues, ticket scenarios, access troubleshooting)
+- Security Expansion (AppLocker, auditing, logging, SIEM integration)
+- VPN and remote access configuration
+- Advanced network segmentation (VLANs, ACLs, firewall rules)
 
-As new labs are developed, they will be linked here to demonstrate continued growth and practical experience.
+Future labs will build on this domain and be linked here as they are developed.
