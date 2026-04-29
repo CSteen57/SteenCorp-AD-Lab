@@ -1,23 +1,19 @@
 # Phase 3 – Networking & Domain Connectivity
 
----
-
 ## Objective
-Configure and validate core networking services (DHCP & DNS) within the SteenCorp lab, and troubleshoot real-world connectivity and resolution issues.
+Configure and validate DHCP and DNS services while troubleshooting real-world network issues.
 
 ---
 
 ## Overview
 
-Phase 3 transitions the lab from isolated systems into a fully functional network.
+This phase transitions the lab into a fully networked environment.
 
-In this phase, I:
-- Designed a structured IP addressing scheme
-- Configured the Domain Controller (DC01) as the central DHCP and DNS authority
-- Implemented forward and reverse DNS lookup
-- Diagnosed and resolved real networking issues
-
-This phase focuses heavily on **troubleshooting and validation**, which are critical in real IT environments.
+Key implementations:
+- Structured IP addressing
+- DHCP deployment
+- DNS configuration
+- Real-world troubleshooting
 
 ---
 
@@ -30,13 +26,7 @@ This phase focuses heavily on **troubleshooting and validation**, which are crit
 | Core Infrastructure | 192.168.10.2–10 | DC, DNS |
 | Server Tier | 192.168.10.11–20 | Future servers |
 | Static Range | 192.168.10.21–99 | Reserved |
-| DHCP Range | 192.168.10.100–200 | Client devices |
-
-**Design Considerations:**
-- Static IPs for critical services
-- DHCP for scalability
-- Centralized DNS
-- Segmentation to prevent conflicts
+| DHCP Range | 192.168.10.100–200 | Clients |
 
 ---
 
@@ -56,8 +46,8 @@ This phase focuses heavily on **troubleshooting and validation**, which are crit
 
 ### DNS Configuration
 
-- Forward Lookup Zone: `SteenCorp.local`
-- Reverse Lookup Zone: `192.168.10.0/24`
+- Forward Lookup Zone: SteenCorp.local  
+- Reverse Lookup Zone: 192.168.10.0/24  
 
 ![DNS Reverse Lookup](../Evidence/Networking/DNS_Reverse_Lookup_PTR_Record.png)
 
@@ -71,42 +61,34 @@ This phase focuses heavily on **troubleshooting and validation**, which are crit
 
 ## Issue 1 – DHCP Not Working
 
-During testing, the client machine received an IP in:
+Client received IP:
+192.168.217.x
 
-`192.168.217.x`
+Indicates:
+- Wrong DHCP server  
+- Network misconfiguration  
 
-This indicated:
-- The client was not receiving DHCP from DC01
-- Another DHCP service was active on the network
-
-![VMware DHCP Conflict](../Evidence/Validation/DHCP_Validation_VMware_Conflict.png)
-
----
-
-### Initial Troubleshooting
-
-Attempted:
-- `ipconfig /release`
-- `ipconfig /renew`
-
-This failed.
-
-Further inspection revealed:
-- The client adapter was still set to a static IP
-
-![DHCP Static Adapter Issue](../Evidence/Validation/DHCP_Validation_Fail_Static_Adapter.png)
+![VMware Conflict](../Evidence/Validation/DHCP_Validation_VMware_Conflict.png)
 
 ---
 
-## Issue 2 – BAD_ADDRESS Conflict
+### Troubleshooting
 
-After enabling DHCP, a new issue appeared:
+- ipconfig /release  
+- ipconfig /renew  
 
-- IP `192.168.10.101` marked as BAD_ADDRESS
+Discovered:
+- Adapter was set to static  
 
-This indicated:
-- IP conflict on the network
-- DHCP correctly preventing assignment
+![Static Adapter Issue](../Evidence/Validation/DHCP_Validation_Fail_Static_Adapter.png)
+
+---
+
+## Issue 2 – IP Conflict
+
+- BAD_ADDRESS detected for 192.168.10.101  
+
+Indicates DHCP conflict detection working properly.
 
 ![DHCP Conflict](../Evidence/Networking/DHCP_IP_Conflict_Detection.png)
 ![BAD ADDRESS](../Evidence/Networking/DHCP_Server_Bad_Address_Quarantine.png)
@@ -115,27 +97,17 @@ This indicated:
 
 ## Root Cause
 
-Investigation revealed:
-
-- VMware NAT adapter was still active
-- VMware had its own DHCP service running
-- Lab environment was connected to multiple networks
-
-This caused:
-- Incorrect IP assignment
-- DHCP conflicts
-- Network instability
+- VMware NAT enabled  
+- Secondary DHCP present  
+- Multiple networks active  
 
 ---
 
 ## Solution – Network Isolation
 
-To resolve the issue:
-
-- Moved all VMs to a custom LAN segment
-- Disabled VMware NAT influence
-- Rebooted the client
-- Renewed DHCP
+- Switched to internal LAN segment  
+- Removed NAT interference  
+- Renewed DHCP  
 
 ![LAN Isolation](../Evidence/Infrastructure/VMware_Internal_LAN_Segment_Isolation.png)
 ![NAT Conflict](../Evidence/Infrastructure/VMware_NAT_Configuration_Conflict.png)
@@ -144,29 +116,25 @@ To resolve the issue:
 
 ## Result
 
-- DHCP requests handled by DC01 only
-- No IP conflicts
-- Client received correct IP:
-  `192.168.10.101`
+- DHCP handled by DC01  
+- No conflicts  
+- Valid IP assigned:
+  192.168.10.101  
 
 ---
 
-## DNS Issue – Inconsistent Resolution
+## DNS Issue
 
-After DHCP was fixed, DNS resolution was inconsistent.
-
-Some lookups worked, others failed.
+Resolution inconsistent.
 
 ---
 
 ## DNS Fix
 
-Reset and re-registered DNS:
-
-`Stop-Service DNS`  
-`ipconfig /flushdns`  
-`Start-Service DNS`  
-`ipconfig /registerdns`
+Stop-Service DNS  
+ipconfig /flushdns  
+Start-Service DNS  
+ipconfig /registerdns  
 
 ![DNS Reset](../Evidence/Validation/PowerShell_DNS_Reset_Script.png)
 
@@ -174,10 +142,8 @@ Reset and re-registered DNS:
 
 ## DNS Forwarders
 
-Configured external resolution:
-
-- 8.8.8.8
-- 1.1.1.1
+- 8.8.8.8  
+- 1.1.1.1  
 
 ![DNS Forwarders](../Evidence/Networking/DNS_Forwarders_Validated.png)
 
@@ -185,26 +151,19 @@ Configured external resolution:
 
 ## Validation
 
-Tested using:
-
-`nslookup dc01`  
-`nslookup 192.168.10.10`
+nslookup dc01  
+nslookup 192.168.10.10  
 
 ![NSLookup](../Evidence/Validation/NSLookup_Internal_External_Success.png)
-
-Results:
-- Internal resolution ✔
-- Reverse lookup ✔
-- External resolution ✔
 
 ---
 
 ## Final Network State
 
-- IP: `192.168.10.101`
-- DHCP: `192.168.10.10`
-- DNS: `192.168.10.10`
-- Gateway: `192.168.10.1`
+- IP: 192.168.10.101  
+- DHCP: 192.168.10.10  
+- DNS: 192.168.10.10  
+- Gateway: 192.168.10.1  
 
 ![Final Validation](../Evidence/Validation/Final_VIP_Workstation_IP_Verification.png)
 
@@ -212,10 +171,8 @@ Results:
 
 ## Key Takeaways
 
-- IP planning is critical before deployment
-- Virtual environments can introduce hidden network conflicts
-- DHCP and DNS must be tightly controlled
-- Network isolation is essential in lab environments
-- Troubleshooting is as important as configuration
-
----
+- IP planning is critical  
+- Virtual environments can cause hidden conflicts  
+- DHCP and DNS must be controlled  
+- Network isolation is essential  
+- Troubleshooting is a core skill  
