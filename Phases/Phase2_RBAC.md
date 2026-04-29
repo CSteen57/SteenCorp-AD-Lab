@@ -1,28 +1,24 @@
 # Phase 2 – Role-Based Access Control (RBAC)
 
 ## Objective
-Set up department-based access so users only have access to what they’re supposed to, and actually test that it works from the client side.
-
----
-
-## What I Built
-
-- Created security groups for each department (HR, IT, Sales)
-- Assigned users to groups based on role
-- Used groups instead of individual permissions to keep it scalable
-- Built out a shared folder environment to test access control
+Design and implement role-based access control (RBAC) to restrict user access based on department roles and validate that permissions are enforced from the client side.
 
 ---
 
 ## Implementation
 
-### Security Group Setup
+### Identity & Group Design
 
-Instead of assigning permissions user-by-user, I created security groups for each department and added users to the appropriate groups.
+- Created departmental security groups (HR, IT, Sales) to represent organizational roles  
+- Assigned users to groups based on department membership  
+- Used group-based access control instead of individual user permissions to ensure scalability and maintainability  
 
-This is how access is typically managed in real environments to keep things clean and scalable.
+---
 
-![Security Groups](../Evidence/Infrastructure/02_Security_Group_Deployment.png)
+### Resource Design
+
+- Built a centralized shared directory (`SteenCorp_Shares`) to simulate a company file server  
+- Created department-specific folders (HR, IT, Sales) to represent isolated business data  
 
 ---
 
