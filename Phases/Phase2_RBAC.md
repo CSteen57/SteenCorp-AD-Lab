@@ -90,12 +90,16 @@ I rebuilt and standardized the drive mapping configuration.
   - GPO_MAP_IT_Drive
   - GPO_MAP_Sales_Drive
 
-- Rebuilt mappings:
-  - HR → H:
-  - Sales → S:
-  - IT → I:
-  - Accounting → A:
-  - Public → P:
+## Rebuilt mappings:
+
+| Department             | Drive :       | Who Has Access                                |
+|----------------------|----------------------|------------------------------------------|
+| HR            | H:      | HR_Users                         |
+| Sales              | S:         | Sales_Users                          |
+| IT | I:      | IT_Staff                   |
+| Acounting        | A:     | Accounting_Users                           |
+| Public        | P:     | Company Wide Access                  |
+
 
 ![Updated Drive Maps](../Evidence/Infrastructure/Drive_Maps_Overview.png)
 
