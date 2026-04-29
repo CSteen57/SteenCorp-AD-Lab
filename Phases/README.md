@@ -22,17 +22,7 @@ Each phase represents a core area of enterprise IT infrastructure, progressing f
 🚧 In Progress  
 - DNS, connectivity, domain communication
 
-### [Phase 4 – Automation](./Phase4_Automation.md)
-🚧 In Progress  
-- PowerShell scripting and bulk provisioning
 
-### [Phase 5 – Security](./Phase5_Security.md)
-🚧 In Progress  
-- GPOs, permissions, access enforcement
-
-### [Phase 6 – Helpdesk Simulation](./Phase6_Helpdesk.md)
-🚧 In Progress  
-- End-user validation and troubleshooting scenarios
 
 ---
 
