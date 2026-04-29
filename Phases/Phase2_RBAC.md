@@ -1,7 +1,7 @@
 # Phase 2 – Role-Based Access Control (RBAC)
 
 ## Objective
-Design and implement role-based access control (RBAC) using Active Directory security groups and validate access through mapped network drives from the client side.
+Design and implement role-based access control (RBAC) using Active Directory security groups and validate access through mapped network drives.
 
 ---
 
@@ -24,7 +24,7 @@ Group-based RBAC is scalable, easier to manage, and reflects real enterprise ide
 ### Resource Design
 
 - Created centralized file share:
-  `\\WIN-4CF03BHNDEC\SteenCorp_Shares`
+  \\WIN-4CF03BHNDEC\SteenCorp_Shares
 
 - Built department folders:
   - HR
@@ -37,11 +37,11 @@ Group-based RBAC is scalable, easier to manage, and reflects real enterprise ide
 
 ### Initial Drive Mapping
 
-I initially configured a mapped drive for the Sales department using Group Policy.
+Configured a mapped drive for the Sales department using Group Policy.
 
 - Drive: S:
 - Path:
-  `\\WIN-4CF03BHNDEC\SteenCorp_Shares`
+  \\WIN-4CF03BHNDEC\SteenCorp_Shares
 
 ![Initial Drive Mapping](../Evidence/Validation/GPO%20Drive%20Map%20COnfiguration%20for%20Sales%20Department.png)
 
@@ -49,26 +49,23 @@ I initially configured a mapped drive for the Sales department using Group Polic
 
 ## Issue Discovered During Validation
 
-While testing from the Windows 11 client:
+Testing from the Windows 11 client revealed:
 
-- Other departments did not receive mapped drives
-- Drive mapping behavior was inconsistent
-- Some access attempts failed
+- Other departments did not receive mapped drives  
+- Drive mapping behavior was inconsistent  
+- Some access attempts failed  
 
 ---
 
 ## Root Cause
 
-- Drive mappings were still pointing to the old server:
-  `\\WIN-4CF03BHNDEC\SteenCorp_Shares`
+- Drive mappings still pointed to the old server name
+- Only HR mapping was correctly configured  
+- Drive mappings were split across multiple GPOs:
+  - GPO_MAP_IT_Drive
+  - GPO_MAP_Sales_Drive
 
-- Only one department (HR) was properly configured
-
-- Additional mappings were split across multiple GPOs:
-  - `GPO_MAP_IT_Drive`
-  - `GPO_MAP_Sales_Drive`
-
-This resulted in an incomplete and inconsistent RBAC implementation.
+This created an inconsistent RBAC implementation.
 
 ![Incorrect Path](../Evidence/Validation/Incorrect_Path.png)
 
@@ -76,31 +73,29 @@ This resulted in an incomplete and inconsistent RBAC implementation.
 
 ## Solution
 
-I rebuilt and standardized the drive mapping configuration.
+Rebuilt and standardized the drive mapping configuration.
 
 ### Fixes Applied
 
 - Updated all paths to:
-  `\\DC01\SteenCorp_Shares`
+  \\DC01\SteenCorp_Shares
 
 - Consolidated mappings into a single GPO:
-  `GPO_SteenCorp_Master_Drive_Map`
+  GPO_SteenCorp_Master_Drive_Map
 
-- Removed redundant GPOs:
-  - `GPO_MAP_IT_Drive`
-  - `GPO_MAP_Sales_Drive`
+- Removed redundant GPOs
 
 ---
 
-### Rebuilt Drive Mapping Structure
+### Final Drive Mapping Structure
 
-| Department | Drive | Access Group        |
-|----------|------|---------------------|
-| HR       | H:   | HR_Users            |
-| Sales    | S:   | Sales_Users         |
-| IT       | I:   | IT_Staff            |
-| Accounting | A: | Accounting_Users    |
-| Public   | P:   | Domain Users        |
+| Department | Drive | Access Group |
+|----------|------|--------------|
+| HR       | H:   | HR_Users |
+| Sales    | S:   | Sales_Users |
+| IT       | I:   | IT_Staff |
+| Accounting | A: | Accounting_Users |
+| Public   | P:   | Domain Users |
 
 ![Updated Drive Maps](../Evidence/Infrastructure/Drive_Maps_Overview.png)
 
@@ -108,17 +103,8 @@ I rebuilt and standardized the drive mapping configuration.
 
 ## Additional Issue – GPO Not Applying
 
-After implementing the fix, I tested access from a client machine.
-
-### Observation
-
-- Drives were still not appearing for some users
-- GPO changes were not applying as expected
-
-I ran:
-`gpupdate /force`
-
-The command completed successfully, but the issue persisted.
+- Drives were still missing for some users  
+- gpupdate /force did not resolve the issue  
 
 ![Validation Attempt](../Evidence/Validation/Validation_Attempt.png)
 
@@ -126,21 +112,20 @@ The command completed successfully, but the issue persisted.
 
 ## Root Cause (GPO Application)
 
-The Windows 11 client machine was not placed in the correct Organizational Unit (OU).
+The client machine was not placed in the correct OU.
 
-Because of this:
-- The system was not receiving the intended Group Policy Objects
-- Drive mappings were not being applied
+- GPOs were not applied  
+- Drive mappings were not deployed  
 
 ---
 
 ## Resolution
 
 - Moved machine to:
-  `SteenCorp_HQ → Workstations`
+  SteenCorp_HQ → Workstations
 
 - Forced policy update:
-  `gpupdate /force`
+  gpupdate /force
 
 ![Workstation GPO Update](../Evidence/Validation/The%20Aha%20Moment.png)
 
@@ -148,41 +133,38 @@ Because of this:
 
 ## Final Validation
 
-- Group Policy applied successfully
-- All mapped drives appeared correctly
-- Users could access only their assigned department drives
+- GPO applied successfully  
+- Drives mapped correctly  
+- Access restricted by department  
 
 ![Successful GPUpdate](../Evidence/Validation/Final_gpupdate.png)
-
 ![Mapped Drives](../Evidence/Validation/V3_Final_Operational_Success%20_2.png)
 
 ---
 
-## Standard User Permission Validation
+## Permission Validation
 
-Tested with:
-`net session`
+Tested:
+net session
 
 Result:
-- System error 5 – Access is denied
+Access denied (expected for standard users)
 
 ![Standard User](../Evidence/Validation/V3_Final_Operational_Success.png)
 
 ---
 
-## What I Learned
+## Key Takeaways
 
-- RBAC requires proper alignment between users, groups, and resources
-- Server name changes can break GPO paths
-- GPO design should be centralized to avoid inconsistencies
-- OU placement directly impacts policy application
-- Client-side validation is critical for confirming configuration
+- RBAC requires alignment between users, groups, and resources  
+- GPO design must be centralized  
+- OU placement directly controls policy application  
+- Client validation is critical  
 
 ---
 
 ## Outcome
 
-- Users segmented by department
-- Centralized and consistent drive mapping implemented
-- Group Policy functioning correctly across the domain
-- Environment prepared for further security controls (GPO hardening, AppLocker, etc.)
+- Department-based access control implemented  
+- Consistent drive mapping via GPO  
+- Environment ready for security hardening 
