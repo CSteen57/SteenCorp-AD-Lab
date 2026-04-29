@@ -1,61 +1,92 @@
-# Phase 1 – Foundation
+# Phase 1 – Foundation & Environment Setup
 
 ## Objective
-Set up a working Active Directory environment and build a domain structure that I could actually scale and manage, not just click through.
+Establish a scalable Active Directory domain environment capable of supporting enterprise user management, organizational structure, and future policy enforcement.
 
 ---
 
-## What I Set Up
+## Environment
+- Windows Server 2022 (Domain Controller – DC01)
+- Windows 11 (Domain-Joined Client)
+- VMware Workstation
 
-- Windows Server 2022 as the Domain Controller (DC01)
-- Windows 11 VM as a domain-joined client machine
-- Active Directory Domain Services (AD DS)
-- Scripted Organizational Unit (OU) structure for departments, groups, and workstations
 ---
 
 ## Implementation
 
-### VirtualBox Issue → Rebuild in VMware
-
-I originally built this environment in VirtualBox, but ran into a blocking issue where my Windows 11 client VM would not boot (black screen).
-
-After trying multiple fixes, I decided to stop wasting time troubleshooting the hypervisor and rebuilt the entire lab in VMware.
-
-This ended up being the right call:
-- More stable VM performance
-- Better control over networking later in the project
+### Domain Controller Deployment
+- Deployed Windows Server 2022 and promoted it to a Domain Controller for the `steencorp.local` domain  
+- Installed and configured Active Directory Domain Services (AD DS)  
+- Established centralized authentication for domain users  
 
 ---
 
-### Domain Controller Setup (VMware)
+### Virtualization Migration (Critical Decision)
 
-After switching to VMware, I rebuilt the domain and promoted the server to a Domain Controller for:
+Initially built the environment in VirtualBox, but encountered a blocking issue where the Windows 11 VM failed to boot (black screen).
 
-`steencorp.local`
+<details>
+<summary>View Issue & Migration Evidence</summary>
+
+**VirtualBox Boot Failure**  
+![VirtualBox Boot Error](Evidence/Infrastructure/Screenshot%202026-04-13%20120545.png)
+
+**Domain Demotion Prior to Rebuild**  
+![Domain Demotion](Evidence/Infrastructure/00_Demote_Domain.png)
+
+</details>
+
+Rather than continuing to troubleshoot a non-critical platform issue, I made the decision to rebuild the lab in VMware.
+
+**Result:**
+- Improved system stability and performance  
+- Greater control over networking for later phases  
+- More reliable environment for domain services  
+- Reinforced understanding of virtualization platform limitations and their impact on infrastructure stability  
 
 ---
 
-### OU Structure (Scripted Instead of Manual)
+### Organizational Unit (OU) Design & Automation
 
-After switching hypervisors, I didn’t want to redo everything manually again, so I used a PowerShell script to rebuild the OU structure and make it repeatable.
+After rebuilding the environment, I transitioned from manual setup to automated deployment using PowerShell.
 
-This includes:
-- Root OU (`SteenCorp_HQ`)
-- Sub containers (Departments, Groups, Workstations)
-- Department-level OUs (IT, Sales, HR, Accounting, Marketing)
+**Structure Implemented:**
+- Root OU: `SteenCorp_HQ`  
+- Sub-containers: `Departments`, `Groups`, `Workstations`  
+- Department OUs: IT, Sales, HR, Accounting, Marketing  
 
-![OU Creation Script](../Evidence/Infrastructure/OU_Script_Creation.png)
+**Automation Approach:**
+- Used PowerShell scripts to create OUs and structure  
+- Designed to be repeatable and scalable  
 
-This approach made the setup:
-- Repeatable
-- Faster to rebuild if needed
-- More aligned with how larger environments are actually managed
+**Why This Matters:**
+- Reduces manual configuration time  
+- Ensures consistency across environments  
+- Reflects real-world enterprise administration practices  
+
+---
+
+## Validation
+
+- Verified successful domain promotion and AD DS functionality  
+- Confirmed Windows 11 client successfully joined to domain  
+- Tested authentication using multiple user accounts  
+- Validated OU structure creation via PowerShell execution  
 
 ---
 
 ## Outcome
 
-- Domain successfully configured (`steencorp.local`)
-- Domain Controller fully operational
-- OU structure deployed via PowerShell
-- Environment ready for user, group, and access control configuration
+- Fully operational Active Directory domain (`steencorp.local`)  
+- Centralized authentication functioning across domain  
+- Scalable OU structure deployed and ready for RBAC implementation  
+- Stable virtualization platform established for continued lab expansion  
+
+---
+
+## Key Takeaways
+
+- Rebuilding environments can be more efficient than troubleshooting unstable platforms  
+- Automation through PowerShell is essential for scalable administration  
+- Proper OU design is critical for future Group Policy and access control  
+- Infrastructure stability directly impacts the reliability of domain services 
