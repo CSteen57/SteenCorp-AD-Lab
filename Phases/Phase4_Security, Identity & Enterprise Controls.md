@@ -1,8 +1,5 @@
 # Phase 4 – Security & Enterprise Controls
 
-## Status
-🚧 In Progress
-
 ---
 
 ## Objective
