@@ -107,8 +107,8 @@ After rebuilding the environment, I transitioned from manual configuration to au
 #### Authentication & Permission Validation
 
 - Logged into the domain using a standard user account (`jhalpert`)  
-- Verified domain authentication using: `whoami`
-- Tested administrative command restrictions using: `net session`
+- Verified domain authentication using: ```whoami```
+- Tested administrative command restrictions using: ```net session```
 
   
 **Result:**
