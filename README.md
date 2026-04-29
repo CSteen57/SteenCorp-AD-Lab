@@ -1,27 +1,25 @@
 # SteenCorp Enterprise Infrastructure Lab
 
-## Overview
+## Objective
 
-I built this lab to get hands-on experience with how a real Active Directory environment works.
+Build and validate a simulated enterprise Active Directory environment capable of supporting real-world IT operations, including user management, access control, group policy enforcement, and network services.
 
-The goal wasn’t just to set everything up, but to actually understand how users, permissions, and networking all connect. I set up a domain controller, joined a client machine, created users and groups, and tested access between different departments.
-
-Along the way I ran into real issues (especially with networking) and worked through them, which ended up being the most valuable part of the project.
-
+This project demonstrates the ability to:
+- Administer Active Directory environments
+- Implement role-based access control (RBAC)
+- Apply Group Policy for system management
+- Configure DNS and DHCP services
+- Troubleshoot real infrastructure issues
+- Support common help desk scenarios
 ---
 
-## Project Objective
+## Overview
 
-The goal of this project was to build a basic enterprise-style environment and understand how it works at a practical level.
+This lab simulates a real enterprise IT environment using Windows Server and a domain-joined client.
 
-I focused on:
-- Setting up and managing Active Directory
-- Creating users, groups, and access controls
-- Using Group Policy to manage resources
-- Configuring DHCP and DNS so systems could communicate
-- Troubleshooting issues when things didn’t work as expected
+The focus was not just on building the infrastructure, but on understanding how systems interact and how to troubleshoot when issues occur. Throughout the project, I implemented core services, enforced security policies, and validated functionality through real-world scenarios such as account lockouts, access restrictions, and network failures.
 
-This project is meant to show that I can not only set these systems up, but also understand how they behave and fix problems when they break.
+This project reflects both system administration and help desk responsibilities..
 
 ---
 
@@ -31,21 +29,38 @@ This project is meant to show that I can not only set these systems up, but also
 - VMware Workstation
 
 ---
-
 ## Project Roadmap
 
-| Phase | Status | Focus |
-| :--- | :--- | :--- |
-| [Phase 1](Phases/Phase1_Foundation.md) | Completed | Windows Server, Windows 11, AD DS, VMware migration |
-| [Phase 2](Phases/Phase2_RBAC.md) | Completed | RBAC, file shares, NTFS permissions, GPO drive mapping |
-| [Phase 3](Phases/Phase3_Networking.md) | In Progress | DNS, DHCP, IP schema, network troubleshooting & validation |
+This lab is structured to simulate the build-out of a real enterprise IT environment, progressing from infrastructure deployment to access control and full system validation.
+
+| Phase | Status | Focus | Outcome |
+| :--- | :--- | :--- | :--- |
+| [Phase 1: Foundation](Phases/Phase1_Foundation.md) | Completed | Windows Server deployment, domain setup, virtualization | Built a functional Active Directory domain with a domain-joined client |
+| [Phase 2: Access Control & Connectivity](Phases/Phase2_RBAC.md) | Completed | Users, groups, NTFS permissions, GPO drive mapping, network integration | Implemented RBAC and ensured systems communicate correctly across the domain |
+| [Phase 3: Validation & Troubleshooting](Phases/Phase3_Networking.md) | In Progress | DNS, DHCP, IP schema, system validation, troubleshooting | Verified end-to-end functionality and resolved real-world infrastructure issues |
 
 ---
 
+### Lab Progression
+
+- Phase 1 established the core domain infrastructure  
+- Phase 2 implemented access control and ensured systems could communicate across the network  
+- Phase 3 focuses on validating all services and troubleshooting real-world issues  
+
+This mirrors how enterprise environments are deployed, tested, and maintained in production.
+
+---
 ## Phase 1: Foundation & Environment Setup
 
-- Set up a Windows Server 2022 Domain Controller (DC01) and created the Steencorp.local domain
-- Joined a Windows 11 client machine to the domain and tested login with different user accounts
+Established the core infrastructure for a simulated enterprise Active Directory environment.
+
+- Deployed a Windows Server 2022 system (DC01) and promoted it to a Domain Controller for the SteenCorp.local domain  
+- Configured Active Directory Domain Services (AD DS) and validated domain functionality  
+- Joined a Windows 11 client machine to the domain and verified user authentication across multiple accounts  
+- Built the lab environment in VMware to ensure stability, performance, and network control  
+
+### Key Outcome
+Successfully created a stable domain environment capable of supporting centralized authentication, user management, and future policy enforcement.
 
 ### Major Challenge: VirtualBox Failure → VMware Migration
 
