@@ -6,6 +6,7 @@ Establish a scalable Active Directory domain environment capable of supporting e
 ---
 
 ## Environment
+
 - Windows Server 2022 (Domain Controller – DC01)
 - Windows 11 (Domain-Joined Client)
 - VMware Workstation
@@ -15,6 +16,7 @@ Establish a scalable Active Directory domain environment capable of supporting e
 ## Implementation
 
 ### Domain Controller Deployment
+
 - Deployed Windows Server 2022 and promoted it to a Domain Controller for the `steencorp.local` domain  
 - Installed and configured Active Directory Domain Services (AD DS)  
 - Established centralized authentication for domain users  
@@ -36,42 +38,50 @@ Initially built the environment in VirtualBox, but encountered a blocking issue 
 
 </details>
 
-Rather than continuing to troubleshoot a non-critical platform issue, I made the decision to rebuild the lab in VMware.
+Rather than continuing to troubleshoot a non-critical platform issue, I rebuilt the lab in VMware.
 
 **Result:**
 - Improved system stability and performance  
 - Greater control over networking for later phases  
 - More reliable environment for domain services  
-- Reinforced understanding of virtualization platform limitations and their impact on infrastructure stability  
+- Reinforced understanding of virtualization platform limitations  
 
 ---
 
-### Organizational Unit (OU) Design & Automation
+### Organizational Unit (OU) Design
 
-After rebuilding the environment, I transitioned from manual configuration to automated deployment using PowerShell to create a scalable and repeatable Active Directory structure.
+After stabilizing the environment, I designed a structured Active Directory hierarchy to support scalability and policy management.
 
 #### Structure Implemented
+
 - Root OU: `SteenCorp_HQ`  
-- Sub-containers: `Departments`, `Groups`, `Workstations`  
-- Department OUs: IT, Sales, HR, Accounting, Marketing  
+- Sub-containers:
+  - `Departments`
+  - `Groups`
+  - `Workstations`  
+- Department OUs:
+  - IT
+  - Sales
+  - HR
+  - Accounting
+  - Marketing
+    
+![Group Deployment](../Evidence/Infrastructure/01_SteenCorp_OU_HQ_Structure.png)
 
 ---
+
+### Automation Implementation
+
+To improve scalability and reduce manual configuration, I implemented PowerShell-based automation.
 
 #### Automation Approach
-- Developed PowerShell scripts to automate the creation of Organizational Units, security groups, and users  
+
+- Developed PowerShell scripts to automate:
+  - Organizational Unit creation  
+  - Security group creation  
+  - User provisioning  
 - Used CSV-driven user provisioning to simulate a real-world employee directory  
-- Designed scripts to be reusable and scalable for rapid environment rebuilds  
-
----
-
-#### Automation Evidence
-
-- Executed PowerShell scripts to deploy OU structure, groups, and users across departments  
-- Successfully populated Active Directory using automated bulk provisioning  
-
-![PowerShell Automation Script Execution](../Evidence/Automation/04_Master_Automation_Proof.png)
-
----
+- Designed scripts to be reusable for rapid environment rebuilds  
 
 #### Scripts Used
 
@@ -82,55 +92,69 @@ After rebuilding the environment, I transitioned from manual configuration to au
 
 ---
 
-#### Why This Matters
-- Reduces manual configuration time and administrative overhead  
-- Ensures consistent and repeatable environment deployments  
-- Reflects real-world enterprise practices for identity and access management  
+### Implementation Results
+
+- Executed automation scripts to deploy OU structure, groups, and users  
+- Successfully populated Active Directory using bulk provisioning  
+- Eliminated manual user and group creation  
+
+---
+
+## Validation
+
+### OU Structure Deployment
+
+- Verified OU structure in Active Directory Users and Computers (ADUC)  
+- Result: Organizational Units aligned with intended hierarchy
+  
+![OU Hierarchy Structure](../Evidence/Infrastructure/01_SteenCorp_OU_HQ_Structure.png)
+
+---
+
+### Automated User Provisioning
+
+- Executed bulk ingestion using CSV-defined user data  
+- Result: Users created and placed into correct departmental OUs
+  
+![Bulk User Provisioning](../Evidence/Automation/04_Master_Automation_Proof.png)
+
+---
+
+### Authentication & Permission Validation
+
+- Logged in as standard user (`jhalpert`)  
+- Verified domain authentication using: `whoami`  
+- Tested administrative restriction using: `net session`  
+
+**Result:**
+- User authenticated as `steencorp\jhalpert`  
+- Administrative command failed with “Access is denied”  
+
+![Domain Authentication and Permission Validation](../Evidence/Validation/V3_Final_Operational_Success.png)
+
+---
+
+## Why This Matters
+
+- Reduces administrative overhead through automation  
+- Ensures consistent and repeatable deployments  
+- Reflects real-world enterprise identity management practices  
 - Demonstrates ability to automate large-scale user provisioning  
 
 ---
 
-### Validation
-
-#### OU Structure Deployment
-- Executed OU deployment script and verified structure in Active Directory Users and Computers (ADUC)  
-- Result: All Organizational Units created successfully and aligned with intended hierarchy  
-
----
-
-#### Automated User Provisioning
-- Ran bulk ingestion script using CSV-defined user data  
-- Result: Users were created and placed into correct departmental OUs  
-
----
-
-#### Authentication & Permission Validation
-
-- Logged into the domain using a standard user account (`jhalpert`)  
-- Verified domain authentication using: ```whoami```
-- Tested administrative command restrictions using: ```net session```
-
-  
-**Result:**
-- User successfully authenticated as `steencorp\jhalpert`  
-- Administrative command failed with “Access is denied,” confirming proper permission enforcement  
-
-![Domain Authentication and Permission Validation](../Evidence/Validation/V3_Final_Operational_Success.png)
----
----
-
 ## Outcome
 
-- Successfully deployed and validated a fully operational Active Directory domain (`steencorp.local`)  
-- Established centralized authentication across domain-joined systems  
-- Implemented a scalable Organizational Unit structure to support future RBAC and Group Policy deployment  
-- Built a stable and reliable virtualized environment for continued infrastructure expansion  
+- Fully operational Active Directory domain (`steencorp.local`) deployed  
+- Centralized authentication established across systems  
+- Scalable OU structure implemented  
+- Stable virtualized environment prepared for future phases  
 
 ---
 
 ## Key Takeaways
 
 - Rebuilding unstable environments can be more efficient than prolonged troubleshooting  
-- PowerShell automation is essential for scalable and repeatable system administration  
-- Proper OU design is foundational for effective Group Policy and access control implementation  
-- Infrastructure stability directly impacts the reliability of domain services and overall system performance   
+- PowerShell automation is critical for scalability  
+- Proper OU design is foundational for RBAC and Group Policy  
+- Infrastructure stability directly impacts system reliability
