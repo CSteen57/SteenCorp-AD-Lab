@@ -1,8 +1,5 @@
 # Phase 3 – Networking & Domain Connectivity
 
-## Status
-🚧 In Progress
-
 ---
 
 ## Objective
