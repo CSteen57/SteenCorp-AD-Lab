@@ -1,7 +1,7 @@
 # Phase 2 – Role-Based Access Control (RBAC)
 
 ## Objective
-Design and implement role-based access control (RBAC) to restrict user access based on department roles and validate that permissions are enforced from the client side.
+Design and implement role-based access control (RBAC) using Active Directory security groups and validate access through mapped network drives from the client side.
 
 ---
 
@@ -9,55 +9,172 @@ Design and implement role-based access control (RBAC) to restrict user access ba
 
 ### Identity & Group Design
 
-- Created departmental security groups (HR, IT, Sales) to represent organizational roles  
-- Assigned users to groups based on department membership  
-- Used group-based access control instead of individual user permissions to ensure scalability and maintainability  
+- Created departmental security groups:
+  - HR
+  - IT
+  - Sales
+- Assigned users based on department roles
+- Used group-based permissions instead of assigning access directly to users
+
+**Why this matters:**
+Group-based RBAC is scalable, easier to manage, and reflects real enterprise identity practices.
 
 ---
 
 ### Resource Design
 
-- Built a centralized shared directory (`SteenCorp_Shares`) to simulate a company file server  
-- Created department-specific folders (HR, IT, Sales) to represent isolated business data  
+- Created centralized file share:
+  \\WIN-4CF03BHNDEC\SteenCorp_Shares
+
+- Built department folders:
+  - HR
+  - IT
+  - Sales
+
+![Department Folder Structure](../Evidence/Infrastructure/Physical%20Directory%20Structure%20for%20Departmental%20Shares.png)
 
 ---
 
-### Department-Based Access (Live Testing)
+### Initial Drive Mapping
 
-After setting up groups, I tested access from the domain-joined Windows 11 client.
+I initially configured a mapped drive for the Sales department using Group Policy.
 
-I logged in as different users and verified:
-- Users could access their own department resources
-- Users could NOT access other department folders
+- Drive: S:
+- Path:
+  \\WIN-4CF03BHNDEC\SteenCorp_Shares
 
-This confirmed that group-based access control was working correctly.
+![Initial Drive Mapping](../Evidence/Validation/GPO%20Drive%20Map%20COnfiguration%20for%20Sales%20Department.png)
 
-![Sales Department](../Evidence/Validation/03_Sales_Department_Live.png)
-
-### Permission Validation (Standard User Restrictions)
-
-To test access beyond just file permissions, I logged in as a Sales user (`jhalpert`) and tried running the `net session` command.
-
-This command requires administrative privileges, and the result was:
-
-- System error 5 has occurred
-- Access is denied
-
-This confirmed the account is operating as a standard user and does not have elevated permissions.
-
-![Standard User Restricted](../Evidence/Validation/V3_Final_Operational_Success.png)
 ---
 
-## What I Learned / Why It Matters
+## Issue Discovered During Validation
 
-- Managing permissions through groups is way more efficient than assigning users directly
-- RBAC (Role-Based Access Control) makes environments easier to scale and maintain
-- Testing from the client side is important — not just setting it up on the server and assuming it works
+While testing from the Windows 11 client:
+
+- Other departments did not have mapped drives
+- Drive mapping behavior was inconsistent
+- Some access attempts failed
+
+---
+
+## Root Cause
+
+- Drive mappings were still pointing to the old server:
+  \\WIN-4CF03BHNDEC\SteenCorp_Shares
+
+- Only the HR drive was properly configured
+
+- Additional mappings were split across multiple GPOs:
+  - GPO_MAP_IT_Drive
+  - GPO_MAP_Sales_Drive
+
+This resulted in an incomplete and inconsistent RBAC implementation.
+
+![Incorrect Path](../Evidence/Validation/Screenshot%202026-04-29%20123102.png)
+
+---
+
+## Solution
+
+I rebuilt and standardized the drive mapping configuration.
+
+### Fixes Applied
+
+- Updated all paths:
+  \\DC01\SteenCorp_Shares
+
+- Consolidated mappings into one GPO:
+  GPO_SteenCorp_Master_Drive_Map
+
+- Removed redundant GPOs:
+  - GPO_MAP_IT_Drive
+  - GPO_MAP_Sales_Drive
+
+- Rebuilt mappings:
+  - HR → H:
+  - Sales → S:
+  - IT → I:
+  - Accounting → A:
+  - Public → P:
+
+![Updated Drive Maps](../Evidence/Infrastructure/Drive_Maps_Overview.png)
+
+---
+
+## Validation & Additional Issue
+
+After implementing the fix, I tested access from a client machine.
+
+### Observation
+
+- Drives were still not appearing for some users
+- GPO changes were not applying as expected
+
+I ran:
+`gpupdate /force`
+
+The command completed successfully, but the issue persisted.
+
+![Validation Attempt](../Evidence/Validation/the-aha-moment.png)
+
+---
+
+## Root Cause (GPO Application)
+
+The Windows 11 client machine was not placed in the correct Organizational Unit (OU).
+
+Because of this:
+- The system was not receiving the intended Group Policy Objects
+- Drive mappings were not being applied
+
+---
+
+## Resolution
+
+- Moved machine to:
+  SteenCorp_HQ → Workstations
+
+- Forced policy update:
+  gpupdate /force
+
+---
+
+## Final Validation
+
+- Group Policy applied successfully
+- All mapped drives appeared correctly
+- Users could access only their assigned department drives
+
+![Successful GPUpdate](../Evidence/Validation/11_Success_GPUpdate.png)
+![Mapped Drives](../Evidence/Validation/13_Success_Mapped_Drives.png)
+
+---
+
+## Standard User Permission Validation
+
+Tested with:
+`net session`
+
+Result:
+- System error 5 – Access is denied
+
+![Standard User](../Evidence/Validation/V3_Final_Operational_Success.png)
+
+---
+
+## What I Learned
+
+- RBAC requires proper alignment between users, groups, and resources
+- Server name changes can break GPO paths
+- GPO structure should be centralized to avoid inconsistency
+- OU placement directly impacts policy application
+- Client-side validation is critical
 
 ---
 
 ## Outcome
 
-- Users successfully segmented by department
-- Group-based access control implemented and tested
-- Environment ready for GPO deployment and further restriction
+- Users segmented by department
+- Centralized and consistent drive mapping implemented
+- Group Policy functioning correctly across the domain
+- Environment ready for further security enhancements
