@@ -23,91 +23,152 @@ In this phase, I:
 This phase represents the transition from a functional environment to a secure and manageable enterprise system.
 
 ---
-
 ## A. Professional Identity Management (Tiered Admin)
 
 ### Implementation
 
-- Created a dedicated administrative account:
+To follow enterprise security best practices, I created a dedicated administrative account instead of using the default Administrator account.
+
+- Created new user:
   adm_christian
 
-- Added the account to:
+- Placed account in:
   Domain Admins
 
-- Avoided using the default Administrator account for daily operations
+- Stored within:
+  SteenCorp_HQ → IT OU
 
 ---
 
 ### Why This Matters
 
-- Reduces risk of targeting the default Administrator account
-- Provides accountability for administrative actions
-- Aligns with enterprise security best practices (least privilege and auditing)
+- Default Administrator accounts are common attack targets
+- Named admin accounts provide accountability and auditing
+- Supports least privilege and real-world enterprise practices
 
 ---
 
 ### Validation
 
-- Successfully logged into DC01 using:
-  STEENCORP\adm_christian
+I verified the configuration by:
 
-### Screenshots to Include
+- Confirming the account exists in Active Directory
+- Verifying Domain Admins group membership
+- Logging into the domain using the new admin account
 
-- ADUC showing adm_christian
-- Group membership (Domain Admins)
-- Logged-in session as adm_christian
+---
+
+### Evidence
+
+#### Admin Account Created in ADUC
+![Admin Account Created](../Evidence/Validation/ADUC_showing_adm_christian.png)
+
+#### Domain Admins Group Membership
+![Admin Group Membership](../Evidence/Validation/Member_Of_Domain_Admins.png)
+
+#### Logged in as Admin Account
+![Admin Login Validation](../Evidence/Validation/logged_in_as_adm_christian.png)
 
 ---
 
 ## B. Workstation Security Hardening (Group Policy)
 
-### Implementation
-
-Created and linked a Group Policy Object:
-
-SteenCorp_Workstation_Policy
-
-Applied to:
-
-SteenCorp_HQ → Workstations
+### Objective
+Implement security-focused Group Policy settings to harden domain-joined workstations and enforce controlled user behavior.
 
 ---
 
-### Security Controls Implemented
+## Security Controls Implemented
 
-Account Lockout Policy
-- Lock account after 5 failed attempts
+### Account Lockout Policy
 
-Legal Notice (Login Banner)
-- Displays warning before login
-- Example: "WARNING: Authorized SteenCorp personnel only"
+Configured to prevent brute-force login attempts:
 
-Screen Lock Policy
-- Timeout set to 5 minutes
+- Lockout threshold: 5 invalid attempts
+- Locks user account after repeated failures
+
+---
+### GPO Configuration
+
+Configured within:
+
+Computer Configuration → Policies → Windows Settings → Security Settings → Local Policies → Security Options
+
+![GPO Login Banner Configuration](../Evidence/Validation/GPO_Login_Banner_Configured.png)
+
+---
+### Privilege Enforcement (UAC)
+
+Used the dedicated admin account (adm_christian) to run elevated commands and force a Group Policy update.
+
+![UAC Prompt](../Evidence/Validation/UAC_Admin_Elevation_Prompt.png)
+
+---
+
+### Login Banner (Legal Notice)
+
+Implemented a security warning displayed before user login.
+
+- Title: SteenCorp Security Notice
+- Message:
+  WARNING: This system is for the use of authorized SteenCorp Personnel only. Activities are monitored and recorded.
+
+![Login Banner](../Evidence/Validation/Login_Banner_SteenCorp.png)
+
+---
+
+### Screen Lock Policy
+
+Configured automatic workstation locking:
+
+- Timeout: 300 seconds (5 minutes)
 - Password required on resume
 
 ---
 
-### Why This Matters
+## Validation & Testing
 
-- Protects against brute-force login attempts
-- Prevents unauthorized workstation access
-- Enforces consistent security policies
+### Account Lockout & Recovery Workflow
+
+Simulated multiple failed login attempts from a standard user account to validate enforcement of the account lockout policy.
+
+After 5 incorrect password entries, the account was automatically locked as configured.
+
+![Account Lockout Triggered](../Evidence/Validation/Account_Lockout_Triggered.png)
 
 ---
 
-### Validation
+### Administrative Intervention
 
-- Triggered account lockout after failed logins
-- Verified login banner appears
-- Confirmed screen lock enforcement
+Used a privileged admin account to unlock the affected user account within Active Directory.
 
-### Screenshots to Include
+![Account Unlock](../Evidence/Validation/Account_Unlock_Admin_Action.png)
 
-- Account lockout message
-- Login warning banner
-- GPO settings view
+---
+### Access Restoration
 
+After administrative unlock, the user successfully regained access to the system.
+
+![Access Restored](../Evidence/Validation/Account_Access_Restored.png)
+
+---
+
+## What This Demonstrates
+
+- Enforcement of account lockout policies
+- Protection against brute-force login attempts
+- Use of login banners for legal/security notice
+- Separation of standard user and administrative privileges
+- Real-world troubleshooting workflow (lockout → admin intervention → recovery)
+
+---
+
+## Outcome
+
+- Workstations hardened through Group Policy
+- User authentication behavior controlled and monitored
+- Administrative actions secured through credential separation
+- Security policies validated through real client-side testing
 ---
 
 ## C. DHCP Role Implementation
