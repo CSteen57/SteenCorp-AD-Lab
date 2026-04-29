@@ -29,10 +29,10 @@ Initially built the environment in VirtualBox, but encountered a blocking issue 
 <summary>View Issue & Migration Evidence</summary>
 
 **VirtualBox Boot Failure**  
-![VirtualBox Boot Error](../Evidence/Infrastructure/Virtual_Box_Boot_Error.png)
+![VirtualBox Boot Error](../Evidence/Infrastructure/Screenshot%202026-04-13%20120545.png)
 
 **Domain Demotion Prior to Rebuild**  
-![Domain Demotion](Evidence/Infrastructure/00_Demote_Domain.png)
+![Domain Demotion](../Evidence/Infrastructure/00_Demote_Domain.png)
 
 </details>
 
