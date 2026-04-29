@@ -170,56 +170,10 @@ After administrative unlock, the user successfully regained access to the system
 - Administrative actions secured through credential separation
 - Security policies validated through real client-side testing
 ---
-
-## C. DHCP Role Implementation
-
-### Implementation
-
-Installed and configured DHCP on DC01.
-
----
-
-### Scope Configuration
-
-- Range: 192.168.10.100 – 192.168.10.200
-- Gateway: 192.168.10.1
-- DNS Server: 192.168.10.10
-- Domain Name: SteenCorp.local
-
----
-
-### Why This Matters
-
-- Eliminates manual IP configuration
-- Ensures consistent network settings
-- Supports scalability
-
----
-
-### Validation
-
-From Windows 11 client:
-
-ipconfig /all
-
-Verified:
-- IP in DHCP range (.100+)
-- DHCP Server = DC01
-- DNS Server = DC01
-
-### Screenshots to Include
-
-- DHCP Scope configuration
-- Server Manager DHCP role
-- ipconfig /all output
-
----
-
 ## Final Validation
 
 - Administrative access is secured and auditable
 - Workstation policies are enforced
-- DHCP is distributing IP addresses correctly
 - Security controls validated from client perspective
 
 ---
@@ -229,7 +183,6 @@ Verified:
 - Default admin accounts should not be used in production
 - GPO is critical for enforcing security at scale
 - Security must be layered on top of functionality
-- DHCP simplifies network management
 - Validation from the user perspective is essential
 
 ---
@@ -238,5 +191,4 @@ Verified:
 
 - Secure administrative access model implemented
 - Workstation security policies enforced via GPO
-- DHCP fully operational
 - Environment aligned with enterprise security practices
