@@ -6,9 +6,9 @@
 
 ## Overview
 
-This project simulates the buildout of a real-world enterprise IT environment using Active Directory, Group Policy, and core networking services.
+The SteenCorp AD Lab is a simulated enterprise IT environment designed to replicate real-world infrastructure and support scenarios.
 
-It demonstrates practical system administration skills including user management, access control, network configuration, troubleshooting, and security enforcement.
+This project was built to bridge the gap between certification knowledge and practical, hands-on experience in system administration, networking, and security.
 
 ---
 
