@@ -82,6 +82,7 @@ Successfully enforced department-based access control and automated resource acc
 
 ➡️ **View Full Phase 2 Documentation:**  
 [Phase 2 – RBAC & GPO Implementation](Phases/Phase2_RBAC.md)
+
 ---
 
 ## Phase 3: Networking & Troubleshooting
