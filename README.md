@@ -66,18 +66,22 @@ Successfully deployed and validated a scalable Active Directory domain environme
 ➡️ **View Full Phase 1 Documentation:**  
 [Phase 1 – Foundation & Environment Setup](Phases/Phase1_Foundation.md)
 
-## Phase 2: RBAC & GPO Implementation
+---
+## Phase 2: Access Control & Connectivity
 
-### What I Set Up
+Implemented role-based access control (RBAC) to simulate how enterprise environments manage and restrict user access to shared resources.
 
-- Built out an Active Directory structure with OUs for departments, users, and workstations
-- Created users and security groups to simulate departments like Sales, HR, and IT
-- Created a central shared folder called `SteenCorp_Shares` to simulate a company file server
-- Built out department folders for Sales, HR, and IT
-- Configured NTFS permissions so departments could only access their own files
-- Disabled inheritance to make sure permissions stayed isolated and didn’t overlap
-- Used Group Policy to automatically map the correct network drive for each department when users log in
+- Created departmental Organizational Units, users, and security groups (Sales, HR, IT)
+- Built a centralized file share (`SteenCorp_Shares`) with department-specific folders
+- Configured NTFS permissions to enforce least privilege access by group membership
+- Disabled inheritance to prevent permission overlap and maintain isolation
+- Implemented Group Policy to automatically map network drives based on user roles
 
+### Key Outcome
+Successfully enforced department-based access control and automated resource access, ensuring users could only interact with authorized data.
+
+➡️ **View Full Phase 2 Documentation:**  
+[Phase 2 – RBAC & GPO Implementation](Phases/Phase2_RBAC.md)
 ---
 
 ## Phase 3: Networking & Troubleshooting
