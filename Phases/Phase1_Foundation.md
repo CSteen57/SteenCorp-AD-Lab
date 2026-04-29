@@ -48,45 +48,81 @@ Rather than continuing to troubleshoot a non-critical platform issue, I made the
 
 ### Organizational Unit (OU) Design & Automation
 
-After rebuilding the environment, I transitioned from manual setup to automated deployment using PowerShell.
+After rebuilding the environment, I transitioned from manual configuration to automated deployment using PowerShell to create a scalable and repeatable Active Directory structure.
 
-**Structure Implemented:**
+#### Structure Implemented
 - Root OU: `SteenCorp_HQ`  
 - Sub-containers: `Departments`, `Groups`, `Workstations`  
 - Department OUs: IT, Sales, HR, Accounting, Marketing  
 
-**Automation Approach:**
-- Used PowerShell scripts to create OUs and structure  
-- Designed to be repeatable and scalable  
+---
 
-**Why This Matters:**
-- Reduces manual configuration time  
-- Ensures consistency across environments  
-- Reflects real-world enterprise administration practices  
+#### Automation Approach
+- Developed PowerShell scripts to automate the creation of Organizational Units, security groups, and users  
+- Used CSV-driven user provisioning to simulate a real-world employee directory  
+- Designed scripts to be reusable and scalable for rapid environment rebuilds  
 
 ---
 
-## Validation
+#### Automation Evidence
 
-- Verified successful domain promotion and AD DS functionality  
-- Confirmed Windows 11 client successfully joined to domain  
-- Tested authentication using multiple user accounts  
-- Validated OU structure creation via PowerShell execution  
+- Executed PowerShell scripts to deploy OU structure, groups, and users across departments  
+- Successfully populated Active Directory using automated bulk provisioning  
 
+![PowerShell Automation Script Execution](../Evidence/Automation/04_Master_Automation_Proof.png)
+
+---
+
+#### Scripts Used
+
+- [OU Infrastructure Setup](../Scripts/Phase1_Infrastructure/SteenCorp%20OU%20Infrastructure%20Setup.ps1)  
+- [Security Group Infrastructure](../Scripts/Phase1_Infrastructure/SteenCorp%20Group%20Infrastructure.ps1)  
+- [Employee CSV Generator](../Scripts/Phase1_Infrastructure/Create%20Mega%20SteenCorp%20Employee%20CSV.ps1)  
+- [Bulk User Provisioning](../Scripts/Phase1_Infrastructure/SteenCorp%20Final%20Bulk%20Ingestion.ps1)  
+
+---
+
+#### Why This Matters
+- Reduces manual configuration time and administrative overhead  
+- Ensures consistent and repeatable environment deployments  
+- Reflects real-world enterprise practices for identity and access management  
+- Demonstrates ability to automate large-scale user provisioning  
+
+---
+
+### Validation
+
+#### OU Structure Deployment
+- Executed OU deployment script and verified structure in Active Directory Users and Computers (ADUC)  
+- Result: All Organizational Units created successfully and aligned with intended hierarchy  
+
+---
+
+#### Automated User Provisioning
+- Ran bulk ingestion script using CSV-defined user data  
+- Result: Users were created and placed into correct departmental OUs  
+
+---
+
+#### Authentication Testing
+- Logged into domain using newly created user accounts  
+- Result: Successful authentication confirmed proper account creation and domain integration  
+
+---
 ---
 
 ## Outcome
 
-- Fully operational Active Directory domain (`steencorp.local`)  
-- Centralized authentication functioning across domain  
-- Scalable OU structure deployed and ready for RBAC implementation  
-- Stable virtualization platform established for continued lab expansion  
+- Successfully deployed and validated a fully operational Active Directory domain (`steencorp.local`)  
+- Established centralized authentication across domain-joined systems  
+- Implemented a scalable Organizational Unit structure to support future RBAC and Group Policy deployment  
+- Built a stable and reliable virtualized environment for continued infrastructure expansion  
 
 ---
 
 ## Key Takeaways
 
-- Rebuilding environments can be more efficient than troubleshooting unstable platforms  
-- Automation through PowerShell is essential for scalable administration  
-- Proper OU design is critical for future Group Policy and access control  
-- Infrastructure stability directly impacts the reliability of domain services 
+- Rebuilding unstable environments can be more efficient than prolonged troubleshooting  
+- PowerShell automation is essential for scalable and repeatable system administration  
+- Proper OU design is foundational for effective Group Policy and access control implementation  
+- Infrastructure stability directly impacts the reliability of domain services and overall system performance   
