@@ -3,7 +3,7 @@
 ---
 
 ## Objective
-Implement enterprise-level security practices within the SteenCorp environment by introducing privileged identity management, workstation hardening through Group Policy, and automated network configuration using DHCP.
+Implement enterprise-level security practices within the SteenCorp environment by introducing privileged identity management, workstation hardening through Group Policy.
 
 ---
 
