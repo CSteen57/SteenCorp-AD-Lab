@@ -136,7 +136,7 @@ This approach reflects how real enterprise environments are continuously develop
 
 Users can only access their assigned department drives.
 
-![Mapped Drives](../Evidence/Validation/V3_Final_Operational_Success%20_2.png)
+![Mapped Drives](/Evidence/Validation/V3_Final_Operational_Success_2.png)
 
 ---
 
@@ -144,7 +144,7 @@ Users can only access their assigned department drives.
 
 Google Chrome was deployed through Group Policy and validated across domain users.
 
-![Chrome Deployment Validation](../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_20_Chrome_Installed_JHalpert_WK01.png)
+![Chrome Deployment Validation](/Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_20_Chrome_Installed_JHalpert_WK01.png)
 
 ---
 
@@ -152,7 +152,7 @@ Google Chrome was deployed through Group Policy and validated across domain user
 
 Verified DHCP and DNS configuration from the client.
 
-![Network Validation](../Evidence/Validation/Final_VIP_Workstation_IP_Verification.png)
+![Network Validation](/Evidence/Validation/Final_VIP_Workstation_IP_Verification.png)
 
 ---
 
@@ -160,7 +160,7 @@ Verified DHCP and DNS configuration from the client.
 
 Account lockout triggered and was resolved through administrative intervention.
 
-![Account Lockout](../Evidence/Validation/Account_Lockout_Triggered.png)
+![Account Lockout](/Evidence/Validation/Account_Lockout_Triggered.png)
 
 ---
 
