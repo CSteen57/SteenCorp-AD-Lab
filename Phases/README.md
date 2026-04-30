@@ -18,7 +18,7 @@ Each phase represents a real-world IT implementation layer, progressing from fou
 ---
 
 ### Phase 2 – RBAC, GPO, & Software Deployment
-📄 [View Phase 2](./Phase2_RBAC.md)
+📄 [View Phase 2](./Phase2_RBAC_GPO_Software_Deployment.md)
 
 - Security group design  
 - Role-based access control  
