@@ -17,13 +17,14 @@ Each phase represents a real-world IT implementation layer, progressing from fou
 
 ---
 
-### Phase 2 – RBAC
+### Phase 2 – RBAC, GPO, & Software Deployment
 📄 [View Phase 2](./Phase2_RBAC.md)
 
 - Security group design  
 - Role-based access control  
 - GPO drive mapping  
-- Access validation  
+- Access validation
+- Deployed Chrome through GPO to all users
 
 ---
 
