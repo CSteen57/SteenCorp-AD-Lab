@@ -55,7 +55,7 @@ After building the SteenCorp domain environment, I used the same Active Director
 
 The follow-up project focuses on troubleshooting and resolving common user support issues inside the environment built here.
 
-**Related Project:** [SteenDesk Help Desk Simulation](LINK-TO-STEENDESK-HELP-DESK-SIMULATION)
+**Related Project:** [SteenDesk Help Desk Simulation](https://github.com/CSteen57/SteenDesk_Help_Desk_Simulation)
 
 Help desk scenarios include:
 
@@ -224,7 +224,7 @@ Account lockout policy was triggered and resolved through administrative interve
 
 | Project | Focus |
 |---|---|
-| [SteenDesk Help Desk Simulation](LINK-TO-STEENDESK-HELP-DESK-SIMULATION) | Help desk troubleshooting, ticket documentation, Active Directory account issues, DNS troubleshooting, software install support, and least privilege validation |
+| [SteenDesk Help Desk Simulation](https://github.com/CSteen57/SteenDesk_Help_Desk_Simulation) | Help desk troubleshooting, ticket documentation, Active Directory account issues, DNS troubleshooting, software install support, and least privilege validation |
 
 ---
 
@@ -270,13 +270,16 @@ This environment is designed to serve as a long-term foundation for additional l
 
 Completed expansion:
 
-- [SteenDesk Help Desk Simulation](LINK-TO-STEENDESK-HELP-DESK-SIMULATION) — Simulated user support tickets involving shared drive access, account lockouts, password resets, DNS troubleshooting, approved software installation, and least privilege validation.
+- [SteenDesk Help Desk Simulation](https://github.com/CSteen57/SteenDesk_Help_Desk_Simulation) — Simulated user support tickets involving shared drive access, account lockouts, password resets, DNS troubleshooting, approved software installation, and least privilege validation.
+
+Next planned expansion:
+
+- SteenCorp Network Segmentation Lab — A focused Packet Tracer networking project demonstrating VLAN segmentation, guest network isolation, basic routing, and access control rules.
 
 Planned future expansions include:
 
-- Network Diagnostics Lab with routing, ARP, and path analysis
 - Security Expansion with AppLocker, auditing, logging, and SIEM integration
 - VPN and remote access configuration
-- Advanced network segmentation with VLANs, ACLs, and firewall rules
+- Advanced network segmentation with additional VLANs, ACLs, and firewall rules
 
 Future labs will continue building on this domain and be linked here as they are developed.
