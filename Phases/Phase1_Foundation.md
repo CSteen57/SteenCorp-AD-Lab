@@ -108,7 +108,7 @@ The CSV-based provisioning helped simulate a larger employee directory and gave 
 - [OU Infrastructure Setup](../Scripts/Phase1_Infrastructure/SteenCorp%20OU%20Infrastructure%20Setup.ps1)
 - [Security Group Infrastructure](../Scripts/Phase1_Infrastructure/SteenCorp%20Group%20Infrastructure.ps1)
 - [Employee CSV Generator](../Scripts/Phase1_Infrastructure/Create%20Mega%20SteenCorp%20Employee%20CSV.ps1)
-- [Bulk User Provisioning](../Scripts/Phase1_Infrastructure/SteenCorp%20Final%20Bulk%20Inestion.ps1)
+- [Bulk User Provisioning](../Scripts/Phase1_Infrastructure/SteenCorp%20Final%20Bulk%20Ingestion.ps1)
 
 ---
 
