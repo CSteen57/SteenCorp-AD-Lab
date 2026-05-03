@@ -101,7 +101,7 @@ I also configured a DHCP reservation for a workstation to simulate a common busi
 
 ---
 
-# Issue 1 – Client Received the Wrong IP Address
+## Issue 1 – Client Received the Wrong IP Address
 
 During testing, the Windows client received an unexpected IP address in this range:
 
@@ -139,7 +139,7 @@ During troubleshooting, I found that the client adapter configuration was not be
 
 ---
 
-# Issue 2 – DHCP IP Conflict
+## Issue 2 – DHCP IP Conflict
 
 While validating DHCP, the DHCP server detected a conflict involving:
 
@@ -208,7 +208,7 @@ At this point, DC01 was correctly handling DHCP for the client workstation.
 
 ---
 
-# DNS Troubleshooting
+## DNS Troubleshooting
 
 After DHCP was working, I still needed to validate DNS.
 
