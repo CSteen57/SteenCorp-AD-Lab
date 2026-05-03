@@ -2,17 +2,17 @@
 
 ## Objective
 
-Implement enterprise-style access control and workstation management using Active Directory security groups, Group Policy, mapped network drives, and software deployment.
+Implement access control and workstation management using Active Directory security groups, Group Policy, mapped network drives, and software deployment.
 
-This phase started with role-based access control (RBAC) for department shares, then expanded into Group Policy software deployment by pushing Google Chrome to domain-joined workstations.
+This phase started with role-based access control for department shares, then expanded into Group Policy software deployment by pushing Google Chrome to domain-joined workstations.
 
 ---
 
 ## Overview
 
-In this phase, I focused on managing users, workstations, and resources through centralized domain controls.
+In this phase, I focused on managing users, workstations, and shared resources through centralized domain controls.
 
-I implemented:
+I implemented and tested:
 
 - Department-based security groups
 - Group-based access control
@@ -27,34 +27,38 @@ This phase helped show how Active Directory and Group Policy can be used to mana
 
 # Part 1 – Role-Based Access Control & Drive Mapping
 
-## Identity & Group Design
+## Identity and Group Design
 
-Created departmental security groups:
+I created departmental security groups to control access to shared resources.
 
-- HR
-- IT
-- Sales
-- Accounting
-- Public access
+Groups included:
+
+- `HR_Users`
+- `IT_Staff`
+- `Sales_Users`
+- `Accounting_Users`
+- `Domain Users` for general public access
 
 Users were assigned to groups based on department roles.
 
 Instead of assigning permissions directly to individual users, permissions were assigned to security groups.
 
 **Why this matters:**  
-Group-based access control is easier to manage, scales better, and reflects how access is commonly handled in enterprise environments.
+Group-based access control is easier to manage, scales better, and reflects how access is commonly handled in business environments.
 
 ---
 
 ## Resource Design
 
-Created a centralized file share:
+I created a centralized file share for department resources.
+
+Initial share path:
 
 ```cmd
 \\WIN-4CF03BHNDEC\SteenCorp_Shares
 ```
 
-Built department folders for:
+Department folders were created for controlled access, including:
 
 - HR
 - IT
@@ -66,10 +70,10 @@ Built department folders for:
 
 ## Initial Drive Mapping
 
-Configured a mapped drive for the Sales department using Group Policy.
+I configured a mapped drive for the Sales department using Group Policy.
 
 - Drive: `S:`
-- Path:
+- Initial path:
 
 ```cmd
 \\WIN-4CF03BHNDEC\SteenCorp_Shares
@@ -81,63 +85,67 @@ Configured a mapped drive for the Sales department using Group Policy.
 
 ## Issue Discovered During Validation
 
-While testing from the Windows 11 client, I noticed:
+While testing from the Windows 11 client, I noticed that the drive mapping setup was not fully consistent.
 
-- Other departments did not receive mapped drives
+Issues found:
+
+- Other departments did not receive mapped drives as expected
 - Drive mapping behavior was inconsistent
 - Some access attempts failed
+- Some mappings still referenced the old server hostname
 
-This showed that the RBAC setup was not fully standardized yet.
+This showed that the RBAC and drive mapping configuration needed to be standardized.
 
 ---
 
 ## Root Cause
 
-The issue came from a few problems happening at the same time:
+The issue came from multiple configuration problems happening at the same time.
+
+Root causes included:
 
 - Drive mappings still pointed to the old server name
-- Only the HR mapping was correctly configured
+- Only one department mapping was configured correctly
 - Drive mappings were split across multiple GPOs:
   - `GPO_MAP_IT_Drive`
   - `GPO_MAP_Sales_Drive`
-
-This created an inconsistent RBAC implementation.
+- The configuration was harder to manage because mappings were not centralized
 
 ![Incorrect Path](../Evidence/Validation/Incorrect_Path.png)
 
 ---
 
-## Solution
+## Resolution
 
 I rebuilt and standardized the drive mapping configuration.
 
 ### Fixes Applied
 
-- Updated all paths to:
+Updated all drive paths to use the current domain controller hostname:
 
 ```cmd
 \\DC01\SteenCorp_Shares
 ```
 
-- Consolidated mappings into one GPO:
+Consolidated drive mappings into one central GPO:
 
 ```cmd
 GPO_SteenCorp_Master_Drive_Map
 ```
 
-- Removed redundant GPOs
+Removed redundant GPOs to make the configuration easier to manage and troubleshoot.
 
 ---
 
 ## Final Drive Mapping Structure
 
 | Department | Drive | Access Group |
-|----------|------|--------------|
-| HR | H: | HR_Users |
-| Sales | S: | Sales_Users |
-| IT | I: | IT_Staff |
-| Accounting | A: | Accounting_Users |
-| Public | P: | Domain Users |
+|---|---|---|
+| HR | H: | `HR_Users` |
+| Sales | S: | `Sales_Users` |
+| IT | I: | `IT_Staff` |
+| Accounting | A: | `Accounting_Users` |
+| Public | P: | `Domain Users` |
 
 ![Updated Drive Maps](../Evidence/Infrastructure/Drive_Maps_Overview.png)
 
@@ -153,7 +161,7 @@ I ran:
 gpupdate /force
 ```
 
-The command completed, but the drives still did not appear as expected.
+The command completed, but the expected drive mappings still did not appear.
 
 ![Validation Attempt](../Evidence/Validation/Validation_Attempt.png)
 
@@ -161,7 +169,7 @@ The command completed, but the drives still did not appear as expected.
 
 ## Root Cause – OU Placement
 
-The Windows 11 client machine was not placed in the correct Organizational Unit.
+The Windows 11 client was not placed in the correct Organizational Unit.
 
 Because the workstation was not in the correct OU:
 
@@ -169,17 +177,19 @@ Because the workstation was not in the correct OU:
 - Drive mappings were not deployed
 - The workstation was not receiving the correct policies
 
+This was a good reminder that Group Policy depends heavily on OU placement and targeting.
+
 ---
 
 ## Resolution
 
-Moved the client machine to:
+I moved the Windows 11 client machine into the correct Workstations OU:
 
 ```cmd
 SteenCorp_HQ → Workstations
 ```
 
-Then forced a policy update:
+Then I forced a policy update:
 
 ```cmd
 gpupdate /force
@@ -194,18 +204,19 @@ gpupdate /force
 After moving the workstation into the correct OU and applying Group Policy:
 
 - GPOs applied successfully
-- Drives mapped correctly
+- Department drives mapped correctly
 - Access was restricted by department
+- Standard users could access only the resources they were allowed to use
 
 ![Successful GPUpdate](../Evidence/Validation/Final_gpupdate.png)
 
-![Mapped Drives](../Evidence/Validation/V3_Final_Operational_Success%20_2.png)
+![Mapped Drives](../Evidence/Validation/V3_Final_Operational_Success_2.png)
 
 ---
 
 ## Permission Validation
 
-Tested administrative command access using:
+I tested administrative command access using:
 
 ```cmd
 net session
@@ -229,21 +240,21 @@ This was expected because the logged-in user was a standard domain user and did 
 
 After getting RBAC and mapped drives working, I wanted to test another real-world Group Policy use case: deploying software to domain-joined workstations.
 
-The goal was to deploy Google Chrome through Group Policy so any user logging into a managed workstation would have access to Chrome without needing a manual install.
+The goal was to deploy Google Chrome through Group Policy so managed workstations would have Chrome installed without requiring a manual install for each user.
 
-This helped expand Phase 2 beyond access control and into centralized workstation management.
+This expanded Phase 2 beyond access control and into centralized workstation management.
 
 ---
 
 ## Software Repository Setup
 
-Downloaded the Google Chrome Enterprise MSI installer and placed it in a centralized software folder on DC01:
+I downloaded the Google Chrome Enterprise MSI installer and placed it in a centralized software folder on DC01:
 
 ```cmd
 C:\Software
 ```
 
-Configured NTFS permissions so domain computers could read and execute the installer.
+I configured permissions so domain computers could read and execute the installer.
 
 ![Chrome MSI Stored in Software Folder](../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_01_MSI_Stored_In_Software_Folder_NTFS_Permissions.png)
 
@@ -275,7 +286,7 @@ I then attempted to use the UNC path:
 \\DC01\Software\googlechromestandaloneenterprise64.msi
 ```
 
-At first, the path failed because the folder had not actually been shared correctly.
+At first, the path failed because the folder had not been shared correctly yet.
 
 ![UNC Path Not Found](../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_04_UNC_Path_Network_Name_Not_Found.png)
 
@@ -285,7 +296,7 @@ At first, the path failed because the folder had not actually been shared correc
 
 I initially created the share with only `Domain Computers` having read access.
 
-This made sense for the GPO install because software deployment runs under the computer context, but I could not manually browse to the share as a user or admin account.
+This made sense for the GPO install because software deployment runs under the computer context. However, it also meant I could not manually browse to the share as a regular user or admin account during testing.
 
 ![Share Created with Domain Computers Only](../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_05_Share_Created_Domain_Computers_Only.png)
 
@@ -303,7 +314,7 @@ I attempted to update the share permissions, but the share already existed.
 
 ![Net Share Already Exists Error](../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_08_Net_Share_Already_Exists_Error.png)
 
-To resolve this cleanly, I deleted and recreated the share with both `Domain Computers` and `Domain Users` having read access.
+To resolve this cleanly, I deleted and recreated the share with both `Domain Users` and `Domain Computers` having read access.
 
 ```cmd
 net share Software /delete
@@ -315,8 +326,8 @@ net share Software=C:\Software /GRANT:"Domain Users",READ /GRANT:"Domain Compute
 
 Final share permissions confirmed:
 
-- Domain Computers: Read
-- Domain Users: Read
+- `Domain Computers`: Read
+- `Domain Users`: Read
 
 ![Final Share Permissions](../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_10_Final_Share_Permissions_Verified.png)
 
@@ -324,17 +335,17 @@ Final share permissions confirmed:
 
 ## GPO Configuration
 
-Created a dedicated GPO for Chrome deployment:
+I created a dedicated GPO for Chrome deployment:
 
 ```cmd
 GPO_Deploy_Chrome
 ```
 
-Linked the GPO to the Workstations OU so it would apply to domain-joined workstation machines.
+The GPO was linked to the Workstations OU so it would apply to domain-joined workstation machines.
 
 ![GPO Linked to Workstations OU](../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_11_GPO_Linked_To_Workstations_OU.png)
 
-Configured security filtering so the policy applied to:
+Security filtering was configured so the policy applied to:
 
 ```cmd
 Domain Computers
@@ -342,7 +353,7 @@ Domain Computers
 
 ![GPO Security Filtering](../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_12_GPO_Security_Filtering_Domain_Computers.png)
 
-Added the Chrome MSI under:
+The Chrome MSI was added under:
 
 ```cmd
 Computer Configuration → Policies → Software Settings → Software Installation
@@ -364,7 +375,7 @@ Source path:
 
 ---
 
-## Policy Application & Troubleshooting
+## Policy Application and Troubleshooting
 
 While testing, I originally checked normal user-side Group Policy results with:
 
@@ -372,9 +383,9 @@ While testing, I originally checked normal user-side Group Policy results with:
 gpresult /r
 ```
 
-This showed the user policies, but Chrome was deployed under Computer Configuration.
+This showed user policy results, but Chrome was deployed under Computer Configuration.
 
-That meant I needed to verify the computer-side policy instead.
+That meant I needed to verify the computer-side policy instead:
 
 ```cmd
 gpresult /scope computer /r
@@ -426,9 +437,28 @@ Validated with multiple users:
 
 ---
 
+## Outcome
+
+By the end of Phase 2, the SteenCorp environment had working department-based access control, centralized drive mapping, and workstation software deployment through Group Policy.
+
+Completed outcome:
+
+- Department-based access control implemented
+- Security groups used for access management
+- Consistent drive mapping deployed through Group Policy
+- Incorrect server paths identified and corrected
+- GPO targeting issue resolved by moving the workstation into the correct OU
+- Standard users restricted from administrative commands
+- Centralized software repository created on DC01
+- Google Chrome deployed through Group Policy to managed workstations
+- Software deployment validated across multiple domain users
+- Environment prepared for security hardening and help desk simulation
+
+---
+
 ## Key Takeaways
 
-- RBAC requires alignment between users, groups, and resources
+- RBAC requires alignment between users, groups, folders, and permissions
 - GPO design should be centralized and targeted correctly
 - OU placement directly controls policy application
 - Group Policy can manage both access control and software deployment
@@ -439,14 +469,3 @@ Validated with multiple users:
 - Software assigned through Computer Configuration installs during startup, so a reboot is required
 - Once installed at the computer level, the application is available to any user who logs into that workstation
 - Client-side validation is critical
-
----
-
-## Outcome
-
-- Department-based access control implemented
-- Consistent drive mapping deployed through Group Policy
-- Standard users restricted from administrative commands
-- Google Chrome deployed through Group Policy to managed workstations
-- Software deployment validated across multiple domain users
-- Environment ready for security hardening and help desk simulationx
