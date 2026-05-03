@@ -211,13 +211,30 @@ Account lockout policy was triggered and resolved through administrative interve
 
 ## Project Structure
 
-| Section | Description |
-|---|---|
-| [Phase 1 – Foundation & Environment Setup](./Phases/Phase1_Foundation.md) | Domain setup, Windows Server configuration, AD DS installation, and workstation domain join |
-| [Phase 2 – Access Control, GPO & Software Deployment](./Phases/Phase2_RBAC_GPO_Software_Deployment.md) | RBAC, mapped drives, shared folders, permissions, GPO troubleshooting, and Chrome deployment |
-| [Phase 3 – Networking & Troubleshooting](./Phases/Phase3_Networking.md) | DNS, DHCP, IP addressing, VMware network troubleshooting, and validation |
-| [Phase 4 – Security, Identity & Enterprise Controls](./Phases/Phase4_Security,%20Identity%20%26%20Enterprise%20Controls.md) | Admin account separation, account lockout policy, login banner, and workstation hardening |
-
+<pre>
+SteenCorp-AD-Lab/
+│
+├── README.md
+│
+├── Phases/
+│   ├── README.md
+│   ├── Phase1_Foundation.md
+│   ├── Phase2_RBAC_GPO_Software_Deployment.md
+│   ├── Phase3_Networking.md
+│   └── Phase4_Security, Identity & Enterprise Controls.md
+│
+├── Evidence/
+│   ├── README.md
+│   ├── Automation/
+│   ├── Infrastructure/
+│   ├── Networking/
+│   ├── Phase2_Chrome_GPO/
+│   └── Validation/
+│
+└── Scripts/
+    ├── README.md
+    └── Phase1_Infrastructure/
+</pre>
 ---
 
 ## Related Portfolio Projects
