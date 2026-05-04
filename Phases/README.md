@@ -140,6 +140,7 @@ After completing this lab, I used the same SteenCorp domain environment to build
 
 The help desk project builds on this lab by using the same domain, users, groups, shared folders, DNS configuration, and Windows workstation environment to simulate real support tickets.
 
+The help desk project also created a documented infrastructure change. Ticket #006 identified that the original isolated LAN Segment supported internal domain communication but did not provide a working internet route for clients. The environment was updated to VMware NAT-backed `VMnet8`, with DC01 remaining the DHCP/DNS server and VMware DHCP disabled.
 Example scenarios include:
 
 - Shared drive access issues
@@ -158,6 +159,8 @@ This lab is designed as a modular enterprise-style environment.
 That means:
 
 - Each phase builds on the previous phase
+- Later help desk tickets may reveal infrastructure improvements that are documented back into the original lab
+- Ticket #006 updated the lab from isolated LAN-only connectivity to VMware NAT-backed client internet access
 - The domain environment can be reused for future projects
 - Issues were documented as part of the learning process
 - Validation was performed from both the server side and client side
