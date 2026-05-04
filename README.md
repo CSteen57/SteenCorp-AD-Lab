@@ -69,9 +69,10 @@ Follow-up scenarios include:
 - User forgot password
 - User cannot access a network share by hostname
 - User cannot install approved software without admin approval
+- User cannot access the internet due to VMware NAT/default gateway misconfiguration
 - Guest network isolation from internal company resources
 - VLAN segmentation and basic network access control
-
+  
 ---
 
 ## Environment
@@ -83,7 +84,10 @@ Follow-up scenarios include:
 | Domain Controller Hostname | `DC01` |
 | Client Systems | Windows 11 domain-joined workstations |
 | Virtualization Platform | VMware Workstation |
-| Network Type | Internal VMware LAN segment |
+| Original Network Type | Internal VMware LAN segment |
+| Current Network Type | VMware NAT-backed `VMnet8` |
+| Lab Subnet | `192.168.10.0/24` |
+| Current NAT Gateway | `192.168.10.2` |
 | Core Services | AD DS, DNS, DHCP, Group Policy, File Sharing |
 
 ---
@@ -155,7 +159,10 @@ This lab was later extended into separate portfolio projects using the same Stee
 - Diagnosed incorrect IP assignments and `BAD_ADDRESS` conflicts
 - Validated DNS resolution and DHCP assignment from Windows clients
 - Used command-line tools to test connectivity and name resolution
-
+- Later updated the lab network after a help desk ticket exposed missing internet routing from the isolated LAN Segment
+- Reconfigured the environment to use VMware NAT-backed `VMnet8` while keeping DC01 as the DHCP and DNS server
+- Updated the active client default gateway from the original planned gateway `192.168.10.1` to the validated VMware NAT gateway `192.168.10.2`
+  
 ---
 
 ### Security Implementation
@@ -179,6 +186,29 @@ This lab includes troubleshooting scenarios that mirror issues commonly seen in 
 - DNS resolution inconsistencies
 - Software deployment issues involving UNC paths, share permissions, and computer-scope policy application
 - Account lockout behavior and administrative recovery
+
+---
+### Post-Build Infrastructure Update
+
+The original Phase 3 network design used an isolated VMware LAN Segment so DC01 could act as the controlled DHCP and DNS source for the SteenCorp domain.
+
+During the later SteenDesk Help Desk Simulation, Ticket #006 revealed that domain clients could reach internal resources and resolve external DNS names, but could not access the internet. The issue was traced to the isolated LAN Segment lacking a working NAT/default gateway path.
+
+To resolve the issue, the lab network was updated to use VMware NAT-backed `VMnet8` on the same `192.168.10.0/24` subnet. VMware DHCP remained disabled so DC01 continued providing DHCP and DNS. The actual VMware NAT gateway was confirmed as `192.168.10.2`, so DHCP Scope Option 003 Router was updated accordingly.
+
+This preserved the original SteenCorp subnet, domain controller IP, DHCP range, and DNS design while adding working internet access for domain clients.
+
+Updated network state:
+
+| Setting | Original Phase 3 Design | Post-Ticket #006 Update |
+|---|---|---|
+| Subnet | `192.168.10.0/24` | `192.168.10.0/24` |
+| DC01 IP | `192.168.10.10` | `192.168.10.10` |
+| DHCP Server | `192.168.10.10` | `192.168.10.10` |
+| DNS Server | `192.168.10.10` | `192.168.10.10` |
+| Default Gateway | `192.168.10.1` | `192.168.10.2` |
+| VMware Network | Internal LAN Segment | NAT-backed `VMnet8` |
+| VMware DHCP | Disabled | Disabled |
 
 ---
 
@@ -274,6 +304,10 @@ SteenCorp-AD-Lab/
 - Administrative and standard user separation
 - Command-line validation and troubleshooting
 - Technical documentation
+- VMware NAT-backed network configuration
+- DHCP default gateway option troubleshooting
+- Internet connectivity troubleshooting
+- Infrastructure change documentation
 
 ---
 
@@ -288,6 +322,7 @@ SteenCorp-AD-Lab/
 - DNS is critical in Active Directory environments
 - Security controls must be implemented and validated, not assumed
 - A reusable lab environment can support multiple future projects and troubleshooting scenarios
+- A later help desk ticket can expose infrastructure design gaps, and documenting those changes shows how real environments evolve after troubleshooting
 
 ---
 
@@ -297,7 +332,7 @@ This environment is designed to serve as a long-term foundation for additional l
 
 Completed expansions:
 
-- [SteenDesk Help Desk Simulation](https://github.com/CSteen57/SteenDesk_Help_Desk_Simulation) — Simulated user support tickets involving shared drive access, account lockouts, password resets, DNS troubleshooting, approved software installation, and least privilege validation.
+- [SteenDesk Help Desk Simulation](https://github.com/CSteen57/SteenDesk_Help_Desk_Simulation)  Help desk troubleshooting, ticket documentation, Active Directory account issues, DNS troubleshooting, approved software install support, VMware NAT internet connectivity troubleshooting, and least privilege validation.
 - [SteenCorp Network Segmentation Lab](https://github.com/CSteen57/SteenCorp_Network_Segmentation_Lab) — Packet Tracer networking project demonstrating VLAN segmentation, trunking, router-on-a-stick, ACL-based guest isolation, and network validation.
 
 Planned future expansions include:
@@ -313,8 +348,6 @@ Future labs will continue building on the SteenCorp environment and be linked he
 
 ## Final Outcome
 
-This project successfully built the foundation for a reusable enterprise-style IT lab.
-
-The final environment includes centralized identity management, Group Policy, role-based access control, file sharing, software deployment, DNS, DHCP, workstation validation, and security controls.
-
 This lab now serves as the foundation for a larger SteenCorp portfolio that includes help desk troubleshooting, network segmentation, and future security-focused projects.
+
+A later SteenDesk help desk ticket also produced a documented infrastructure update: the original isolated LAN Segment design was changed to VMware NAT-backed `VMnet8` so domain clients could access the internet while DC01 continued providing DHCP and DNS.
