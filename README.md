@@ -25,15 +25,7 @@ The SteenCorp Enterprise IT Lab is a simulated business IT environment designed 
 
 The environment was built as a reusable domain infrastructure rather than a one-time lab.
 
-This allows additional scenarios to be layered on top of the same system, including:
-
-- Network diagnostics and troubleshooting
-- Help desk and user support workflows
-- Security testing and policy enforcement
-- Software deployment and workstation standardization
-- Future infrastructure and service expansion
-
-This approach reflects how real enterprise environments are continuously developed, maintained, troubleshot, and improved over time.
+This allows additional scenarios to be layered on top of the same system to reflect how real enterprise environments are continuously developed, maintained, troubleshot, and improved over time.
 
 ---
 
