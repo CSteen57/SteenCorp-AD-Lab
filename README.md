@@ -4,17 +4,7 @@
 
 ## Overview
 
-The SteenCorp Enterprise IT Lab is a simulated business IT environment designed to replicate real-world infrastructure, identity management, access control, networking, security, and workstation support scenarios.
-
-This project was built to bridge the gap between certification knowledge and practical, hands-on experience in system administration, networking, Active Directory administration, Group Policy, DNS, DHCP, permissions, and troubleshooting.
-
-The lab is built around a reusable Windows domain environment that can continue expanding into future help desk, networking, security, remote access, and monitoring projects.
-
----
-
-## What This Project Demonstrates
-
-This lab showcases hands-on experience with:
+The SteenCorp Enterprise IT Lab is a simulated business IT environment designed to bridge the gap between certification knowledge and practical, hands-on experience to replicate real-world scenarios, including:
 
 - Active Directory Domain Services (AD DS)
 - Organizational Unit (OU) design
@@ -28,8 +18,6 @@ This lab showcases hands-on experience with:
 - Account lockout and workstation security policies
 - Standard user and administrative account separation
 - Real-world issue diagnosis and resolution
-
-All configurations were built and validated in a virtualized environment using Windows Server 2022, Windows 11, and VMware Workstation.
 
 ---
 
