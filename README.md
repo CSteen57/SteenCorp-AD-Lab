@@ -19,7 +19,11 @@ The SteenCorp Enterprise IT Lab is a simulated business IT environment designed 
 - Standard user and administrative account separation
 - Real-world issue diagnosis and resolution
 
-Refer to [Key Highlights][#key-highlights] for elaboration.
+### Lab Design Philosophy
+
+The environment was built as a reusable domain infrastructure rather than a one-time lab.
+
+This allows additional scenarios to be layered on top of the same system to reflect how real enterprise environments are continuously developed, maintained, troubleshot, and improved over time.
 
 ### What I Learned
 
@@ -33,14 +37,6 @@ Refer to [Key Highlights][#key-highlights] for elaboration.
 - Security controls must be implemented and validated, not assumed
 - A reusable lab environment can support multiple future projects and troubleshooting scenarios
 - A later help desk ticket can expose infrastructure design gaps, and documenting those changes shows how real environments evolve after troubleshooting
-
----
-
-## Lab Design Philosophy
-
-The environment was built as a reusable domain infrastructure rather than a one-time lab.
-
-This allows additional scenarios to be layered on top of the same system to reflect how real enterprise environments are continuously developed, maintained, troubleshot, and improved over time.
 
 ---
 
