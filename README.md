@@ -231,7 +231,7 @@ Account lockout policy was triggered and resolved through administrative interve
 SteenCorp-AD-Lab/
 │
 ├── README.md
-├── SteenCorp_Enterprise_IT_Lab_Banner.jpg
+├── SteenCorp_Enterprise_IT_Lab_Banner.png
 │
 ├── Phases/
 │   ├── README.md
