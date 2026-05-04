@@ -366,9 +366,10 @@ Validation after the Ticket #006 correction confirmed:
 - A secondary manual DNS issue on Workstation 2 was found and corrected
 - Browser internet access worked from both tested workstations
 
-Related help desk project:
 
-[SteenDesk Help Desk Simulation – Ticket #006](https://github.com/CSteen57/SteenDesk_Help_Desk_Simulation)
+Related Help Desk Ticket:
+
+[SteenDesk Ticket #006 – Mike Ross Cannot Access Internet](https://github.com/CSteen57/SteenDesk_Help_Desk_Simulation/blob/main/Helpdesk_Tickets/Tickets/Ticket006_Mike_Ross_Cannot_Access_Internet.md)
 
 ---
 
