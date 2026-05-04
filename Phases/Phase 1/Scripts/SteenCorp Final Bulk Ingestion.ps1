@@ -1,4 +1,5 @@
 ﻿# --- SteenCorp Final Bulk Ingestion ---
+# Purpose: Imports users into Active Directory from the generated CSV file
 Import-Module ActiveDirectory
 
 $csv = Import-Csv "$home\Desktop\Employees.csv"

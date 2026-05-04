@@ -1,4 +1,5 @@
 ﻿# --- Create Mega SteenCorp Employee CSV ---
+# Purpose: Generates CSV-based employee data for bulk user provisioning
 # Expanding Sales and Accounting for a more realistic scale
 
 $Employees = @(
