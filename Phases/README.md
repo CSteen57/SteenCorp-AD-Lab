@@ -53,6 +53,10 @@ Key focus areas:
 
 Phase 3 focused on DHCP, DNS, IP addressing, and network troubleshooting inside the SteenCorp domain environment.
 
+The original Phase 3 design used an isolated VMware LAN Segment to remove unwanted VMware DHCP interference and allow DC01 to act as the controlled DHCP/DNS source for the lab.
+
+A later help desk ticket revealed that the isolated LAN Segment allowed internal domain connectivity but did not provide internet access for domain clients. The lab was updated after Ticket #006 to use VMware NAT-backed `VMnet8`, while keeping DC01 as the DHCP and DNS server.
+
 Key focus areas:
 
 - IP addressing design
@@ -63,8 +67,10 @@ Key focus areas:
 - DNS forwarders
 - VMware NAT/DHCP conflict troubleshooting
 - Internal LAN segment isolation
-- Client-side network validation
-
+- Post-ticket VMware NAT gateway correction
+- DHCP Scope Option 003 Router update
+- Client-side network and internet validation
+  
 ---
 
 ### Phase 4 – Security & Enterprise Controls
