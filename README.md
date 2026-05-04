@@ -1,5 +1,7 @@
 # SteenCorp Enterprise IT Lab
 
+![SteenCorp Enterprise IT Lab](./SteenCorp_Enterprise_IT_Lab_Banner.png)
+
 ## Overview
 
 The SteenCorp Enterprise IT Lab is a simulated business IT environment designed to replicate real-world infrastructure, identity management, access control, networking, security, and workstation support scenarios.
@@ -49,21 +51,26 @@ This approach reflects how real enterprise environments are continuously develop
 
 ## Project Continuation
 
-This lab serves as the foundation for my follow-up help desk simulation project.
+This lab serves as the foundation for my follow-up SteenCorp portfolio projects.
 
 After building the SteenCorp domain environment, I used the same Active Directory domain, users, groups, shared folders, Group Policy configuration, DNS setup, and Windows 11 workstation environment to simulate real help desk tickets.
 
-The follow-up project focuses on troubleshooting and resolving common user support issues inside the environment built here.
+The lab was also extended with a separate networking project focused on VLAN segmentation, guest isolation, inter-VLAN routing, and access control rules.
 
-**Related Project:** [SteenDesk Help Desk Simulation](https://github.com/CSteen57/SteenDesk_Help_Desk_Simulation)
+**Related Projects:**
 
-Help desk scenarios include:
+- [SteenDesk Help Desk Simulation](https://github.com/CSteen57/SteenDesk_Help_Desk_Simulation)
+- [SteenCorp Network Segmentation Lab](https://github.com/CSteen57/SteenCorp_Network_Segmentation_Lab)
+
+Follow-up scenarios include:
 
 - User cannot access a shared department drive
 - User account locked out
 - User forgot password
 - User cannot access a network share by hostname
 - User cannot install approved software without admin approval
+- Guest network isolation from internal company resources
+- VLAN segmentation and basic network access control
 
 ---
 
@@ -90,7 +97,7 @@ Help desk scenarios include:
 | Phase 3: Networking & Troubleshooting | Completed | DNS, DHCP, IP management, issue resolution | Configured and validated core network services |
 | Phase 4: Security & Enterprise Controls | Completed | Identity management, GPO security, workstation hardening | Implemented enterprise-level security controls and validation |
 
-This lab was later extended into a separate help desk simulation project using the same SteenCorp domain environment.
+This lab was later extended into separate portfolio projects using the same SteenCorp business environment.
 
 ---
 
@@ -181,7 +188,7 @@ This lab includes troubleshooting scenarios that mirror issues commonly seen in 
 
 Users can only access their assigned department drives.
 
-![Mapped Drives](/Evidence/Validation/V3_Final_Operational_Success_2.png)
+<img src="./Evidence/Validation/V3_Final_Operational_Success_2.png" alt="Mapped Drives Validation" width="850">
 
 ---
 
@@ -189,7 +196,7 @@ Users can only access their assigned department drives.
 
 Google Chrome was deployed through Group Policy and validated across domain users.
 
-![Chrome Deployment Validation](/Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_20_Chrome_Installed_JHalpert_WK01.png)
+<img src="./Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_20_Chrome_Installed_JHalpert_WK01.png" alt="Chrome Deployment Validation" width="850">
 
 ---
 
@@ -197,7 +204,7 @@ Google Chrome was deployed through Group Policy and validated across domain user
 
 DHCP and DNS configuration were validated from the client workstation.
 
-![Network Validation](/Evidence/Validation/Final_VIP_Workstation_IP_Verification.png)
+<img src="./Evidence/Validation/Final_VIP_Workstation_IP_Verification.png" alt="Network Validation" width="850">
 
 ---
 
@@ -205,7 +212,16 @@ DHCP and DNS configuration were validated from the client workstation.
 
 Account lockout policy was triggered and resolved through administrative intervention.
 
-![Account Lockout](/Evidence/Validation/Account_Lockout_Triggered.png)
+<img src="./Evidence/Validation/Account_Lockout_Triggered.png" alt="Account Lockout Validation" width="850">
+
+---
+
+## Related Portfolio Projects
+
+| Project | Focus |
+|---|---|
+| [SteenDesk Help Desk Simulation](https://github.com/CSteen57/SteenDesk_Help_Desk_Simulation) | Help desk troubleshooting, ticket documentation, Active Directory account issues, DNS troubleshooting, software install support, and least privilege validation |
+| [SteenCorp Network Segmentation Lab](https://github.com/CSteen57/SteenCorp_Network_Segmentation_Lab) | VLAN segmentation, trunking, router-on-a-stick, ACL-based guest isolation, and network validation |
 
 ---
 
@@ -215,6 +231,7 @@ Account lockout policy was triggered and resolved through administrative interve
 SteenCorp-AD-Lab/
 │
 ├── README.md
+├── SteenCorp_Enterprise_IT_Lab_Banner.jpg
 │
 ├── Phases/
 │   ├── README.md
@@ -235,13 +252,6 @@ SteenCorp-AD-Lab/
     ├── README.md
     └── Phase1_Infrastructure/
 </pre>
----
-
-## Related Portfolio Projects
-
-| Project | Focus |
-|---|---|
-| [SteenDesk Help Desk Simulation](https://github.com/CSteen57/SteenDesk_Help_Desk_Simulation) | Help desk troubleshooting, ticket documentation, Active Directory account issues, DNS troubleshooting, software install support, and least privilege validation |
 
 ---
 
@@ -285,18 +295,26 @@ SteenCorp-AD-Lab/
 
 This environment is designed to serve as a long-term foundation for additional labs and real-world scenarios.
 
-Completed expansion:
+Completed expansions:
 
 - [SteenDesk Help Desk Simulation](https://github.com/CSteen57/SteenDesk_Help_Desk_Simulation) — Simulated user support tickets involving shared drive access, account lockouts, password resets, DNS troubleshooting, approved software installation, and least privilege validation.
-
-Next planned expansion:
-
-- SteenCorp Network Segmentation Lab — A focused Packet Tracer networking project demonstrating VLAN segmentation, guest network isolation, basic routing, and access control rules.
+- [SteenCorp Network Segmentation Lab](https://github.com/CSteen57/SteenCorp_Network_Segmentation_Lab) — Packet Tracer networking project demonstrating VLAN segmentation, trunking, router-on-a-stick, ACL-based guest isolation, and network validation.
 
 Planned future expansions include:
 
-- Security Expansion with AppLocker, auditing, logging, and SIEM integration
+- Security expansion with AppLocker, auditing, logging, and SIEM integration
 - VPN and remote access configuration
-- Advanced network segmentation with additional VLANs, ACLs, and firewall rules
+- Firewall-based network isolation using pfSense or OPNsense
+- Advanced endpoint and identity security controls
 
-Future labs will continue building on this domain and be linked here as they are developed.
+Future labs will continue building on the SteenCorp environment and be linked here as they are developed.
+
+---
+
+## Final Outcome
+
+This project successfully built the foundation for a reusable enterprise-style IT lab.
+
+The final environment includes centralized identity management, Group Policy, role-based access control, file sharing, software deployment, DNS, DHCP, workstation validation, and security controls.
+
+This lab now serves as the foundation for a larger SteenCorp portfolio that includes help desk troubleshooting, network segmentation, and future security-focused projects.
