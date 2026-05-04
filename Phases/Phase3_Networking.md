@@ -46,6 +46,8 @@ I planned the lab network before configuring DHCP so the environment would have 
 
 The domain controller was assigned a static IP address so clients could reliably use it for DNS and DHCP services.
 
+> Note: This Phase 3 design represents the original SteenCorp internal/domain network before VLAN segmentation was introduced. The `192.168.10.0/24` subnet later became the trusted Corporate LAN in the separate SteenCorp Network Segmentation Lab. In that follow-up project, additional networks were added for Guest devices and Internal Servers using `192.168.20.0/24` and `192.168.30.0/24`.
+
 ---
 
 ## Domain Controller Network Configuration
@@ -287,6 +289,29 @@ Final validation confirmed:
 - DNS forwarders were configured
 - Client workstation used DC01 for DNS
 - The lab network was ready for later security and help desk troubleshooting scenarios
+- Network foundation later expanded into a separate Packet Tracer segmentation lab
+- VLAN segmentation and guest isolation concepts were documented in a follow-up networking project
+
+---
+
+## Relationship to Network Segmentation Lab
+
+Phase 3 established the original SteenCorp internal network using the `192.168.10.0/24` subnet.
+
+That network later became the trusted Corporate LAN in the separate SteenCorp Network Segmentation Lab.
+
+| Design Stage | Network | Subnet | Purpose |
+|---|---|---|---|
+| Phase 3 Domain Network | Internal LAN | `192.168.10.0/24` | Original flat domain network for DC01 and domain clients |
+| Segmentation Lab | Corporate VLAN 10 | `192.168.10.0/24` | Trusted employee/domain network |
+| Segmentation Lab | Guest VLAN 20 | `192.168.20.0/24` | Isolated guest/untrusted network |
+| Segmentation Lab | Server VLAN 30 | `192.168.30.0/24` | Internal server network |
+
+The segmentation lab does not replace the Phase 3 network design. It expands the same foundation into a more secure segmented model using VLANs, trunking, router-on-a-stick, and ACL-based guest isolation.
+
+Related project:
+
+[SteenCorp Network Segmentation Lab](https://github.com/CSteen57/SteenCorp_Network_Segmentation_Lab)
 
 ---
 
@@ -297,6 +322,8 @@ This phase showed that Active Directory depends heavily on healthy networking.
 Even when the domain controller, users, and policies are configured correctly, the environment can still fail if DHCP, DNS, or virtual networking are misconfigured.
 
 The issues in this phase also helped support later help desk scenarios, especially DNS and hostname troubleshooting.
+
+This phase also became the networking foundation for the follow-up SteenCorp Network Segmentation Lab, where the original internal network design was expanded into separate Corporate, Guest, and Server networks.
 
 ---
 
@@ -316,6 +343,7 @@ Completed outcome:
 - Network isolation implemented
 - Client workstation received the correct DHCP lease
 - Final network settings validated from the client side
+- Original `192.168.10.0/24` internal network later used as the trusted Corporate LAN in the Network Segmentation Lab
 
 ---
 
@@ -329,3 +357,4 @@ Completed outcome:
 - DNS should be validated from the client side, not just from the server
 - Network isolation helps create a controlled lab environment
 - Troubleshooting DHCP and DNS builds real help desk and network support skills
+- A stable IP, DNS, and DHCP foundation is required before adding more advanced segmentation or access control concepts
