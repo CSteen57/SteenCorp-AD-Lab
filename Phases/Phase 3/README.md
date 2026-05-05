@@ -6,6 +6,21 @@ Configure and validate the core networking services for the SteenCorp domain env
 
 This phase focused on making sure the Windows Server domain controller and Windows 11 domain clients could communicate correctly on the lab network while also troubleshooting real network issues caused by virtualization settings, DHCP conflicts, DNS behavior, and VMware NAT routing.
 
+## Key Takeaways
+
+- IP planning is important before building network services
+- Active Directory depends heavily on DNS
+- DHCP must come from the correct source
+- Virtual environments can create hidden networking conflicts
+- `BAD_ADDRESS` entries can indicate DHCP conflict detection
+- DNS should be validated from the client side, not just from the server
+- A working internal domain network does not automatically mean clients have a valid internet route
+- VMware NAT can provide the upstream gateway while DC01 continues handling DHCP and DNS
+- DHCP Scope Option 003 controls the gateway clients receive
+- Help desk tickets can expose infrastructure design gaps that should be documented back into the original lab
+- Troubleshooting DHCP, DNS, and routing builds real help desk and network support skills
+- A stable IP, DNS, DHCP, and gateway foundation is required before adding more advanced segmentation or access control concepts
+
 ---
 
 ## Overview
@@ -91,7 +106,7 @@ Current DC01 configuration:
 
 The server uses itself for DNS because Active Directory depends on internal DNS. External DNS resolution is handled through DNS forwarders, not by placing public DNS directly on client workstations.
 
-![DC01 Static IP](../Evidence/Infrastructure/DC01_Static_IP_Configuration.png)
+![DC01 Static IP](../../Evidence/Infrastructure/DC01_Static_IP_Configuration.png)
 
 ---
 
@@ -117,7 +132,7 @@ Current DHCP design:
 | Option 015 DNS Domain Name | `steencorp.local` |
 | VMware DHCP | Disabled |
 
-![DHCP Scope](../Evidence/Networking/DHCP_Scope_Exclusion_Pool.png)
+![DHCP Scope](../../Evidence/Networking/DHCP_Scope_Exclusion_Pool.png)
 
 ---
 
@@ -132,7 +147,7 @@ Configured zones:
 
 The reverse lookup zone allowed IP addresses to resolve back to hostnames, which helped validate DNS from both directions.
 
-![DNS Reverse Lookup](../Evidence/Networking/DNS_Reverse_Lookup_PTR_Record.png)
+![DNS Reverse Lookup](../../Evidence/Networking/DNS_Reverse_Lookup_PTR_Record.png)
 
 ---
 
@@ -140,7 +155,7 @@ The reverse lookup zone allowed IP addresses to resolve back to hostnames, which
 
 I also configured a DHCP reservation for a workstation to simulate a common business use case where a specific device needs to keep the same IP address.
 
-![DHCP Reservation](../Evidence/Networking/Windows_Server_DHCP_Reservation_Config.png)
+![DHCP Reservation](../../Evidence/Networking/Windows_Server_DHCP_Reservation_Config.png)
 
 ---
 
@@ -162,7 +177,7 @@ Expected subnet:
 
 The incorrect address showed that the client was receiving DHCP from the wrong source.
 
-![VMware Conflict](../Evidence/Validation/DHCP_Validation_VMware_Conflict.png)
+![VMware Conflict](../../Evidence/Validation/DHCP_Validation_VMware_Conflict.png)
 
 ---
 
@@ -178,7 +193,7 @@ ipconfig /all
 
 During troubleshooting, I found that the client adapter configuration was not behaving as expected and the workstation was not cleanly receiving its address from the SteenCorp DHCP scope.
 
-![Static Adapter Issue](../Evidence/Validation/DHCP_Validation_Fail_Static_Adapter.png)
+![Static Adapter Issue](../../Evidence/Validation/DHCP_Validation_Fail_Static_Adapter.png)
 
 ---
 
@@ -194,9 +209,9 @@ The DHCP console showed a `BAD_ADDRESS` entry.
 
 This indicated that the DHCP server detected an address conflict and quarantined the address instead of assigning it normally.
 
-![DHCP Conflict](../Evidence/Networking/DHCP_IP_Conflict_Detection.png)
+![DHCP Conflict](../../Evidence/Networking/DHCP_IP_Conflict_Detection.png)
 
-![BAD ADDRESS](../Evidence/Networking/DHCP_Server_Bad_Address_Quarantine.png)
+![BAD ADDRESS](../../Evidence/Networking/DHCP_Server_Bad_Address_Quarantine.png)
 
 ---
 
@@ -229,9 +244,9 @@ Actions taken:
 - Confirmed the client received an address from the correct subnet
 - Confirmed DC01 was handling DHCP and DNS for the client workstation
 
-![LAN Isolation](../Evidence/Infrastructure/VMware_Internal_LAN_Segment_Isolation.png)
+![LAN Isolation](../../Evidence/Infrastructure/VMware_Internal_LAN_Segment_Isolation.png)
 
-![NAT Conflict](../Evidence/Infrastructure/VMware_NAT_Configuration_Conflict.png)
+![NAT Conflict](../../Evidence/Infrastructure/VMware_NAT_Configuration_Conflict.png)
 
 This solved the DHCP conflict and created a stable internal domain network. However, the isolated LAN Segment did not provide a working internet route for domain clients. That limitation was later discovered and corrected during SteenDesk Ticket #006.
 
@@ -269,7 +284,7 @@ Start-Service DNS
 ipconfig /registerdns
 ```
 
-![DNS Reset](../Evidence/Validation/PowerShell_DNS_Reset_Script.png)
+![DNS Reset](../../Evidence/Validation/PowerShell_DNS_Reset_Script.png)
 
 ---
 
@@ -282,7 +297,7 @@ Configured forwarders:
 - `8.8.8.8`
 - `1.1.1.1`
 
-![DNS Forwarders](../Evidence/Networking/DNS_Forwarders_Validated.png)
+![DNS Forwarders](../../Evidence/Networking/DNS_Forwarders_Validated.png)
 
 ---
 
@@ -299,7 +314,7 @@ nslookup 192.168.10.10
 
 Successful DNS validation confirmed that the client could resolve the domain controller by name and that the reverse lookup record was working.
 
-![NSLookup](../Evidence/Validation/NSLookup_Internal_External_Success.png)
+![NSLookup](../../Evidence/Validation/NSLookup_Internal_External_Success.png)
 
 ---
 
@@ -391,7 +406,7 @@ The original planned gateway was `192.168.10.1`, but VMware NAT settings confirm
 
 The screenshot below shows the original internal DHCP/DNS validation from Phase 3. The final gateway value was later updated during Ticket #006.
 
-![Final Validation](../Evidence/Validation/Final_VIP_Workstation_IP_Verification.png)
+![Final Validation](../../Evidence/Validation/Final_VIP_Workstation_IP_Verification.png)
 
 ---
 
@@ -481,20 +496,3 @@ Completed outcome:
 - DHCP Scope Option 003 Router updated to the validated VMware NAT gateway `192.168.10.2`
 - Domain clients validated with both internal domain connectivity and external internet access
 - Original `192.168.10.0/24` internal network later used as the trusted Corporate LAN in the Network Segmentation Lab
-
----
-
-## Key Takeaways
-
-- IP planning is important before building network services
-- Active Directory depends heavily on DNS
-- DHCP must come from the correct source
-- Virtual environments can create hidden networking conflicts
-- `BAD_ADDRESS` entries can indicate DHCP conflict detection
-- DNS should be validated from the client side, not just from the server
-- A working internal domain network does not automatically mean clients have a valid internet route
-- VMware NAT can provide the upstream gateway while DC01 continues handling DHCP and DNS
-- DHCP Scope Option 003 controls the gateway clients receive
-- Help desk tickets can expose infrastructure design gaps that should be documented back into the original lab
-- Troubleshooting DHCP, DNS, and routing builds real help desk and network support skills
-- A stable IP, DNS, DHCP, and gateway foundation is required before adding more advanced segmentation or access control concepts
