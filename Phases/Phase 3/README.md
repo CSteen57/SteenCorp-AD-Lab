@@ -443,11 +443,10 @@ Phase 3 established the original SteenCorp internal network using the `192.168.1
 That network later became the trusted Corporate LAN in the separate SteenCorp Network Segmentation Lab.
 
 | Design Stage | Network | Subnet | Purpose |
+| Design Stage | Network | Subnet | Purpose |
 |---|---|---|---|
 | Phase 3 Domain Network | Flat domain network | `192.168.10.0/24` | Original domain network for DC01 and domain clients |
-| Segmentation Lab | Corporate was ready for later security and help desk troubleshooting scenarios
-- The network foundation later expanded into a separate Packet Tracer segmentation lab
-- VLAN segmentation and guest isolation VLAN 10 | `192.168.10.0/24` | Trusted employee/domain network |
+| Segmentation Lab | Corporate VLAN 10 | `192.168.10.0/24` | Trusted employee/domain network |
 | Segmentation Lab | Guest VLAN 20 | `192.168.20.0/24` | Isolated guest/untrusted network |
 | Segmentation Lab | Server VLAN 30 | `192.168.30.0/24` | Internal server network |
 
