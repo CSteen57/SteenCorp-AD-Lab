@@ -4,7 +4,7 @@
 
 ## Overview
 
-The SteenCorp Enterprise IT Lab is a simulated business IT environment designed to bridge the gap between certification knowledge and practical, hands-on experience to replicate real-world scenarios, including:
+The SteenCorp Enterprise IT Lab is a simulated business IT environment designed to bridge the gap between certification knowledge and hands-on troubleshooting.
 
 - Active Directory Domain Services (AD DS)
 - Organizational Unit (OU) design
