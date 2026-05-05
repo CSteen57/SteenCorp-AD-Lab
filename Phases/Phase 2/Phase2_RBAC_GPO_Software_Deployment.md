@@ -6,6 +6,20 @@ Implement access control and workstation management using Active Directory secur
 
 This phase started with role-based access control for department shares, then expanded into Group Policy software deployment by pushing Google Chrome to domain-joined workstations.
 
+## Key Takeaways
+
+- RBAC requires alignment between users, groups, folders, and permissions
+- GPO design should be centralized and targeted correctly
+- OU placement directly controls policy application
+- Group Policy can manage both access control and software deployment
+- GPO software deployment must use a UNC path, not a local server path
+- Both NTFS permissions and share permissions matter
+- Software deployment runs under the computer context, not the logged-in user
+- Computer-based policies should be validated with `gpresult /scope computer /r`
+- Software assigned through Computer Configuration installs during startup, so a reboot is required
+- Once installed at the computer level, the application is available to any user who logs into that workstation
+- Client-side validation is critical
+
 ---
 
 ## Overview
@@ -64,7 +78,7 @@ Department folders were created for controlled access, including:
 - IT
 - Sales
 
-![Department Folder Structure](../Evidence/Infrastructure/Physical%20Directory%20Structure%20for%20Departmental%20Shares.png)
+![Department Folder Structure](../../Evidence/Infrastructure/Physical%20Directory%20Structure%20for%20Departmental%20Shares.png)
 
 ---
 
@@ -79,7 +93,7 @@ I configured a mapped drive for the Sales department using Group Policy.
 \\WIN-4CF03BHNDEC\SteenCorp_Shares
 ```
 
-![Initial Drive Mapping](../Evidence/Validation/GPO%20Drive%20Map%20COnfiguration%20for%20Sales%20Department.png)
+![Initial Drive Mapping](../../Evidence/Validation/GPO%20Drive%20Map%20COnfiguration%20for%20Sales%20Department.png)
 
 ---
 
@@ -111,7 +125,7 @@ Root causes included:
   - `GPO_MAP_Sales_Drive`
 - The configuration was harder to manage because mappings were not centralized
 
-![Incorrect Path](../Evidence/Validation/Incorrect_Path.png)
+![Incorrect Path](../../Evidence/Validation/Incorrect_Path.png)
 
 ---
 
@@ -147,7 +161,7 @@ Removed redundant GPOs to make the configuration easier to manage and troublesho
 | Accounting | A: | `Accounting_Users` |
 | Public | P: | `Domain Users` |
 
-![Updated Drive Maps](../Evidence/Infrastructure/Drive_Maps_Overview.png)
+![Updated Drive Maps](../../Evidence/Infrastructure/Drive_Maps_Overview.png)
 
 ---
 
@@ -163,7 +177,7 @@ gpupdate /force
 
 The command completed, but the expected drive mappings still did not appear.
 
-![Validation Attempt](../Evidence/Validation/Validation_Attempt.png)
+![Validation Attempt](../../Evidence/Validation/Validation_Attempt.png)
 
 ---
 
@@ -195,7 +209,7 @@ Then I forced a policy update:
 gpupdate /force
 ```
 
-![Workstation GPO Update](../Evidence/Validation/The%20Aha%20Moment.png)
+![Workstation GPO Update](../../Evidence/Validation/The%20Aha%20Moment.png)
 
 ---
 
@@ -208,9 +222,9 @@ After moving the workstation into the correct OU and applying Group Policy:
 - Access was restricted by department
 - Standard users could access only the resources they were allowed to use
 
-![Successful GPUpdate](../Evidence/Validation/Final_gpupdate.png)
+![Successful GPUpdate](../../Evidence/Validation/Final_gpupdate.png)
 
-![Mapped Drives](../Evidence/Validation/V3_Final_Operational_Success_2.png)
+![Mapped Drives](../../Evidence/Validation/V3_Final_Operational_Success_2.png)
 
 ---
 
@@ -230,7 +244,7 @@ Access is denied
 
 This was expected because the logged-in user was a standard domain user and did not have administrative privileges.
 
-![Standard User](../Evidence/Validation/V3_Final_Operational_Success.png)
+![Standard User](../../Evidence/Validation/V3_Final_Operational_Success.png)
 
 ---
 
@@ -256,9 +270,9 @@ C:\Software
 
 I configured permissions so domain computers could read and execute the installer.
 
-![Chrome MSI Stored in Software Folder](../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_01_MSI_Stored_In_Software_Folder_NTFS_Permissions.png)
+![Chrome MSI Stored in Software Folder](../../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_01_MSI_Stored_In_Software_Folder_NTFS_Permissions.png)
 
-![NTFS Permissions for Domain Computers](../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_02_NTFS_Domain_Computers_Read_Execute.png)
+![NTFS Permissions for Domain Computers](../../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_02_NTFS_Domain_Computers_Read_Execute.png)
 
 ---
 
@@ -274,7 +288,7 @@ Group Policy warned that this was not a network location.
 
 This mattered because client workstations cannot install software from the server's local `C:\` path. They need a network path that they can reach.
 
-![Local Path Error](../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_03_Local_Path_Not_Network_Location_Error.png)
+![Local Path Error](../../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_03_Local_Path_Not_Network_Location_Error.png)
 
 ---
 
@@ -288,7 +302,7 @@ I then attempted to use the UNC path:
 
 At first, the path failed because the folder had not been shared correctly yet.
 
-![UNC Path Not Found](../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_04_UNC_Path_Network_Name_Not_Found.png)
+![UNC Path Not Found](../../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_04_UNC_Path_Network_Name_Not_Found.png)
 
 ---
 
@@ -298,13 +312,13 @@ I initially created the share with only `Domain Computers` having read access.
 
 This made sense for the GPO install because software deployment runs under the computer context. However, it also meant I could not manually browse to the share as a regular user or admin account during testing.
 
-![Share Created with Domain Computers Only](../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_05_Share_Created_Domain_Computers_Only.png)
+![Share Created with Domain Computers Only](../../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_05_Share_Created_Domain_Computers_Only.png)
 
-![Initial Share Permissions](../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_06_Share_Permissions_Domain_Computers_Only.png)
+![Initial Share Permissions](../../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_06_Share_Permissions_Domain_Computers_Only.png)
 
 When testing the UNC path manually, access was denied.
 
-![UNC Access Denied](../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_07_UNC_Access_Denied_User_Not_Allowed.png)
+![UNC Access Denied](../../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_07_UNC_Access_Denied_User_Not_Allowed.png)
 
 ---
 
@@ -312,7 +326,7 @@ When testing the UNC path manually, access was denied.
 
 I attempted to update the share permissions, but the share already existed.
 
-![Net Share Already Exists Error](../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_08_Net_Share_Already_Exists_Error.png)
+![Net Share Already Exists Error](../../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_08_Net_Share_Already_Exists_Error.png)
 
 To resolve this cleanly, I deleted and recreated the share with both `Domain Users` and `Domain Computers` having read access.
 
@@ -322,14 +336,14 @@ net share Software /delete
 net share Software=C:\Software /GRANT:"Domain Users",READ /GRANT:"Domain Computers",READ
 ```
 
-![Share Recreated with Correct Permissions](../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_09_Share_Recreated_With_Correct_Permissions.png)
+![Share Recreated with Correct Permissions](../../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_09_Share_Recreated_With_Correct_Permissions.png)
 
 Final share permissions confirmed:
 
 - `Domain Computers`: Read
 - `Domain Users`: Read
 
-![Final Share Permissions](../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_10_Final_Share_Permissions_Verified.png)
+![Final Share Permissions](../../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_10_Final_Share_Permissions_Verified.png)
 
 ---
 
@@ -343,7 +357,7 @@ GPO_Deploy_Chrome
 
 The GPO was linked to the Workstations OU so it would apply to domain-joined workstation machines.
 
-![GPO Linked to Workstations OU](../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_11_GPO_Linked_To_Workstations_OU.png)
+![GPO Linked to Workstations OU](../../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_11_GPO_Linked_To_Workstations_OU.png)
 
 Security filtering was configured so the policy applied to:
 
@@ -351,7 +365,7 @@ Security filtering was configured so the policy applied to:
 Domain Computers
 ```
 
-![GPO Security Filtering](../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_12_GPO_Security_Filtering_Domain_Computers.png)
+![GPO Security Filtering](../../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_12_GPO_Security_Filtering_Domain_Computers.png)
 
 The Chrome MSI was added under:
 
@@ -371,7 +385,7 @@ Source path:
 \\DC01\Software\googlechromestandaloneenterprise64.msi
 ```
 
-![Chrome MSI Assigned Using UNC Path](../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_13_Chrome_MSI_Assigned_Using_UNC_Path.png)
+![Chrome MSI Assigned Using UNC Path](../../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_13_Chrome_MSI_Assigned_Using_UNC_Path.png)
 
 ---
 
@@ -393,7 +407,7 @@ gpresult /scope computer /r
 
 This confirmed that `GPO_Deploy_Chrome` was applied to the workstation.
 
-![Computer Scope GPResult](../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_22_Computer_Scope_GPResult_GPO_Applied.png)
+![Computer Scope GPResult](../../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_22_Computer_Scope_GPResult_GPO_Applied.png)
 
 ---
 
@@ -403,7 +417,7 @@ I also attempted to force Group Policy remotely from DC01.
 
 The remote update returned an RPC error.
 
-![Remote GPUpdate RPC Error](../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_16_Remote_GPUpdate_RPC_Error.png)
+![Remote GPUpdate RPC Error](../../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_16_Remote_GPUpdate_RPC_Error.png)
 
 This showed that a remote policy refresh can fail even when the GPO itself is configured correctly.
 
@@ -429,11 +443,11 @@ Validated with multiple users:
 - `steencorp\kkapoor`
 - `steencorp\jhalpert`
 
-![Chrome Installed for CSteen](../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_18_Chrome_Installed_CSteen_WK02.png)
+![Chrome Installed for CSteen](../../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_18_Chrome_Installed_CSteen_WK02.png)
 
-![Chrome Installed for Kelly Kapoor](../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_19_Chrome_Installed_KKapoor_WK01.png)
+![Chrome Installed for Kelly Kapoor](../../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_19_Chrome_Installed_KKapoor_WK01.png)
 
-![Chrome Installed for Jim Halpert](../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_20_Chrome_Installed_JHalpert_WK01.png)
+![Chrome Installed for Jim Halpert](../../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_20_Chrome_Installed_JHalpert_WK01.png)
 
 ---
 
@@ -453,19 +467,3 @@ Completed outcome:
 - Google Chrome deployed through Group Policy to managed workstations
 - Software deployment validated across multiple domain users
 - Environment prepared for security hardening and help desk simulation
-
----
-
-## Key Takeaways
-
-- RBAC requires alignment between users, groups, folders, and permissions
-- GPO design should be centralized and targeted correctly
-- OU placement directly controls policy application
-- Group Policy can manage both access control and software deployment
-- GPO software deployment must use a UNC path, not a local server path
-- Both NTFS permissions and share permissions matter
-- Software deployment runs under the computer context, not the logged-in user
-- Computer-based policies should be validated with `gpresult /scope computer /r`
-- Software assigned through Computer Configuration installs during startup, so a reboot is required
-- Once installed at the computer level, the application is available to any user who logs into that workstation
-- Client-side validation is critical
