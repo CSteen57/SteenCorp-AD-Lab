@@ -10,7 +10,7 @@ Each phase represents a different layer of the environment, starting with the Ac
 
 ### Phase 1 – Foundation & Environment Setup
 
-📄 [View Phase 1](../Phase%201)
+📄 [View Phase 1](./Phase%201)
 
 Phase 1 established the core Windows domain environment.
 
@@ -29,7 +29,7 @@ Key focus areas:
 
 ### Phase 2 – Access Control, Group Policy & Software Deployment
 
-📄 📄 [View Phase 2](./Phase%202/))
+📄 📄 [View Phase 2](./Phase%202/)
 
 Phase 2 focused on controlling access to shared resources and managing workstations through Group Policy.
 
@@ -49,7 +49,7 @@ Key focus areas:
 
 ### Phase 3 – Networking & Domain Connectivity
 
-📄 [View Phase 3](./Phase3_Networking.md)
+📄 [View Phase 3](./Phase%203)
 
 Phase 3 focused on DHCP, DNS, IP addressing, and network troubleshooting inside the SteenCorp domain environment.
 
@@ -75,7 +75,7 @@ Key focus areas:
 
 ### Phase 4 – Security & Enterprise Controls
 
-📄 [View Phase 4](./Phase4_Security,%20Identity%20%26%20Enterprise%20Controls.md)
+📄 [View Phase 4](./Phase%204)
 
 Phase 4 focused on improving security through administrative account separation, Group Policy security settings, and client-side validation.
 
