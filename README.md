@@ -49,12 +49,6 @@ This allows additional scenarios to be layered on top of the same system to refl
 
 ---
 
-## Environment
-
-
-
----
-
 ## Project Roadmap
 
 | Phase | Status | Focus | Outcome |
