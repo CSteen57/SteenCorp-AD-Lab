@@ -29,7 +29,7 @@ Key focus areas:
 
 ### Phase 2 – Access Control, Group Policy & Software Deployment
 
-📄 📄 [View Phase 2](./Phase%202/)
+📄 [View Phase 2](./Phase%202/)
 
 Phase 2 focused on controlling access to shared resources and managing workstations through Group Policy.
 
