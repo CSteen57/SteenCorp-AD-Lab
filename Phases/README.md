@@ -10,7 +10,7 @@ Each phase represents a different layer of the environment, starting with the Ac
 
 ### Phase 1 – Foundation & Environment Setup
 
-📄 [View Phase 1](./Phase1_Foundation.md)
+📄 [View Phase 1](../Phase1_Foundation.md)
 
 Phase 1 established the core Windows domain environment.
 
