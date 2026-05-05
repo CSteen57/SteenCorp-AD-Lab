@@ -51,18 +51,7 @@ This allows additional scenarios to be layered on top of the same system to refl
 
 ## Environment
 
-| Component | Details |
-|---|---|
-| Domain | `steencorp.local` |
-| Domain Controller | Windows Server 2022 |
-| Domain Controller Hostname | `DC01` |
-| Client Systems | Windows 11 domain-joined workstations |
-| Virtualization Platform | VMware Workstation |
-| Original Network Type | Internal VMware LAN segment |
-| Current Network Type | VMware NAT-backed `VMnet8` |
-| Lab Subnet | `192.168.10.0/24` |
-| Current NAT Gateway | `192.168.10.2` |
-| Core Services | AD DS, DNS, DHCP, Group Policy, File Sharing |
+
 
 ---
 
@@ -79,17 +68,20 @@ This lab was later extended into separate portfolio projects using the same Stee
 
 ---
 
-## Architecture Summary
+## Architecture/Environment Summary
 
-- Single Active Directory domain: `steencorp.local`
-- Centralized Domain Controller: `DC01`
-- Domain-joined Windows 11 workstations
-- Internal network segmentation through VMware
-- Centralized authentication through Active Directory
-- Centralized policy management through Group Policy
-- Department-based access control through security groups
-- Shared resources protected through NTFS and share permissions
-- Standard user accounts separated from administrative accounts
+| Component | Details |
+|---|---|
+| Domain | `steencorp.local` |
+| Domain Controller | Windows Server 2022 |
+| Domain Controller Hostname | `DC01` |
+| Client Systems | Windows 11 domain-joined workstations |
+| Virtualization Platform | VMware Workstation |
+| Original Network Type | Internal VMware LAN segment |
+| Current Network Type | VMware NAT-backed `VMnet8` |
+| Lab Subnet | `192.168.10.0/24` |
+| Current NAT Gateway | `192.168.10.2` |
+| Core Services | AD DS, DNS, DHCP, Group Policy, File Sharing |
 
 ---
 
