@@ -1,6 +1,6 @@
 # Phase 1 – Foundation & Environment Setup
 
-## Overview
+## Objective
 
 Build the foundation for the SteenCorp Windows domain environment by deploying a domain controller, creating a structured Active Directory layout, joining a Windows 11 client to the domain, and preparing the lab for future access control, Group Policy, networking, security, and help desk scenarios.
 
