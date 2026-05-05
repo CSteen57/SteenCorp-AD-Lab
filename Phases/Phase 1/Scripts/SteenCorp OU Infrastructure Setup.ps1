@@ -1,4 +1,7 @@
-﻿Import-Module ActiveDirectory
+﻿# --- SteenCorp OU Infrastructure Setup ---
+# Purpose: Creates the main Active Directory OU structure for the SteenCorp domain
+
+Import-Module ActiveDirectory
 
 $domain = "DC=SteenCorp,DC=Local"
 $hqName = "SteenCorp_HQ"

@@ -4,6 +4,15 @@
 
 Build the foundation for the SteenCorp Windows domain environment by deploying a domain controller, creating a structured Active Directory layout, joining a Windows 11 client to the domain, and preparing the lab for future access control, Group Policy, networking, security, and help desk scenarios.
 
+## Key Takeaways
+
+- A stable foundation matters before adding advanced services
+- Rebuilding in the right platform can be more efficient than fighting unstable lab issues
+- Active Directory structure affects future access control and Group Policy design
+- PowerShell automation makes the environment easier to rebuild and expand
+- Standard user testing is important because access should be validated from the user side
+- This phase directly supports the later RBAC, GPO, networking, security, and help desk ticketing projects
+
 ---
 
 ## Environment
@@ -41,10 +50,10 @@ The lab was originally started in VirtualBox, but I ran into a blocking issue wh
 <summary>View Issue & Migration Evidence</summary>
 
 **VirtualBox Boot Failure**  
-![VirtualBox Boot Error](../Evidence/Infrastructure/Screenshot%202026-04-13%20120545.png)
+![VirtualBox Boot Error](../../Evidence/Infrastructure/Screenshot%202026-04-13%20120545.png)
 
 **Domain Demotion Prior to Rebuild**  
-![Domain Demotion](../Evidence/Infrastructure/00_Demote_Domain.png)
+![Domain Demotion](../../Evidence/Infrastructure/00_Demote_Domain.png)
 
 </details>
 
@@ -82,7 +91,7 @@ The goal was to avoid dumping every object into default containers and instead b
   - Accounting
   - Marketing
 
-![Group Deployment](../Evidence/Infrastructure/01_SteenCorp_OU_HQ_Structure.png)
+![Group Deployment](../../Evidence/Infrastructure/01_SteenCorp_OU_HQ_Structure.png)
 
 ---
 
@@ -92,7 +101,7 @@ To avoid manually creating every OU, group, and user, I used PowerShell automati
 
 This made the lab easier to rebuild, easier to expand, and more realistic than manually creating every object one at a time.
 
-#### Automation Approach
+#### Approach
 
 PowerShell scripts were used to automate:
 
@@ -105,27 +114,29 @@ The CSV-based provisioning helped simulate a larger employee directory and gave 
 
 #### Scripts Used
 
-- [OU Infrastructure Setup](../Scripts/Phase1_Infrastructure/SteenCorp%20OU%20Infrastructure%20Setup.ps1)
-- [Security Group Infrastructure](../Scripts/Phase1_Infrastructure/SteenCorp%20Group%20Infrastructure.ps1)
-- [Employee CSV Generator](../Scripts/Phase1_Infrastructure/Create%20Mega%20SteenCorp%20Employee%20CSV.ps1)
-- [Bulk User Provisioning](../Scripts/Phase1_Infrastructure/SteenCorp%20Final%20Bulk%20Ingestion.ps1)
+- [OU Infrastructure Setup](./Scripts/SteenCorp%20OU%20Infrastructure%20Setup.ps1)
+- [Security Group Infrastructure](./Scripts/SteenCorp%20Group%20Infrastructure.ps1)
+- [Employee CSV Generator](./Scripts/Create%20Mega%20SteenCorp%20Employee%20CSV.ps1)
+- [Bulk User Provisioning](./Scripts/SteenCorp%20Final%20Bulk%20Ingestion.ps1)
 
 ---
 
-## Implementation Results
+## Outcome
 
-Phase 1 resulted in a working Active Directory foundation for the rest of the SteenCorp lab.
+Phase 1 created the foundation that every later phase depends on.
 
-Completed results:
+Without a stable domain controller, organized Active Directory structure, and working domain-joined client, the later RBAC, Group Policy, networking, security, and help desk scenarios would not have been possible.
 
-- Deployed the `steencorp.local` domain
-- Promoted Windows Server 2022 to Domain Controller
-- Created a structured OU layout
-- Created department-based security groups
-- Bulk-provisioned users with PowerShell and CSV data
-- Joined a Windows 11 client to the domain
-- Verified standard user authentication
-- Confirmed standard users did not have administrative privileges
+This phase demonstrated:
+
+- Basic Windows Server deployment
+- Active Directory domain creation
+- OU and group planning
+- PowerShell automation
+- Bulk user provisioning
+- Domain client validation
+- Standard user permission testing
+- Practical troubleshooting during a virtualization migration
 
 ---
 
@@ -138,7 +149,7 @@ The OU structure was verified in Active Directory Users and Computers.
 **Result:**  
 The domain structure matched the intended layout and was ready for future RBAC and Group Policy configuration.
 
-![OU Hierarchy Structure](../Evidence/Infrastructure/01_SteenCorp_OU_HQ_Structure.png)
+![OU Hierarchy Structure](../../Evidence/Infrastructure/01_SteenCorp_OU_HQ_Structure.png)
 
 ---
 
@@ -149,7 +160,7 @@ Bulk user provisioning was completed using CSV-defined user data.
 **Result:**  
 Users were created and placed into the correct departmental OUs.
 
-![Bulk User Provisioning](../Evidence/Automation/04_Master_Automation_Proof.png)
+![Bulk User Provisioning](../../Evidence/Automation/04_Master_Automation_Proof.png)
 
 ---
 
@@ -169,52 +180,4 @@ Validation steps:
 - Administrative command failed with “Access is denied”
 - Standard user restrictions were working as expected
 
-![Domain Authentication and Permission Validation](../Evidence/Validation/V3_Final_Operational_Success.png)
-
----
-
-## Why This Matters
-
-Phase 1 created the foundation that every later phase depends on.
-
-Without a stable domain controller, organized Active Directory structure, and working domain-joined client, the later RBAC, Group Policy, networking, security, and help desk scenarios would not have been possible.
-
-This phase demonstrated:
-
-- Basic Windows Server deployment
-- Active Directory domain creation
-- OU and group planning
-- PowerShell automation
-- Bulk user provisioning
-- Domain client validation
-- Standard user permission testing
-- Practical troubleshooting during a virtualization migration
-
----
-
-## Outcome
-
-By the end of Phase 1, the SteenCorp domain environment was operational and ready for future phases.
-
-Completed outcome:
-
-- Functional Active Directory domain: `steencorp.local`
-- Domain Controller deployed as `DC01`
-- Windows 11 client joined to the domain
-- Centralized authentication established
-- Organized OU structure created
-- Users, groups, and departments provisioned
-- Standard user login validated
-- Administrative restrictions confirmed
-- Stable VMware-based environment prepared for future lab work
-
----
-
-## Key Takeaways
-
-- A stable foundation matters before adding advanced services
-- Rebuilding in the right platform can be more efficient than fighting unstable lab issues
-- Active Directory structure affects future access control and Group Policy design
-- PowerShell automation makes the environment easier to rebuild and expand
-- Standard user testing is important because access should be validated from the user side
-- This phase directly supports the later RBAC, GPO, networking, security, and help desk ticketing projects
+![Domain Authentication and Permission Validation](../../Evidence/Validation/V3_Final_Operational_Success.png)

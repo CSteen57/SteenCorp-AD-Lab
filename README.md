@@ -4,17 +4,7 @@
 
 ## Overview
 
-The SteenCorp Enterprise IT Lab is a simulated business IT environment designed to replicate real-world infrastructure, identity management, access control, networking, security, and workstation support scenarios.
-
-This project was built to bridge the gap between certification knowledge and practical, hands-on experience in system administration, networking, Active Directory administration, Group Policy, DNS, DHCP, permissions, and troubleshooting.
-
-The lab is built around a reusable Windows domain environment that can continue expanding into future help desk, networking, security, remote access, and monitoring projects.
-
----
-
-## What This Project Demonstrates
-
-This lab showcases hands-on experience with:
+The SteenCorp Enterprise IT Lab is a simulated business IT environment designed to bridge the gap between certification knowledge and practical, hands-on experience to replicate real-world scenarios, including:
 
 - Active Directory Domain Services (AD DS)
 - Organizational Unit (OU) design
@@ -29,66 +19,33 @@ This lab showcases hands-on experience with:
 - Standard user and administrative account separation
 - Real-world issue diagnosis and resolution
 
-All configurations were built and validated in a virtualized environment using Windows Server 2022, Windows 11, and VMware Workstation.
-
----
-
-## Lab Design Philosophy
+### Lab Design Philosophy
 
 The environment was built as a reusable domain infrastructure rather than a one-time lab.
 
-This allows additional scenarios to be layered on top of the same system, including:
+This allows additional scenarios to be layered on top of the same system to reflect how real enterprise environments are continuously developed, maintained, troubleshot, and improved over time.
 
-- Network diagnostics and troubleshooting
-- Help desk and user support workflows
-- Security testing and policy enforcement
-- Software deployment and workstation standardization
-- Future infrastructure and service expansion
+### What I Learned
 
-This approach reflects how real enterprise environments are continuously developed, maintained, troubleshot, and improved over time.
+- Building systems is only one part of IT; troubleshooting and validation are just as important
+- Active Directory structure affects how policies and access controls behave
+- Group Policy depends heavily on proper OU placement, targeting, and refresh behavior
+- RBAC is easier to manage when permissions are assigned to groups instead of individual users
+- Software deployment through GPO requires proper UNC paths, share permissions, and computer-scope validation
+- Virtual environments can introduce real-world networking issues
+- DNS is critical in Active Directory environments
+- Security controls must be implemented and validated, not assumed
+- A reusable lab environment can support multiple future projects and troubleshooting scenarios
+- A later help desk ticket can expose infrastructure design gaps, and documenting those changes shows how real environments evolve after troubleshooting
 
 ---
 
-## Project Continuation
+## Related Portfolio Projects
 
-This lab serves as the foundation for my follow-up SteenCorp portfolio projects.
-
-After building the SteenCorp domain environment, I used the same Active Directory domain, users, groups, shared folders, Group Policy configuration, DNS setup, and Windows 11 workstation environment to simulate real help desk tickets.
-
-The lab was also extended with a separate networking project focused on VLAN segmentation, guest isolation, inter-VLAN routing, and access control rules.
-
-**Related Projects:**
-
-- [SteenDesk Help Desk Simulation](https://github.com/CSteen57/SteenDesk_Help_Desk_Simulation)
-- [SteenCorp Network Segmentation Lab](https://github.com/CSteen57/SteenCorp_Network_Segmentation_Lab)
-
-Follow-up scenarios include:
-
-- User cannot access a shared department drive
-- User account locked out
-- User forgot password
-- User cannot access a network share by hostname
-- User cannot install approved software without admin approval
-- User cannot access the internet due to VMware NAT/default gateway misconfiguration
-- Guest network isolation from internal company resources
-- VLAN segmentation and basic network access control
-  
----
-
-## Environment
-
-| Component | Details |
+| Project | Focus |
 |---|---|
-| Domain | `steencorp.local` |
-| Domain Controller | Windows Server 2022 |
-| Domain Controller Hostname | `DC01` |
-| Client Systems | Windows 11 domain-joined workstations |
-| Virtualization Platform | VMware Workstation |
-| Original Network Type | Internal VMware LAN segment |
-| Current Network Type | VMware NAT-backed `VMnet8` |
-| Lab Subnet | `192.168.10.0/24` |
-| Current NAT Gateway | `192.168.10.2` |
-| Core Services | AD DS, DNS, DHCP, Group Policy, File Sharing |
+| [SteenDesk Help Desk Simulation](https://github.com/CSteen57/SteenDesk_Help_Desk_Simulation) | Help desk troubleshooting, ticket documentation, Active Directory account issues, DNS troubleshooting, software install support, and least privilege validation |
+| [SteenCorp Network Segmentation Lab](https://github.com/CSteen57/SteenCorp_Network_Segmentation_Lab) | VLAN segmentation, trunking, router-on-a-stick, ACL-based guest isolation, and network validation |
 
 ---
 
@@ -105,17 +62,20 @@ This lab was later extended into separate portfolio projects using the same Stee
 
 ---
 
-## Architecture Summary
+## Architecture/Environment Summary
 
-- Single Active Directory domain: `steencorp.local`
-- Centralized Domain Controller: `DC01`
-- Domain-joined Windows 11 workstations
-- Internal network segmentation through VMware
-- Centralized authentication through Active Directory
-- Centralized policy management through Group Policy
-- Department-based access control through security groups
-- Shared resources protected through NTFS and share permissions
-- Standard user accounts separated from administrative accounts
+| Component | Details |
+|---|---|
+| Domain | `steencorp.local` |
+| Domain Controller | Windows Server 2022 |
+| Domain Controller Hostname | `DC01` |
+| Client Systems | Windows 11 domain-joined workstations |
+| Virtualization Platform | VMware Workstation |
+| Original Network Type | Internal VMware LAN segment |
+| Current Network Type | VMware NAT-backed `VMnet8` |
+| Lab Subnet | `192.168.10.0/24` |
+| Current NAT Gateway | `192.168.10.2` |
+| Core Services | AD DS, DNS, DHCP, Group Policy, File Sharing |
 
 ---
 
@@ -129,8 +89,6 @@ This lab was later extended into separate portfolio projects using the same Stee
 - Restricted users to only their assigned department resources
 - Validated access from domain-joined Windows 11 clients
 
----
-
 ### Group Policy Management
 
 - Configured mapped network drives through Group Policy
@@ -139,8 +97,6 @@ This lab was later extended into separate portfolio projects using the same Stee
 - Validated policy application using client-side testing
 - Expanded Group Policy use beyond access control into software deployment and workstation security
 
----
-
 ### Software Deployment
 
 - Created a centralized software repository on DC01
@@ -148,8 +104,6 @@ This lab was later extended into separate portfolio projects using the same Stee
 - Deployed Google Chrome using Group Policy software installation
 - Used a UNC path for MSI deployment
 - Verified Chrome installation across multiple domain users
-
----
 
 ### Networking & Troubleshooting
 
@@ -162,8 +116,7 @@ This lab was later extended into separate portfolio projects using the same Stee
 - Later updated the lab network after a help desk ticket exposed missing internet routing from the isolated LAN Segment
 - Reconfigured the environment to use VMware NAT-backed `VMnet8` while keeping DC01 as the DHCP and DNS server
 - Updated the active client default gateway from the original planned gateway `192.168.10.1` to the validated VMware NAT gateway `192.168.10.2`
-  
----
+
 
 ### Security Implementation
 
@@ -173,8 +126,6 @@ This lab was later extended into separate portfolio projects using the same Stee
 - Configured a login security banner
 - Applied workstation hardening through Group Policy
 - Validated security controls from the client side
-
----
 
 ### Real-World Troubleshooting
 
@@ -243,111 +194,3 @@ DHCP and DNS configuration were validated from the client workstation.
 Account lockout policy was triggered and resolved through administrative intervention.
 
 <img src="./Evidence/Validation/Account_Lockout_Triggered.png" alt="Account Lockout Validation" width="850">
-
----
-
-## Related Portfolio Projects
-
-| Project | Focus |
-|---|---|
-| [SteenDesk Help Desk Simulation](https://github.com/CSteen57/SteenDesk_Help_Desk_Simulation) | Help desk troubleshooting, ticket documentation, Active Directory account issues, DNS troubleshooting, software install support, and least privilege validation |
-| [SteenCorp Network Segmentation Lab](https://github.com/CSteen57/SteenCorp_Network_Segmentation_Lab) | VLAN segmentation, trunking, router-on-a-stick, ACL-based guest isolation, and network validation |
-
----
-
-## Project Structure
-
-<pre>
-SteenCorp-AD-Lab/
-│
-├── README.md
-├── SteenCorp_Enterprise_IT_Lab_Banner.png
-│
-├── Phases/
-│   ├── README.md
-│   ├── Phase1_Foundation.md
-│   ├── Phase2_RBAC_GPO_Software_Deployment.md
-│   ├── Phase3_Networking.md
-│   └── Phase4_Security, Identity & Enterprise Controls.md
-│
-├── Evidence/
-│   ├── README.md
-│   ├── Automation/
-│   ├── Infrastructure/
-│   ├── Networking/
-│   ├── Phase2_Chrome_GPO/
-│   └── Validation/
-│
-└── Scripts/
-    ├── README.md
-    └── Phase1_Infrastructure/
-</pre>
-
----
-
-## Skills Demonstrated
-
-- Active Directory administration
-- Organizational Unit design
-- Group Policy configuration and troubleshooting
-- Role-Based Access Control
-- NTFS and share permission management
-- Mapped drive configuration
-- DNS and DHCP configuration
-- IP addressing and network troubleshooting
-- VMware virtual networking
-- Group Policy software deployment
-- Windows Server administration
-- Windows 11 domain client support
-- Security policy enforcement
-- Account lockout policy testing
-- Administrative and standard user separation
-- Command-line validation and troubleshooting
-- Technical documentation
-- VMware NAT-backed network configuration
-- DHCP default gateway option troubleshooting
-- Internet connectivity troubleshooting
-- Infrastructure change documentation
-
----
-
-## What I Learned
-
-- Building systems is only one part of IT; troubleshooting and validation are just as important
-- Active Directory structure affects how policies and access controls behave
-- Group Policy depends heavily on proper OU placement, targeting, and refresh behavior
-- RBAC is easier to manage when permissions are assigned to groups instead of individual users
-- Software deployment through GPO requires proper UNC paths, share permissions, and computer-scope validation
-- Virtual environments can introduce real-world networking issues
-- DNS is critical in Active Directory environments
-- Security controls must be implemented and validated, not assumed
-- A reusable lab environment can support multiple future projects and troubleshooting scenarios
-- A later help desk ticket can expose infrastructure design gaps, and documenting those changes shows how real environments evolve after troubleshooting
-
----
-
-## Future Development
-
-This environment is designed to serve as a long-term foundation for additional labs and real-world scenarios.
-
-Completed expansions:
-
-- [SteenDesk Help Desk Simulation](https://github.com/CSteen57/SteenDesk_Help_Desk_Simulation)  Help desk troubleshooting, ticket documentation, Active Directory account issues, DNS troubleshooting, approved software install support, VMware NAT internet connectivity troubleshooting, and least privilege validation.
-- [SteenCorp Network Segmentation Lab](https://github.com/CSteen57/SteenCorp_Network_Segmentation_Lab) — Packet Tracer networking project demonstrating VLAN segmentation, trunking, router-on-a-stick, ACL-based guest isolation, and network validation.
-
-Planned future expansions include:
-
-- Security expansion with AppLocker, auditing, logging, and SIEM integration
-- VPN and remote access configuration
-- Firewall-based network isolation using pfSense or OPNsense
-- Advanced endpoint and identity security controls
-
-Future labs will continue building on the SteenCorp environment and be linked here as they are developed.
-
----
-
-## Final Outcome
-
-This lab now serves as the foundation for a larger SteenCorp portfolio that includes help desk troubleshooting, network segmentation, and future security-focused projects.
-
-A later SteenDesk help desk ticket also produced a documented infrastructure update: the original isolated LAN Segment design was changed to VMware NAT-backed `VMnet8` so domain clients could access the internet while DC01 continued providing DHCP and DNS.
