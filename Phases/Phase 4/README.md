@@ -6,6 +6,16 @@ Implement security controls for the SteenCorp domain environment by separating a
 
 This phase focused on improving the environment after the core Active Directory, access control, Group Policy, and networking foundations were already in place.
 
+## Key Takeaways
+
+- Administrative accounts should be separated from standard user accounts
+- Named admin accounts provide better accountability than relying only on default administrator access
+- Group Policy is important for enforcing security settings across workstations
+- Security controls should be validated from the client side
+- Account lockout policies create realistic help desk and security workflows
+- Least privilege should be tested, not assumed
+- This phase created the security foundation for later help desk and security-focused projects
+
 ---
 
 ## Overview
@@ -82,11 +92,11 @@ Validation completed:
 - Successfully signed into the domain using the admin account
 - Used the admin account for elevated tasks instead of a standard user account
 
-![Admin Account Created](../Evidence/Validation/ADUC_showing_adm_christian.png)
+![Admin Account Created](../../Evidence/Validation/ADUC_showing_adm_christian.png)
 
-![Admin Group Membership](../Evidence/Validation/Member_Of_Domain_Admins.png)
+![Admin Group Membership](../../Evidence/Validation/Member_Of_Domain_Admins.png)
 
-![Admin Login](../Evidence/Validation/logged_in_as_adm_christian.png)
+![Admin Login](../../Evidence/Validation/logged_in_as_adm_christian.png)
 
 ---
 
@@ -132,7 +142,7 @@ Login banner message:
 WARNING: This system is for authorized SteenCorp personnel only. Activities are monitored.
 ```
 
-![Login Banner](../Evidence/Validation/Login_Banner_SteenCorp.png)
+![Login Banner](../../Evidence/Validation/Login_Banner_SteenCorp.png)
 
 ---
 
@@ -144,7 +154,7 @@ The login banner was configured through Group Policy under:
 Computer Configuration → Policies → Windows Settings → Security Settings → Local Policies → Security Options
 ```
 
-![GPO Settings](../Evidence/Validation/GPO_Login_Banner_Configured.png)
+![GPO Settings](../../Evidence/Validation/GPO_Login_Banner_Configured.png)
 
 ---
 
@@ -167,7 +177,7 @@ Administrative elevation was tested using the dedicated admin account.
 
 When elevated permissions were required, the admin account was used instead of granting unnecessary privileges to a standard user.
 
-![UAC Prompt](../Evidence/Validation/UAC_Admin_Elevation_Prompt.png)
+![UAC Prompt](../../Evidence/Validation/UAC_Admin_Elevation_Prompt.png)
 
 This helped validate the difference between normal user permissions and administrative permissions.
 
@@ -190,7 +200,7 @@ Result:
 - Account lockout policy triggered successfully
 - Policy enforcement was confirmed from the client side
 
-![Account Lockout](../Evidence/Validation/Account_Lockout_Triggered.png)
+![Account Lockout](../../Evidence/Validation/Account_Lockout_Triggered.png)
 
 ---
 
@@ -210,7 +220,7 @@ Admin unlocks account
 User signs in successfully
 ```
 
-![Account Unlock](../Evidence/Validation/Account_Unlock_Admin_Action.png)
+![Account Unlock](../../Evidence/Validation/Account_Unlock_Admin_Action.png)
 
 ---
 
@@ -218,7 +228,7 @@ User signs in successfully
 
 After the account was unlocked, the user was able to sign back into the workstation successfully.
 
-![Access Restored](../Evidence/Validation/Account_Access_Restored.png)
+![Access Restored](../../Evidence/Validation/Account_Access_Restored.png)
 
 ---
 
@@ -271,15 +281,3 @@ Completed outcome:
 - UAC/admin elevation tested
 - Account lockout and recovery workflow validated
 - Environment prepared for help desk ticketing and future security expansion
-
----
-
-## Key Takeaways
-
-- Administrative accounts should be separated from standard user accounts
-- Named admin accounts provide better accountability than relying only on default administrator access
-- Group Policy is important for enforcing security settings across workstations
-- Security controls should be validated from the client side
-- Account lockout policies create realistic help desk and security workflows
-- Least privilege should be tested, not assumed
-- This phase created the security foundation for later help desk and security-focused projects
