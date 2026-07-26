@@ -8,6 +8,7 @@ The SteenCorp Enterprise IT Lab is a simulated business IT environment designed 
 
 - Active Directory Domain Services (AD DS)
 - Organizational Unit (OU) design
+- PowerShell infrastructure and user administration
 - Group Policy (GPO) configuration and troubleshooting
 - Role-Based Access Control (RBAC)
 - Mapped network drives and department-based permissions
@@ -37,6 +38,7 @@ This allows additional scenarios to be layered on top of the same system to refl
 - Security controls must be implemented and validated, not assumed
 - A reusable lab environment can support multiple future projects and troubleshooting scenarios
 - A later help desk ticket can expose infrastructure design gaps, and documenting those changes shows how real environments evolve after troubleshooting
+- Reliable automation needs validation, error handling, and clear verification instead of only running the change command
 
 ---
 
@@ -53,7 +55,7 @@ This allows additional scenarios to be layered on top of the same system to refl
 
 | Phase | Status | Focus | Outcome |
 |---|---|---|---|
-| Phase 1: Foundation | Completed | Domain setup, AD DS, virtualization | Built a fully functional Windows domain environment |
+| Phase 1: Foundation | Completed | Domain setup, AD DS, virtualization, PowerShell | Built a functional Windows domain with automated infrastructure and user provisioning |
 | Phase 2: Access Control, GPO & Software Deployment | Completed | RBAC, drive mapping, GPO troubleshooting, Chrome deployment | Implemented access control and centralized workstation software deployment |
 | Phase 3: Networking & Troubleshooting | Completed | DNS, DHCP, IP management, issue resolution | Configured and validated core network services |
 | Phase 4: Security & Enterprise Controls | Completed | Identity management, GPO security, workstation hardening | Implemented enterprise-level security controls and validation |
@@ -88,6 +90,15 @@ This lab was later extended into separate portfolio projects using the same Stee
 - Implemented RBAC using group-based permissions
 - Restricted users to only their assigned department resources
 - Validated access from domain-joined Windows 11 clients
+
+### PowerShell Automation
+
+- Automated OU, security group, and bulk user deployment
+- Built a reusable tool for onboarding individual employees
+- Added department mapping, duplicate account protection, error handling, and final verification
+- Documented successful onboarding and controlled failure testing
+
+[View the PowerShell scripts and validation](./Phases/Phase%201/Scripts/)
 
 ### Group Policy Management
 

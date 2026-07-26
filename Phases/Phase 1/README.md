@@ -9,7 +9,7 @@ Build the foundation for the SteenCorp Windows domain environment by deploying a
 - A stable foundation matters before adding advanced services
 - Rebuilding in the right platform can be more efficient than fighting unstable lab issues
 - Active Directory structure affects future access control and Group Policy design
-- PowerShell automation makes the environment easier to rebuild and expand
+- PowerShell can support both repeatable infrastructure deployment and ongoing user administration
 - Standard user testing is important because access should be validated from the user side
 - This phase directly supports the later RBAC, GPO, networking, security, and help desk ticketing projects
 
@@ -95,29 +95,23 @@ The goal was to avoid dumping every object into default containers and instead b
 
 ---
 
-### Automation Implementation
+### PowerShell Automation
 
-To avoid manually creating every OU, group, and user, I used PowerShell automation.
+I first used PowerShell to create the OU and security group structure, generate employee data, and complete the initial bulk user deployment.
 
-This made the lab easier to rebuild, easier to expand, and more realistic than manually creating every object one at a time.
+After the environment was running, I expanded that work into a reusable employee onboarding tool for individual hires. This progression let me practice moving from one-time build scripts to a safer administrative workflow with input validation, duplicate account protection, error handling, and final verification.
 
-#### Approach
-
-PowerShell scripts were used to automate:
-
-- Organizational Unit creation
-- Security group creation
-- User provisioning
-- CSV-based employee imports
-
-The CSV-based provisioning helped simulate a larger employee directory and gave the lab enough users to support later RBAC, GPO, and help desk scenarios.
-
-#### Scripts Used
+#### Scripts
 
 - [OU Infrastructure Setup](./Scripts/SteenCorp%20OU%20Infrastructure%20Setup.ps1)
 - [Security Group Infrastructure](./Scripts/SteenCorp%20Group%20Infrastructure.ps1)
 - [Employee CSV Generator](./Scripts/Create%20Mega%20SteenCorp%20Employee%20CSV.ps1)
 - [Bulk User Provisioning](./Scripts/SteenCorp%20Final%20Bulk%20Ingestion.ps1)
+- [Reusable Employee Onboarding Tool](./Scripts/New_SteenCorpEmployee.ps1)
+
+The CSV-based deployment gave the lab enough users to support later RBAC, GPO, security, and help desk scenarios. The individual onboarding tool added a repeatable process for growing the environment after the initial build.
+
+[View the PowerShell walkthrough and validation evidence](./Scripts/)
 
 ---
 
@@ -132,8 +126,9 @@ This phase demonstrated:
 - Basic Windows Server deployment
 - Active Directory domain creation
 - OU and group planning
-- PowerShell automation
+- PowerShell infrastructure and user administration
 - Bulk user provisioning
+- Reusable employee onboarding
 - Domain client validation
 - Standard user permission testing
 - Practical troubleshooting during a virtualization migration
