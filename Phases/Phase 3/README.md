@@ -97,11 +97,11 @@ ipconfig /renew
 ipconfig /all
 ```
 
-During testing, the DHCP console also displayed a `BAD_ADDRESS` entry for `192.168.10.101`. This confirmed that Windows DHCP conflict detection had quarantined that address. The entry alone did not identify the conflicting device, so I treated it as supporting evidence rather than the complete root cause.
+During testing, the DHCP console also marked `192.168.10.101` as `BAD_ADDRESS`, temporarily removing it from the available pool after an address conflict was detected. This confirmed that Windows DHCP had identified a conflict, but the entry alone did not identify the conflicting device or explain why the workstation had received a `192.168.217.x` lease. I therefore treated it as supporting evidence rather than the complete root cause.
 
 ![DHCP BAD_ADDRESS conflict detection](../../Evidence/Networking/DHCP_Server_Bad_Address_Quarantine.png)
 
-### Initial Correction
+### Interim Correction: Isolated LAN Segment
 
 I first moved the domain controller and workstation onto an isolated VMware LAN Segment. This removed VMware DHCP from the client path and allowed DC01 to become the only DHCP and DNS source on the internal network.
 
@@ -176,7 +176,7 @@ DC01 could reach the internet through its own NAT adapter, but it was not config
 
 ## 5. Final Network Correction
 
-I moved DC01 and both workstations from the isolated LAN Segment to a custom NAT-backed `VMnet8`.
+I reconfigured DC01 and both workstations to use the same custom NAT-backed `VMnet8` network. In the final design, every virtual machine had a direct connection to `VMnet8` instead of depending on DC01 to route traffic between an isolated LAN Segment and a separate NAT adapter.
 
 The corrected design used:
 
@@ -189,7 +189,7 @@ The corrected design used:
 
 This preserved centralized Windows Server DHCP and DNS while giving every virtual machine a valid route through VMware NAT.
 
-After renewing the client leases, I validated the correction from DC01 and two s:
+After renewing the client leases, I validated the correction from DC01 and both workstations:
 
 - Clients received addresses from the SteenCorp DHCP scope
 - Clients received gateway `192.168.10.2`
