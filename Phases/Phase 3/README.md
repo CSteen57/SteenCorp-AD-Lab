@@ -19,7 +19,6 @@ This phase focused on making sure the Windows Server domain controller and Windo
 - DHCP Scope Option 003 controls the gateway clients receive
 - Help desk tickets can expose infrastructure design gaps that should be documented back into the original lab
 - Troubleshooting DHCP, DNS, and routing builds real help desk and network support skills
-- A stable IP, DNS, DHCP, and gateway foundation is required before adding more advanced segmentation or access control concepts
 
 ---
 
@@ -85,8 +84,6 @@ I planned the lab network before configuring DHCP so the environment would have 
 The domain controller was assigned a static IP address so clients could reliably use it for DNS and DHCP services.
 
 > Note: The original Phase 3 design used `192.168.10.1` as the planned default gateway. During SteenDesk Ticket #006, VMware NAT settings confirmed that the active VMware NAT gateway for the corrected `VMnet8` network was `192.168.10.2`. The subnet, DC01 IP, DNS design, and DHCP client range remained unchanged.
-
-> Note: This Phase 3 design represents the original SteenCorp internal/domain network before VLAN segmentation was introduced. The `192.168.10.0/24` subnet later became the trusted Corporate LAN in the separate SteenCorp Network Segmentation Lab. In that follow-up project, additional networks were added for Guest devices and Internal Servers using `192.168.20.0/24` and `192.168.30.0/24`.
 
 ---
 
@@ -431,30 +428,6 @@ Final validation confirmed:
 - DHCP Scope Option 003 Router was updated to `192.168.10.2`
 - Domain clients could reach both internal domain resources and external internet resources
 - The lab network was ready for later security and help desk troubleshooting scenarios
-- The network foundation later expanded into a separate Packet Tracer segmentation lab
-- VLAN segmentation and guest isolation concepts were documented in a follow-up networking project
-
----
-
-## Relationship to Network Segmentation Lab
-
-Phase 3 established the original SteenCorp internal network using the `192.168.10.0/24` subnet.
-
-That network later became the trusted Corporate LAN in the separate SteenCorp Network Segmentation Lab.
-
-| Design Stage | Network | Subnet | Purpose |
-| Design Stage | Network | Subnet | Purpose |
-|---|---|---|---|
-| Phase 3 Domain Network | Flat domain network | `192.168.10.0/24` | Original domain network for DC01 and domain clients |
-| Segmentation Lab | Corporate VLAN 10 | `192.168.10.0/24` | Trusted employee/domain network |
-| Segmentation Lab | Guest VLAN 20 | `192.168.20.0/24` | Isolated guest/untrusted network |
-| Segmentation Lab | Server VLAN 30 | `192.168.30.0/24` | Internal server network |
-
-The segmentation lab does not replace the Phase 3 network design. It expands the same foundation into a more secure segmented model using VLANs, trunking, router-on-a-stick, and ACL-based guest isolation.
-
-Related project:
-
-[SteenCorp Network Segmentation Lab](https://github.com/CSteen57/SteenCorp_Network_Segmentation_Lab)
 
 ---
 
@@ -494,4 +467,3 @@ Completed outcome:
 - DC01 remained the DHCP and DNS server
 - DHCP Scope Option 003 Router updated to the validated VMware NAT gateway `192.168.10.2`
 - Domain clients validated with both internal domain connectivity and external internet access
-- Original `192.168.10.0/24` internal network later used as the trusted Corporate LAN in the Network Segmentation Lab

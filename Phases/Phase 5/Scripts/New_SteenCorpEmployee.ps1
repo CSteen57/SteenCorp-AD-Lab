@@ -1,5 +1,6 @@
 # SteenCorp Active Directory Employee Onboarding Tool
 # Purpose: Standardize the creation and configuration of new employee accounts
+# Project: Phase 5 - PowerShell Identity Lifecycle Automation
 
 Import-Module ActiveDirectory -ErrorAction Stop
 

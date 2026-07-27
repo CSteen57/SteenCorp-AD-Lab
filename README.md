@@ -8,7 +8,7 @@ The SteenCorp Enterprise IT Lab is a simulated business IT environment designed 
 
 - Active Directory Domain Services (AD DS)
 - Organizational Unit (OU) design
-- PowerShell infrastructure and user administration
+- PowerShell infrastructure and identity lifecycle automation
 - Group Policy (GPO) configuration and troubleshooting
 - Role-Based Access Control (RBAC)
 - Mapped network drives and department-based permissions
@@ -36,18 +36,17 @@ This allows additional scenarios to be layered on top of the same system to refl
 - Virtual environments can introduce real-world networking issues
 - DNS is critical in Active Directory environments
 - Security controls must be implemented and validated, not assumed
-- A reusable lab environment can support multiple future projects and troubleshooting scenarios
+- A reusable lab environment makes it easier to practice additional administration and troubleshooting without rebuilding the domain
 - A later help desk ticket can expose infrastructure design gaps, and documenting those changes shows how real environments evolve after troubleshooting
 - Reliable automation needs validation, error handling, and clear verification instead of only running the change command
 
 ---
 
-## Related Portfolio Projects
+## Related Portfolio Project
 
 | Project | Focus |
 |---|---|
 | [SteenDesk Help Desk Simulation](https://github.com/CSteen57/SteenDesk_Help_Desk_Simulation) | Help desk troubleshooting, ticket documentation, Active Directory account issues, DNS troubleshooting, software install support, and least privilege validation |
-| [SteenCorp Network Segmentation Lab](https://github.com/CSteen57/SteenCorp_Network_Segmentation_Lab) | VLAN segmentation, trunking, router-on-a-stick, ACL-based guest isolation, and network validation |
 
 ---
 
@@ -59,8 +58,7 @@ This allows additional scenarios to be layered on top of the same system to refl
 | Phase 2: Access Control, GPO & Software Deployment | Completed | RBAC, drive mapping, GPO troubleshooting, Chrome deployment | Implemented access control and centralized workstation software deployment |
 | Phase 3: Networking & Troubleshooting | Completed | DNS, DHCP, IP management, issue resolution | Configured and validated core network services |
 | Phase 4: Security & Enterprise Controls | Completed | Identity management, GPO security, workstation hardening | Implemented enterprise-level security controls and validation |
-
-This lab was later extended into separate portfolio projects using the same SteenCorp business environment.
+| Phase 5: PowerShell Identity Lifecycle Automation | In Progress | PowerShell, employee onboarding, validation | Completed a reusable onboarding tool; offboarding and access auditing are planned |
 
 ---
 
@@ -94,11 +92,10 @@ This lab was later extended into separate portfolio projects using the same Stee
 ### PowerShell Automation
 
 - Automated OU, security group, and bulk user deployment
-- Built a reusable tool for onboarding individual employees
-- Added department mapping, duplicate account protection, error handling, and final verification
-- Documented successful onboarding and controlled failure testing
+- Expanded the lab with a reusable employee onboarding tool
+- Tested department mapping, duplicate account protection, error handling, OU placement, and group assignment
 
-[View the PowerShell scripts and validation](./Phases/Phase%201/Scripts/)
+[View Phase 5: PowerShell Identity Lifecycle Automation](./Phases/Phase%205/)
 
 ### Group Policy Management
 

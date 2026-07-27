@@ -2,7 +2,7 @@
 
 This directory contains the phase-by-phase buildout of the SteenCorp Enterprise IT Lab.
 
-Each phase represents a different layer of the environment, starting with the Active Directory foundation and progressing into access control, Group Policy, networking, security, and enterprise controls.
+Each phase represents a different layer of the environment, starting with the Active Directory foundation and progressing into access control, Group Policy, networking, security, and identity lifecycle automation.
 
 ---
 
@@ -93,16 +93,34 @@ Key focus areas:
 
 ---
 
+### Phase 5 – PowerShell Identity Lifecycle Automation
+
+📄 [View Phase 5](./Phase%205/)
+
+Phase 5 uses the completed Active Directory environment to practice repeatable employee administration with PowerShell.
+
+Key focus areas:
+
+- Reusable employee onboarding
+- Department-to-OU and security group mapping
+- Duplicate username protection
+- Error handling and final verification
+- Controlled success and failure testing
+- Planned employee offboarding and RBAC access auditing
+
+---
+
 ## How to Read This Lab
 
-For the full build process, start with **Phase 1** and move through each phase in order.
+For the full build process, start with **Phase 1** and move through each phase in order. Phase 5 builds on the completed environment as an ongoing administration project.
 
 For specific skill areas:
 
 | Skill Area | Recommended Phase |
 |---|---|
 | Active Directory foundation | Phase 1 |
-| PowerShell automation | Phase 1 |
+| PowerShell infrastructure deployment | Phase 1 |
+| PowerShell identity lifecycle automation | Phase 5 |
 | User/group structure | Phase 1 and Phase 2 |
 | RBAC and permissions | Phase 2 |
 | Group Policy troubleshooting | Phase 2 |
@@ -126,6 +144,8 @@ Phase 2: Add access control, GPOs, mapped drives, and software deployment
 Phase 3: Configure and validate DHCP, DNS, and network connectivity
 ↓
 Phase 4: Add security controls and administrative separation
+↓
+Phase 5: Automate employee identity lifecycle tasks
 ```
 
 Together, these phases created the reusable SteenCorp domain environment used for later support and troubleshooting projects.
@@ -161,7 +181,6 @@ That means:
 - Each phase builds on the previous phase
 - Later help desk tickets may reveal infrastructure improvements that are documented back into the original lab
 - Ticket #006 updated the lab from isolated LAN-only connectivity to VMware NAT-backed client internet access
-- The domain environment can be reused for future projects
+- The domain environment can be reused for additional administration and troubleshooting scenarios
 - Issues were documented as part of the learning process
 - Validation was performed from both the server side and client side
-- Future networking, security, SIEM, VPN, and help desk projects can expand from this foundation
