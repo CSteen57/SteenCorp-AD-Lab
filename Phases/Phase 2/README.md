@@ -4,28 +4,28 @@
 
 Build centralized access control and workstation management using Active Directory security groups, Group Policy, mapped network drives, SMB and NTFS permissions, and software deployment.
 
-This phase focused on two administrative goals:
+This phase focused on two goals:
 
 1. Map department drives according to each user's role.
-2. Deploy Google Chrome to domain joined workstations without installing it manually for every user.
+2. Deploy Google Chrome to domain-joined workstations without installing it manually for every user.
 
 ## Environment
 
 - Windows Server 2022 domain controller: `DC01`
 - Active Directory domain: `steencorp.local`
-- Windows 11 domain joined workstations
+- Windows 11 domain-joined workstations
 - Group Policy Management
 - SMB file shares and NTFS permissions
 - Google Chrome Enterprise MSI
 
 ## Policy Design
 
-| Purpose | Configuration | GPO link |
+| Purpose | Policy type | GPO link |
 |---|---|---|
 | Department drive mappings | User Configuration | `Departments` OU |
 | Google Chrome deployment | Computer Configuration | `Workstations` OU |
 
-Drive mappings follow the signed in user and are selected through security group membership. Chrome is assigned to managed computers and remains available when different domain users sign in.
+Drive mappings follow the signed-in user and are selected through security group membership. Chrome is assigned to managed computers and remains available when different domain users sign in.
 
 ---
 
@@ -43,7 +43,7 @@ I assigned access to security groups instead of individual users.
 | Accounting | A: | `\\DC01\SteenCorp_Shares\Accounting` | `Accounting_Users` |
 | Public | P: | `\\DC01\SteenCorp_Shares\Public` | `Domain Users` |
 
-This design allows an employee's access to change through group membership rather than through individual drive or folder permissions.
+This design allows an employee's access to change through group membership instead of individual drive or folder permissions.
 
 ### Group Policy Configuration
 
@@ -64,22 +64,20 @@ User Configuration
 
 Because this is a user policy, I linked it to the `Departments` OU containing the department user OUs.
 
-![Drive map GPO linked to the Departments OU](../../Evidence/Phase2_Drive_Mapping/Phase2_DriveMap_01_GPO_Scope.png)
+![Drive-map GPO inheritance at the Departments OU](../../Evidence/Phase2_Chrome_GPO/Phase2_DriveMap_01_GPO_Inheritance_Departments.png)
 
-Each preference item uses:
+Each drive-map preference item uses:
 
 - Action: `Replace`
 - Reconnect enabled
-- Item level targeting based on the appropriate security group
+- Item-level targeting based on the appropriate security group
 - **Remove this item when it is no longer applied** enabled
 
 Group Policy Preferences requires `Replace` when automatic removal is enabled. This ensures that a department drive is removed when a user no longer belongs to its target group.
 
-![Final department drive mappings](../../Evidence/Phase2_Drive_Mapping/Phase2_DriveMap_02_Final_Mappings.png)
+The HR mapping below demonstrates the security-group targeting used for each department.
 
-The HR mapping below demonstrates the security group targeting used for each department.
-
-![HR security group targeting](../../Evidence/Phase2_Drive_Mapping/Phase2_DriveMap_03_Item_Level_Targeting.png)
+![HR drive item-level targeting](../../Evidence/Phase2_Chrome_GPO/Phase2_DriveMap_04_HR_Targeting.png)
 
 ### Share and NTFS Permissions
 
@@ -100,11 +98,9 @@ Accounting  → Accounting_Users: Modify
 Public      → Domain Users: Modify
 ```
 
-Administrators and SYSTEM retain Full Control. Public is available to all domain users, while the department folders are limited to their assigned groups.
+Administrators and SYSTEM retain Full Control. Public is available to domain users, while department folders are limited to their assigned groups.
 
-![Department NTFS permissions](../../Evidence/Phase2_Drive_Mapping/Phase2_DriveMap_05_NTFS_Permissions.png)
-
-Group Policy determines which drives appear for the user. SMB and NTFS permissions determine whether that user is authorized to access the underlying data.
+Group Policy determines which drives appear for a user. SMB and NTFS permissions determine whether that user is authorized to access the underlying data.
 
 ### User Validation
 
@@ -117,7 +113,9 @@ For HR user `steencorp\mross`, validation confirmed:
 - HR and Public were accessible
 - Direct access to Sales returned `Access is denied`
 
-![HR drive mapping and access validation](../../Evidence/Phase2_Drive_Mapping/Phase2_DriveMap_06_HR_Validation.png)
+![HR mapped drives and applied GPO](../../Evidence/Phase2_Chrome_GPO/Phase2_DriveMap_07_HR_Drive.png)
+
+![HR user denied access to Sales](../../Evidence/Phase2_Chrome_GPO/Phase2_DriveMap_08_HR_Denied_Sales.png)
 
 For Sales user `steencorp\rhoward`, validation confirmed:
 
@@ -126,15 +124,17 @@ For Sales user `steencorp\rhoward`, validation confirmed:
 - Sales and Public were accessible
 - Direct access to HR returned `Access is denied`
 
-![Sales drive mapping and access validation](../../Evidence/Phase2_Drive_Mapping/Phase2_DriveMap_07_Sales_Validation.png)
+![Sales mapped drives and applied GPO](../../Evidence/Phase2_Chrome_GPO/Phase2_DriveMap_07_Sales_Drive.png)
 
-These tests verified both policy delivery and cross department access restrictions.
+![Sales user denied access to HR](../../Evidence/Phase2_Chrome_GPO/Phase2_DriveMap_08_Sales_Denied_HR.png)
+
+These tests verified both policy delivery and cross-department access restrictions.
 
 ### Troubleshooting
 
-The original configuration used the server's previous hostname, mapped the root share instead of each department folder, and split the mappings across multiple GPOs.
+The original drive mappings used the server's previous hostname, mapped the root share instead of each department folder, and were split across multiple GPOs.
 
-I corrected the paths to use `DC01`, consolidated the mappings into one GPO, and applied item level targeting to each drive. I also corrected the GPO scope after confirming that drive mappings under User Configuration must be linked to an OU containing user objects. The `Workstations` OU remains the correct scope for computer policies such as software deployment.
+I corrected the paths to use `DC01`, consolidated the mappings into one GPO, and applied item-level targeting to each drive. I also corrected the GPO scope after confirming that drive mappings under User Configuration must be linked to an OU containing user objects. The `Workstations` OU remains the correct scope for computer policies such as software deployment.
 
 ---
 
@@ -203,11 +203,9 @@ gpresult /scope computer /r
 
 The result confirmed that `GPO_Deploy_Chrome` applied to the workstation.
 
-![Computer scope Group Policy results](../../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_22_Computer_Scope_GPResult_GPO_Applied.png)
+![Computer-scope Group Policy results](../../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_22_Computer_Scope_GPResult_GPO_Applied.png)
 
-Computer assigned software is processed during startup. After refreshing policy and restarting the clients, Chrome installed on both managed workstations and remained available when different domain users signed in.
-
-![Chrome installed on WK01](../../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_19_Chrome_Installed_KKapoor_WK01.png)
+Computer-assigned software is processed during startup. After refreshing policy and restarting the client, Chrome installed successfully on the managed workstation.
 
 ![Chrome installed on WK02](../../Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_18_Chrome_Installed_CSteen_WK02.png)
 
@@ -218,7 +216,7 @@ Computer assigned software is processed during startup. After refreshing policy 
 Phase 2 produced two centralized management systems:
 
 - Department drives map according to user security group membership.
-- SMB and NTFS permissions block unauthorized cross department access.
+- SMB and NTFS permissions block unauthorized cross-department access.
 - All drive mappings are maintained in one user GPO linked to the `Departments` OU.
 - Chrome is assigned through a computer GPO linked to the `Workstations` OU.
 - User and computer policies were validated with the appropriate `gpresult` scope.
@@ -232,7 +230,7 @@ Larger environments may also use Microsoft Intune or Configuration Manager for a
 ## What I Learned
 
 - User and computer policies must be linked to OUs containing the correct object type.
-- Item level targeting allows one drive mapping GPO to support multiple departments.
+- Item-level targeting allows one drive-mapping GPO to support multiple departments.
 - A visible mapped drive does not grant access by itself; SMB and NTFS permissions enforce authorization.
 - Group Policy software deployment requires a reachable UNC path.
-- Computer assigned software should be verified through computer scope policy results.
+- Computer-assigned software should be verified through computer-scope policy results.
