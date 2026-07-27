@@ -19,7 +19,7 @@ This phase began as a basic Windows Server networking build. It became a practic
 | DHCP Server | `192.168.10.10` |
 | DNS Server | `192.168.10.10` |
 | Default Gateway | `192.168.10.2` |
-| Client DHCP Range | `192.168.10.100–192.168.10.200` |
+| Client DHCP Range | `192.168.10.100–192.168.10.254` |
 | VMware Network | NAT-backed `VMnet8` |
 | VMware DHCP | Disabled |
 
@@ -37,7 +37,7 @@ I planned a single `192.168.10.0/24` network and assigned DC01 a static address 
 | Domain Controller | `192.168.10.10` |
 | Reserved Server Addresses | `192.168.10.11–192.168.10.20` |
 | Reserved Static Addresses | `192.168.10.21–192.168.10.99` |
-| DHCP Client Range | `192.168.10.100–192.168.10.200` |
+| DHCP Client Range | `192.168.10.100–192.168.10.254` |
 
 The screenshot below records the original Phase 3 server configuration. At that point, `192.168.10.1` was entered as the planned gateway. The active VMware NAT gateway was later verified as `192.168.10.2` and the configuration was corrected.
 
@@ -49,7 +49,7 @@ I installed DHCP on DC01 and created a scope for domain workstations. The final 
 
 | DHCP Option | Value |
 |---|---|
-| Address Range | `192.168.10.100–192.168.10.200` |
+| Address Range | `192.168.10.100–192.168.10.254x` |
 | Option 003 Router | `192.168.10.2` |
 | Option 006 DNS Server | `192.168.10.10` |
 | Option 015 DNS Domain | `steencorp.local` |
