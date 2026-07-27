@@ -16,13 +16,13 @@ Build a reusable Windows domain environment with centralized authentication, an 
 
 ## Implementation
 
-### Initial VirtualBox Deployment and VMware Migration
+### Initial VirtualBox Deployment and VMware Rebuild
 
 I initially deployed `DC01` and created the `steencorp.local` domain in VirtualBox. When I attempted to add a Windows 11 client, the virtual machine repeatedly booted to a black screen and prevented me from completing the client-side portion of the lab.
 
 Because the environment was still early in development, I decided to rebuild it in VMware Workstation. Before retiring the original environment, I demoted the VirtualBox domain controller.
 
-Instead of manually recreating every organizational unit, security group, and user, I converted the work I had already completed into PowerShell scripts. I then used those scripts to rebuild the Active Directory environment in VMware.
+Instead of manually recreating every organizational unit, security group, and user, I converted the work I had already completed into  scripts. I then used those scripts to rebuild the Active Directory environment in VMware.
 
 This allowed me to continue the project while making the environment faster to recreate and easier to expand.
 
@@ -86,7 +86,7 @@ Departmental OUs contain the user accounts associated with each business departm
 
 ---
 
-### PowerShell Provisioning
+###  Provisioning
 
 I created PowerShell scripts to automate the Active Directory work that had originally been completed manually in VirtualBox.
 
@@ -118,7 +118,7 @@ After rebuilding the domain, I deployed a Windows 11 client in VMware Workstatio
 
 To connect the client to Active Directory, I:
 
-- Configured the client to use `DC01` for internal DNS
+- Configured the client to use the static IP address of `DC01` as its preferred DNS server
 - Joined the workstation to the `steencorp.local` domain
 - Restarted the workstation
 - Organized the computer account under the `Workstations` OU
@@ -172,7 +172,7 @@ I also ran `net session` from the non-elevated session. The command returned `Ac
 
 Phase 1 produced a functioning `steencorp.local` domain with a structured Active Directory hierarchy, departmental security groups, bulk-provisioned users, and a domain-joined Windows 11 workstation.
 
-The PowerShell scripts also made the environment easier to rebuild after migrating from VirtualBox to VMware. This foundation supported the file access, Group Policy, networking, security, automation, and help desk scenarios developed in the following phases.
+The PowerShell scripts also made the environment easier to rebuild after moving from VirtualBox to VMware. This foundation supported the file access, Group Policy, networking, security, automation, and help desk scenarios developed in the following phases.
 
 ## What I Learned
 
