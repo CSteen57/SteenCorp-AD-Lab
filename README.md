@@ -4,41 +4,26 @@
 
 ## Overview
 
-The SteenCorp Enterprise IT Lab is a simulated business IT environment designed to bridge the gap between certification knowledge and hands-on troubleshooting.
+The SteenCorp Enterprise IT Lab is a simulated business IT environment designed to bridge the gap between certification knowledge and hands-on administration, troubleshooting, and validation.
 
-- Active Directory Domain Services (AD DS)
-- Organizational Unit (OU) design
+The project includes:
+
+- Active Directory Domain Services and Organizational Unit design
 - PowerShell infrastructure and identity lifecycle automation
-- Group Policy (GPO) configuration and troubleshooting
-- Role-Based Access Control (RBAC)
+- Group Policy configuration and troubleshooting
+- Role-Based Access Control using security groups
 - Mapped network drives and department-based permissions
-- Group Policy software deployment
-- DHCP and DNS configuration
-- IP addressing and network troubleshooting
-- Enterprise identity and access management
+- Centralized software deployment through Group Policy
+- DHCP, DNS, IP addressing, and network troubleshooting
 - Account lockout and workstation security policies
 - Standard user and administrative account separation
-- Real-world issue diagnosis and resolution
+- Real-world issue diagnosis, resolution, and documentation
 
 ### Lab Design Philosophy
 
-The environment was built as a reusable domain infrastructure rather than a one-time lab.
+The environment was built as reusable domain infrastructure rather than a one-time lab.
 
-This allows additional scenarios to be layered on top of the same system to reflect how real enterprise environments are continuously developed, maintained, troubleshot, and improved over time.
-
-### What I Learned
-
-- Building systems is only one part of IT; troubleshooting and validation are just as important
-- Active Directory structure affects how policies and access controls behave
-- Group Policy depends heavily on proper OU placement, targeting, and refresh behavior
-- RBAC is easier to manage when permissions are assigned to groups instead of individual users
-- Software deployment through GPO requires proper UNC paths, share permissions, and computer-scope validation
-- Virtual environments can introduce real-world networking issues
-- DNS is critical in Active Directory environments
-- Security controls must be implemented and validated, not assumed
-- A reusable lab environment makes it easier to practice additional administration and troubleshooting without rebuilding the domain
-- A later help desk ticket can expose infrastructure design gaps, and documenting those changes shows how real environments evolve after troubleshooting
-- Reliable automation needs validation, error handling, and clear verification instead of only running the change command
+This allows new administration, support, security, networking, and automation scenarios to be layered onto the same environment. That approach reflects how business IT systems are continuously maintained, troubleshot, secured, and improved over time.
 
 ---
 
@@ -46,7 +31,7 @@ This allows additional scenarios to be layered on top of the same system to refl
 
 | Project | Focus |
 |---|---|
-| [SteenDesk Help Desk Simulation](https://github.com/CSteen57/SteenDesk_Help_Desk_Simulation) | Help desk troubleshooting, ticket documentation, Active Directory account issues, DNS troubleshooting, software install support, and least privilege validation |
+| [SteenDesk Help Desk Simulation](https://github.com/CSteen57/SteenDesk_Help_Desk_Simulation) | Help desk troubleshooting, ticket documentation, Active Directory account issues, DNS troubleshooting, software installation support, and least privilege validation |
 
 ---
 
@@ -54,15 +39,15 @@ This allows additional scenarios to be layered on top of the same system to refl
 
 | Phase | Status | Focus | Outcome |
 |---|---|---|---|
-| Phase 1: Foundation | Completed | Domain setup, AD DS, virtualization, PowerShell | Built a functional Windows domain with automated infrastructure and user provisioning |
-| Phase 2: Access Control, GPO & Software Deployment | Completed | RBAC, drive mapping, GPO troubleshooting, Chrome deployment | Implemented access control and centralized workstation software deployment |
-| Phase 3: Networking & Troubleshooting | Completed | DNS, DHCP, IP management, issue resolution | Configured and validated core network services |
-| Phase 4: Security & Enterprise Controls | Completed | Identity management, GPO security, workstation hardening | Implemented enterprise-level security controls and validation |
-| Phase 5: PowerShell Identity Lifecycle Automation | In Progress | PowerShell, employee onboarding, validation | Completed a reusable onboarding tool; offboarding and access auditing are planned |
+| [Phase 1: Foundation and Environment Setup](./Phases/Phase%201/) | Completed | Domain setup, AD DS, virtualization, and PowerShell | Built a functional Windows domain with automated infrastructure and user provisioning |
+| [Phase 2: Access Control, Group Policy, and Software Deployment](./Phases/Phase%202/) | Completed | RBAC, drive mapping, Group Policy, and Chrome deployment | Implemented group-based access control and centralized workstation software deployment |
+| [Phase 3: Networking and Domain Connectivity](./Phases/Phase%203/) | Completed | DNS, DHCP, IP management, and connectivity troubleshooting | Configured, validated, and improved the lab’s core network services |
+| [Phase 4: Security and Enterprise Controls](./Phases/Phase%204/) | Completed | Administrative separation, account security, and workstation hardening | Implemented centralized account and workstation security controls with client-side validation |
+| [Phase 5: PowerShell Identity Lifecycle Automation](./Phases/Phase%205/) | In Progress | Employee onboarding, validation, and lifecycle automation | Completed a reusable onboarding tool; offboarding and access auditing are planned |
 
 ---
 
-## Architecture/Environment Summary
+## Architecture and Environment Summary
 
 | Component | Details |
 |---|---|
@@ -71,7 +56,7 @@ This allows additional scenarios to be layered on top of the same system to refl
 | Domain Controller Hostname | `DC01` |
 | Client Systems | Windows 11 domain-joined workstations |
 | Virtualization Platform | VMware Workstation |
-| Original Network Type | Internal VMware LAN segment |
+| Original Network Type | Internal VMware LAN Segment |
 | Current Network Type | VMware NAT-backed `VMnet8` |
 | Lab Subnet | `192.168.10.0/24` |
 | Current NAT Gateway | `192.168.10.2` |
@@ -81,93 +66,78 @@ This allows additional scenarios to be layered on top of the same system to refl
 
 ## Key Highlights
 
-### Centralized Identity & Access Control
+### Centralized Identity and Access Control
 
 - Built a structured Active Directory environment
 - Created department-based Organizational Units and security groups
-- Implemented RBAC using group-based permissions
-- Restricted users to only their assigned department resources
-- Validated access from domain-joined Windows 11 clients
+- Implemented RBAC through group-based permissions
+- Restricted users to their assigned department resources
+- Validated access from domain-joined Windows 11 workstations
 
 ### PowerShell Automation
 
-- Automated OU, security group, and bulk user deployment
-- Expanded the lab with a reusable employee onboarding tool
-- Tested department mapping, duplicate account protection, error handling, OU placement, and group assignment
-
-[View Phase 5: PowerShell Identity Lifecycle Automation](./Phases/Phase%205/)
+- Automated the initial creation of Organizational Units, security groups, and domain users
+- Expanded the environment with a reusable employee onboarding tool
+- Added department mapping, duplicate-account protection, error handling, OU validation, and group-assignment verification
 
 ### Group Policy Management
 
 - Configured mapped network drives through Group Policy
-- Consolidated drive mappings into a centralized GPO
-- Resolved GPO issues caused by incorrect OU placement
-- Validated policy application using client-side testing
-- Expanded Group Policy use beyond access control into software deployment and workstation security
+- Consolidated department drive mappings into a centralized GPO
+- Used security groups and item-level targeting to control drive assignment
+- Resolved policy issues caused by incorrect OU placement and targeting
+- Validated policy application from domain-joined client workstations
 
 ### Software Deployment
 
-- Created a centralized software repository on DC01
-- Configured NTFS and share permissions for deployment access
-- Deployed Google Chrome using Group Policy software installation
-- Used a UNC path for MSI deployment
-- Verified Chrome installation across multiple domain users
+- Created a centralized software repository on `DC01`
+- Configured the required NTFS and share permissions
+- Deployed Google Chrome through Group Policy Software Installation
+- Used a UNC path to make the MSI package available to domain computers
+- Verified installation across multiple domain users and workstations
 
-### Networking & Troubleshooting
+### Networking and Troubleshooting
 
-- Configured DNS and DHCP services for the lab domain
-- Planned and validated IP addressing for the internal network
-- Resolved DHCP conflicts caused by VMware NAT interference
+- Configured DNS and DHCP services for the SteenCorp domain
+- Designed the lab subnet, DHCP scope, reservations, and supporting options
+- Resolved DHCP conflicts caused by VMware network services
 - Diagnosed incorrect IP assignments and `BAD_ADDRESS` conflicts
-- Validated DNS resolution and DHCP assignment from Windows clients
-- Used command-line tools to test connectivity and name resolution
-- Later updated the lab network after a help desk ticket exposed missing internet routing from the isolated LAN Segment
-- Reconfigured the environment to use VMware NAT-backed `VMnet8` while keeping DC01 as the DHCP and DNS server
-- Updated the active client default gateway from the original planned gateway `192.168.10.1` to the validated VMware NAT gateway `192.168.10.2`
-
+- Validated DHCP assignment, DNS resolution, and domain connectivity from Windows clients
+- Updated the environment from an isolated LAN Segment to NAT-backed `VMnet8`
+- Preserved `DC01` as the lab’s DHCP and DNS server while adding client internet access
 
 ### Security Implementation
 
 - Created a dedicated administrative account
-- Validated separation between standard and administrative users
-- Enforced account lockout policy
-- Configured a login security banner
-- Applied workstation hardening through Group Policy
+- Separated standard user activity from administrative tasks
+- Enforced an account lockout policy
+- Configured an interactive logon security banner
+- Applied workstation inactivity controls through Group Policy
 - Validated security controls from the client side
+- Practiced administrative account recovery and required password changes
 
 ### Real-World Troubleshooting
 
-This lab includes troubleshooting scenarios that mirror issues commonly seen in business IT environments, including:
+The lab includes troubleshooting scenarios that mirror issues commonly encountered in business IT environments:
 
-- GPO deployment problems caused by incorrect OU placement
-- Drive mapping issues caused by targeting and path configuration
+- Group Policy failures caused by incorrect OU placement
+- Drive mapping problems involving targeting, permissions, and path configuration
 - DHCP conflicts caused by virtualization network settings
-- DNS resolution inconsistencies
-- Software deployment issues involving UNC paths, share permissions, and computer-scope policy application
-- Account lockout behavior and administrative recovery
+- DNS and network connectivity inconsistencies
+- Software deployment failures involving local paths, UNC paths, permissions, and computer-scope policy
+- Account lockouts requiring verified administrative recovery
 
 ---
-### Post-Build Infrastructure Update
 
-The original Phase 3 network design used an isolated VMware LAN Segment so DC01 could act as the controlled DHCP and DNS source for the SteenCorp domain.
+## Post-Build Infrastructure Update
 
-During the later SteenDesk Help Desk Simulation, Ticket #006 revealed that domain clients could reach internal resources and resolve external DNS names, but could not access the internet. The issue was traced to the isolated LAN Segment lacking a working NAT/default gateway path.
+SteenDesk Ticket #006 exposed that the original isolated LAN Segment supported internal domain traffic but did not provide client internet access.
 
-To resolve the issue, the lab network was updated to use VMware NAT-backed `VMnet8` on the same `192.168.10.0/24` subnet. VMware DHCP remained disabled so DC01 continued providing DHCP and DNS. The actual VMware NAT gateway was confirmed as `192.168.10.2`, so DHCP Scope Option 003 Router was updated accordingly.
+I moved the lab to NAT-backed `VMnet8`, kept VMware DHCP disabled, retained `DC01` as the DHCP and DNS server, and updated DHCP Option 003 to the verified `192.168.10.2` VMware NAT gateway.
 
-This preserved the original SteenCorp subnet, domain controller IP, DHCP range, and DNS design while adding working internet access for domain clients.
+This preserved the SteenCorp subnet, domain controller address, DHCP scope, and internal DNS design while adding working internet connectivity for domain clients.
 
-Updated network state:
-
-| Setting | Original Phase 3 Design | Post-Ticket #006 Update |
-|---|---|---|
-| Subnet | `192.168.10.0/24` | `192.168.10.0/24` |
-| DC01 IP | `192.168.10.10` | `192.168.10.10` |
-| DHCP Server | `192.168.10.10` | `192.168.10.10` |
-| DNS Server | `192.168.10.10` | `192.168.10.10` |
-| Default Gateway | `192.168.10.1` | `192.168.10.2` |
-| VMware Network | Internal LAN Segment | NAT-backed `VMnet8` |
-| VMware DHCP | Disabled | Disabled |
+The complete investigation and final network design are documented in [Phase 3: Networking and Domain Connectivity](./Phases/Phase%203/).
 
 ---
 
@@ -175,30 +145,32 @@ Updated network state:
 
 ### RBAC Enforcement
 
-Users can only access their assigned department drives.
+Users can access their assigned department resources while access to unauthorized department shares is denied.
 
-<img src="./Evidence/Validation/V3_Final_Operational_Success_2.png" alt="Mapped Drives Validation" width="850">
+<img src="./Evidence/Validation/V3_Final_Operational_Success_2.png" alt="Mapped drive and RBAC validation" width="850">
 
 ---
 
 ### Software Deployment
 
-Google Chrome was deployed through Group Policy and validated across domain users.
+Google Chrome was deployed through Group Policy and validated from a domain-joined workstation.
 
-<img src="./Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_20_Chrome_Installed_JHalpert_WK01.png" alt="Chrome Deployment Validation" width="850">
-
----
-
-### Network Validation
-
-DHCP and DNS configuration were validated from the client workstation.
-
-<img src="./Evidence/Validation/Final_VIP_Workstation_IP_Verification.png" alt="Network Validation" width="850">
+<img src="./Evidence/Phase2_Chrome_GPO/Phase2_Chrome_GPO_20_Chrome_Installed_JHalpert_WK01.png" alt="Google Chrome deployment validation" width="850">
 
 ---
 
 ### Security Enforcement
 
-Account lockout policy was triggered and resolved through administrative intervention.
+The account lockout policy was triggered after repeated failed sign-in attempts and validated from the client workstation.
 
-<img src="./Evidence/Validation/Account_Lockout_Triggered.png" alt="Account Lockout Validation" width="850">
+<img src="./Evidence/Validation/Account_Lockout_Triggered.png" alt="Account lockout policy validation" width="850">
+
+---
+
+## What I Learned
+
+- Active Directory structure directly affects how policies, permissions, and administrative boundaries behave
+- Group-based access control is more consistent and scalable than assigning permissions directly to individual users
+- Group Policy troubleshooting requires checking OU placement, targeting, permissions, policy scope, and client-side results
+- Virtual networking problems can affect DHCP, DNS, routing, and domain connectivity even when the server configuration appears correct
+- Reliable automation requires input validation, error handling, and verification instead of only executing the requested change
