@@ -175,9 +175,9 @@ User tests access again
 
 ![Administrator unlocking the user account](../../Evidence/Validation/Account_Unlock_Admin_Action.png)
 
-### 3. Restoring User Access
+### 3. Password Change and Access Restoration
 
-After unlocking the account, I confirmed that the user could sign back into the workstation successfully.
+As part of the recovery process, I reset the user’s password and selected **User must change password at next logon**. When `STEENCORP\mross` attempted to sign in, Windows required the user to create a new password. After completing the password change, the user successfully regained access to the workstation.
 
 ![User access restored after account unlock](../../Evidence/Validation/Account_Access_Restored.png)
 
