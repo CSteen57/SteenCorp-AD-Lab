@@ -1,185 +1,183 @@
-# Phase 1 – Foundation & Environment Setup
+# Phase 1: Foundation and Environment Setup
 
 ## Objective
 
-Build the foundation for the SteenCorp Windows domain environment by deploying a domain controller, creating a structured Active Directory layout, joining a Windows 11 client to the domain, and preparing the lab for future access control, Group Policy, networking, security, and help desk scenarios.
+Build a reusable Windows domain environment with centralized authentication, an organized Active Directory structure, automated user provisioning, and a domain-joined Windows 11 workstation.
 
-## Key Takeaways
+## Final Environment
 
-- A stable foundation matters before adding advanced services
-- Rebuilding in the right platform can be more efficient than fighting unstable lab issues
-- Active Directory structure affects future access control and Group Policy design
-- PowerShell automation makes the environment easier to rebuild and expand
-- Standard user testing is important because access should be validated from the user side
-- This phase directly supports the later RBAC, GPO, networking, security, and help desk ticketing projects
-
----
-
-## Environment
-
-- Windows Server 2022 Domain Controller: `DC01`
-- Windows 11 domain-joined client
-- VMware Workstation
+- Hypervisor: VMware Workstation
+- Domain controller: Windows Server 2022 named `DC01`
+- Client: Windows 11
 - Active Directory domain: `steencorp.local`
+- Core services: Active Directory Domain Services and DNS
 
 ---
 
 ## Implementation
 
-### Domain Controller Deployment
+### Initial VirtualBox Deployment and VMware Migration
 
-I deployed Windows Server 2022 and promoted it to a Domain Controller for the `steencorp.local` domain.
+I initially deployed `DC01` and created the `steencorp.local` domain in VirtualBox. When I attempted to add a Windows 11 client, the virtual machine repeatedly booted to a black screen and prevented me from completing the client-side portion of the lab.
 
-This established the core identity foundation for the lab, including centralized authentication and Active Directory Domain Services.
+Because the environment was still early in development, I decided to rebuild it in VMware Workstation. Before retiring the original environment, I demoted the VirtualBox domain controller.
 
-Key steps completed:
+Instead of manually recreating every organizational unit, security group, and user, I converted the work I had already completed into PowerShell scripts. I then used those scripts to rebuild the Active Directory environment in VMware.
 
-- Installed Windows Server 2022
-- Configured the server as the domain controller
-- Installed and configured Active Directory Domain Services (AD DS)
-- Created the `steencorp.local` domain
-- Prepared the environment for domain users, groups, workstations, and policies
-
----
-
-### Virtualization Migration
-
-The lab was originally started in VirtualBox, but I ran into a blocking issue where the Windows 11 VM failed to boot and displayed a black screen.
+This allowed me to continue the project while making the environment faster to recreate and easier to expand.
 
 <details>
-<summary>View Issue & Migration Evidence</summary>
+<summary>View VirtualBox issue and migration evidence</summary>
 
-**VirtualBox Boot Failure**  
+**Windows 11 VirtualBox boot failure**
+
 ![VirtualBox Boot Error](../../Evidence/Infrastructure/Screenshot%202026-04-13%20120545.png)
 
-**Domain Demotion Prior to Rebuild**  
+**Original domain controller demotion**
+
 ![Domain Demotion](../../Evidence/Infrastructure/00_Demote_Domain.png)
 
 </details>
 
-Rather than spending too much time troubleshooting a virtualization platform issue, I made the decision to rebuild the lab in VMware Workstation.
-
-This ended up being the better choice for the project.
-
 **Result:**
 
-- Improved VM stability and performance
-- More reliable Windows 11 client behavior
-- Better control over virtual networking
-- Stronger foundation for later DNS, DHCP, GPO, and help desk testing
-- Reinforced the importance of choosing the right virtualization platform for a lab environment
+- Restored reliable Windows 11 operation
+- Recreated the domain in VMware Workstation
+- Automated the Active Directory structure instead of rebuilding it manually
+- Established the virtualization platform used throughout the remaining phases
 
 ---
 
-### Organizational Unit Design
+### Domain Controller Deployment
 
-After stabilizing the environment, I created a structured Active Directory layout to keep users, groups, departments, and workstations organized.
+In VMware Workstation, I deployed Windows Server 2022 and named the server `DC01`.
 
-The goal was to avoid dumping every object into default containers and instead build the environment closer to how a business domain would be managed.
+I then:
 
-#### Structure Implemented
+- Installed the Active Directory Domain Services role
+- Promoted `DC01` as the first domain controller
+- Created a new forest with the root domain `steencorp.local`
+- Installed DNS as part of the domain controller promotion
+- Verified that Active Directory and DNS services were available
 
-- Root OU: `SteenCorp_HQ`
-- Main containers:
+This provided centralized identity and authentication services for the lab.
+
+---
+
+### Active Directory Structure
+
+I created a structured organizational unit hierarchy to separate departments, groups, and workstations.
+
+The goal was to avoid relying on the default Active Directory containers and create a structure that could support later permissions, Group Policy, and administrative tasks.
+
+#### OU Structure
+
+- `SteenCorp_HQ`
   - `Departments`
+    - `IT`
+    - `Sales`
+    - `HR`
+    - `Accounting`
+    - `Marketing`
   - `Groups`
   - `Workstations`
-- Department OUs:
-  - IT
-  - Sales
-  - HR
-  - Accounting
-  - Marketing
 
-![Group Deployment](../../Evidence/Infrastructure/01_SteenCorp_OU_HQ_Structure.png)
+Departmental OUs contain the user accounts associated with each business department. Security groups are stored separately so they can be used for file permissions, drive mappings, and other access controls in later phases.
 
 ---
 
-### Automation Implementation
+### PowerShell Provisioning
 
-To avoid manually creating every OU, group, and user, I used PowerShell automation.
+I created PowerShell scripts to automate the Active Directory work that had originally been completed manually in VirtualBox.
 
-This made the lab easier to rebuild, easier to expand, and more realistic than manually creating every object one at a time.
+The scripts automate:
 
-#### Approach
+- Organizational unit creation
+- Departmental security group creation
+- Employee data generation
+- CSV-based user provisioning
+- User placement into the correct departmental OUs
+- Departmental group assignments
 
-PowerShell scripts were used to automate:
+CSV-based provisioning allowed me to populate the domain with enough users to support later access control, Group Policy, security, and help desk scenarios.
 
-- Organizational Unit creation
-- Security group creation
-- User provisioning
-- CSV-based employee imports
-
-The CSV-based provisioning helped simulate a larger employee directory and gave the lab enough users to support later RBAC, GPO, and help desk scenarios.
-
-#### Scripts Used
+#### Deployment Scripts
 
 - [OU Infrastructure Setup](./Scripts/SteenCorp%20OU%20Infrastructure%20Setup.ps1)
 - [Security Group Infrastructure](./Scripts/SteenCorp%20Group%20Infrastructure.ps1)
 - [Employee CSV Generator](./Scripts/Create%20Mega%20SteenCorp%20Employee%20CSV.ps1)
 - [Bulk User Provisioning](./Scripts/SteenCorp%20Final%20Bulk%20Ingestion.ps1)
 
-Ongoing employee administration is documented separately in [Phase 5: PowerShell Identity Lifecycle Automation](../Phase%205/).
+These scripts were created for the initial deployment of the lab. More advanced employee provisioning, validation, and failure handling are covered in [Phase 5: PowerShell Identity Lifecycle Automation](../Phase%205/).
 
 ---
 
-## Outcome
+### Windows 11 Domain Join
 
-Phase 1 created the foundation that every later phase depends on.
+After rebuilding the domain, I deployed a Windows 11 client in VMware Workstation.
 
-Without a stable domain controller, organized Active Directory structure, and working domain-joined client, the later RBAC, Group Policy, networking, security, and help desk scenarios would not have been possible.
+To connect the client to Active Directory, I:
 
-This phase demonstrated:
+- Configured the client to use `DC01` for internal DNS
+- Joined the workstation to the `steencorp.local` domain
+- Restarted the workstation
+- Organized the computer account under the `Workstations` OU
+- Signed in using a standard domain user account
+- Verified that the user could authenticate through Active Directory
 
-- Basic Windows Server deployment
-- Active Directory domain creation
-- OU and group planning
-- PowerShell automation
-- Bulk user provisioning
-- Domain client validation
-- Standard user permission testing
-- Practical troubleshooting during a virtualization migration
+This confirmed that the rebuilt environment supported both the server and client sides of domain authentication.
 
 ---
 
 ## Validation
 
-### OU Structure Deployment
+### Active Directory Structure
 
-The OU structure was verified in Active Directory Users and Computers.
+I verified the completed organizational unit hierarchy in Active Directory Users and Computers.
 
-**Result:**  
-The domain structure matched the intended layout and was ready for future RBAC and Group Policy configuration.
+**Result:** The departments, groups, and workstation structure matched the intended design and was ready for later Group Policy and access-control configurations.
 
-![OU Hierarchy Structure](../../Evidence/Infrastructure/01_SteenCorp_OU_HQ_Structure.png)
+![Active Directory OU Structure](../../Evidence/Infrastructure/01_SteenCorp_OU_HQ_Structure.png)
 
 ---
 
 ### Automated User Provisioning
 
-Bulk user provisioning was completed using CSV-defined user data.
+I ran the bulk-provisioning script using CSV-defined employee information.
 
-**Result:**  
-Users were created and placed into the correct departmental OUs.
+**Result:** User accounts were created and placed into their assigned departmental OUs.
 
 ![Bulk User Provisioning](../../Evidence/Automation/04_Master_Automation_Proof.png)
 
 ---
 
-### Authentication and Permission Validation
+### Domain Authentication
 
-A standard domain user account was used to validate authentication from the Windows 11 client.
+I signed in to the Windows 11 workstation using the standard domain account `rhoward`.
 
-Validation steps:
+I ran `whoami` to verify the authenticated user.
 
-- Signed in as standard user `jhalpert`
-- Ran `whoami` to confirm domain authentication
-- Ran `net session` to test whether the user had administrative privileges
+**Result:** The workstation authenticated the account as:
 
-**Result:**
+```text
+steencorp\rhoward
+```
 
-- User authenticated as `steencorp\jhalpert`
-- Administrative command failed with “Access is denied”
-- Standard user restrictions were working as expected
+I also ran `net session` from the non-elevated session. The command returned `Access is denied`, confirming that the current command session was not running with elevated administrative privileges.
 
-![Domain Authentication and Permission Validation](../../Evidence/Validation/V3_Final_Operational_Success.png)
+![Domain Authentication Validation](../../Evidence/Validation/V3_Final_Operational_Success.png)
+---
+
+## Outcome
+
+Phase 1 produced a functioning `steencorp.local` domain with a structured Active Directory hierarchy, departmental security groups, bulk-provisioned users, and a domain-joined Windows 11 workstation.
+
+The PowerShell scripts also made the environment easier to rebuild after migrating from VirtualBox to VMware. This foundation supported the file access, Group Policy, networking, security, automation, and help desk scenarios developed in the following phases.
+
+## What I Learned
+
+- A working client environment is just as important as successfully deploying the server.
+- PowerShell can turn manually completed infrastructure work into a repeatable deployment process.
+- Active Directory structure affects how users, computers, permissions, and policies can be managed later.
+- Testing with a standard user account helps verify the experience and restrictions employees actually receive.
+- Rebuilding can be a practical troubleshooting decision when the environment is reproducible and the original platform is blocking further progress.
