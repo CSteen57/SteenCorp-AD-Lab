@@ -7,7 +7,7 @@ Build centralized access control and workstation management using Active Directo
 This phase focused on two goals:
 
 1. Map department drives according to each user's role.
-2. Deploy Google Chrome to domain-joined workstations without installing it manually for every user.
+2. Deploy Google Chrome automatically to domain-joined workstations instead of installing it manually on each computer.
 
 ## Environment
 
@@ -73,7 +73,7 @@ Each drive-map preference item uses:
 - Item-level targeting based on the appropriate security group
 - **Remove this item when it is no longer applied** enabled
 
-Group Policy Preferences requires `Replace` when automatic removal is enabled. This ensures that a department drive is removed when a user no longer belongs to its target group.
+Enabling **Remove this item when it is no longer applied** automatically changes the preference action to `Replace`. This ensures that a department drive is removed when the user no longer belongs to its targeted security group.
 
 The HR mapping below demonstrates the security-group targeting used for each department.
 
