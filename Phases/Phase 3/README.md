@@ -85,7 +85,7 @@ DHCP server: 192.168.217.254
 Default gateway: 192.168.217.2
 ```
 
-Those values did not belong to the planned SteenCorp network. The output showed that the workstation was attached to VMware's NAT network and receiving a lease from VMware instead of DC01.
+Those values did not belong to the planned SteenCorp network. The output showed the workstation was attached to VMware’s default NAT network, which was still using the 192.168.217.0/24 subnet and VMware’s built-in DHCP service. I later reconfigured the NAT-backed VMnet8 network to use the SteenCorp 192.168.10.0/24 subnet and disabled VMware DHCP.
 
 ![Client receiving a lease from the wrong DHCP server](../../Evidence/Validation/DHCP_Validation_VMware_Conflict.png)
 
@@ -189,7 +189,7 @@ The corrected design used:
 
 This preserved centralized Windows Server DHCP and DNS while giving every virtual machine a valid route through VMware NAT.
 
-After renewing the client leases, I validated the correction from DC01 and two workstations:
+After renewing the client leases, I validated the correction from DC01 and two s:
 
 - Clients received addresses from the SteenCorp DHCP scope
 - Clients received gateway `192.168.10.2`
