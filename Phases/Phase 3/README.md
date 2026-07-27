@@ -2,55 +2,15 @@
 
 ## Objective
 
-Configure and validate the core networking services for the SteenCorp domain environment, including IP addressing, DHCP, DNS, internal domain connectivity, and client internet access.
+Configure DHCP and DNS for the SteenCorp domain, validate client connectivity, and troubleshoot the VMware networking issues that affected address assignment and internet access.
 
-This phase focused on making sure the Windows Server domain controller and Windows 11 domain clients could communicate correctly on the lab network while also troubleshooting real network issues caused by virtualization settings, DHCP conflicts, DNS behavior, and VMware NAT routing.
-
-## Key Takeaways
-
-- IP planning is important before building network services
-- Active Directory depends heavily on DNS
-- DHCP must come from the correct source
-- Virtual environments can create hidden networking conflicts
-- `BAD_ADDRESS` entries can indicate DHCP conflict detection
-- DNS should be validated from the client side, not just from the server
-- A working internal domain network does not automatically mean clients have a valid internet route
-- VMware NAT can provide the upstream gateway while DC01 continues handling DHCP and DNS
-- DHCP Scope Option 003 controls the gateway clients receive
-- Help desk tickets can expose infrastructure design gaps that should be documented back into the original lab
-- Troubleshooting DHCP, DNS, and routing builds real help desk and network support skills
+This phase began as a basic Windows Server networking build. It became a practical troubleshooting exercise when a client received an address from the wrong DHCP server and a later help desk ticket revealed that the isolated domain network had no route to the internet.
 
 ---
 
-## Overview
+## Current Network Design
 
-Phase 3 moved the lab beyond basic Active Directory setup and into network service validation.
-
-The goal was to make the environment behave like a controlled internal business network where the domain controller provides core services for client machines.
-
-Key areas covered:
-
-- IP addressing plan
-- Static IP configuration for DC01
-- DHCP scope creation
-- DHCP reservation testing
-- DNS forward and reverse lookup configuration
-- DNS forwarders
-- Client IP validation
-- VMware network troubleshooting
-- DHCP conflict troubleshooting
-- Internal domain connectivity validation
-- Post-build internet connectivity remediation after SteenDesk Ticket #006
-
-This phase became one of the most important parts of the lab because several issues appeared that required actual troubleshooting instead of simply following a setup checklist.
-
----
-
-## Network Design Summary
-
-The SteenCorp lab uses a single flat domain network for the original Active Directory environment.
-
-| Component | Current Design |
+| Component | Configuration |
 |---|---|
 | Domain | `steencorp.local` |
 | Domain Controller | `DC01` |
@@ -58,129 +18,78 @@ The SteenCorp lab uses a single flat domain network for the original Active Dire
 | Subnet | `192.168.10.0/24` |
 | DHCP Server | `192.168.10.10` |
 | DNS Server | `192.168.10.10` |
-| Current Default Gateway | `192.168.10.2` |
+| Default Gateway | `192.168.10.2` |
+| Client DHCP Range | `192.168.10.100–192.168.10.200` |
 | VMware Network | NAT-backed `VMnet8` |
 | VMware DHCP | Disabled |
-| Client DHCP Range | `192.168.10.100–192.168.10.200` |
 
-DC01 remains the authoritative DHCP and DNS server for the SteenCorp domain. VMware provides the upstream NAT gateway only.
-
----
-
-## IP Addressing Scheme
-
-I planned the lab network before configuring DHCP so the environment would have a predictable structure.
-
-| Category | Range / Value | Purpose |
-|---|---|---|
-| Network | `192.168.10.0/24` | SteenCorp lab subnet |
-| Original Planned Gateway | `192.168.10.1` | Initial default gateway value used during the internal-only design |
-| Current VMware NAT Gateway | `192.168.10.2` | Validated VMware NAT gateway after Ticket #006 |
-| Domain Controller | `192.168.10.10` | DC01, DNS, DHCP |
-| Server Tier | `192.168.10.11–20` | Reserved for future servers |
-| Static Range | `192.168.10.21–99` | Reserved static assignments |
-| DHCP Range | `192.168.10.100–200` | Client workstation leases |
-
-The domain controller was assigned a static IP address so clients could reliably use it for DNS and DHCP services.
-
-> Note: The original Phase 3 design used `192.168.10.1` as the planned default gateway. During SteenDesk Ticket #006, VMware NAT settings confirmed that the active VMware NAT gateway for the corrected `VMnet8` network was `192.168.10.2`. The subnet, DC01 IP, DNS design, and DHCP client range remained unchanged.
+DC01 provides DHCP and DNS for the domain. VMware provides the NAT gateway that allows the virtual machines to reach external networks.
 
 ---
 
-## Domain Controller Network Configuration
+## 1. Initial Server Configuration
 
-DC01 was configured with a static IP address.
+I planned a single `192.168.10.0/24` network and assigned DC01 a static address so domain clients could reliably locate DNS and other Active Directory services.
 
-Current DC01 configuration:
-
-| Setting | Value |
+| Purpose | Address or Range |
 |---|---|
-| IP Address | `192.168.10.10` |
-| Subnet Mask | `255.255.255.0` |
-| Default Gateway | `192.168.10.2` |
-| Preferred DNS | `127.0.0.1` |
-| Role | Domain Controller, DNS, DHCP |
+| VMware NAT Gateway | `192.168.10.2` |
+| Domain Controller | `192.168.10.10` |
+| Reserved Server Addresses | `192.168.10.11–192.168.10.20` |
+| Reserved Static Addresses | `192.168.10.21–192.168.10.99` |
+| DHCP Client Range | `192.168.10.100–192.168.10.200` |
 
-The server uses itself for DNS because Active Directory depends on internal DNS. External DNS resolution is handled through DNS forwarders, not by placing public DNS directly on client workstations.
+The screenshot below records the original Phase 3 server configuration. At that point, `192.168.10.1` was entered as the planned gateway. The active VMware NAT gateway was later verified as `192.168.10.2` and the configuration was corrected.
 
-![DC01 Static IP](../../Evidence/Infrastructure/DC01_Static_IP_Configuration.png)
+![Original DC01 static IP configuration](../../Evidence/Infrastructure/DC01_Static_IP_Configuration.png)
 
----
+### DHCP
 
-## DHCP Deployment
+I installed DHCP on DC01 and created a scope for domain workstations. The final scope provides:
 
-I configured DHCP on DC01 so Windows client machines could automatically receive valid IP addresses from the lab network.
-
-The DHCP scope was created for the client range:
-
-```text
-192.168.10.100–192.168.10.200
-```
-
-Current DHCP design:
-
-| DHCP Setting | Value |
+| DHCP Option | Value |
 |---|---|
-| DHCP Server | `192.168.10.10` |
-| Scope Network | `192.168.10.0/24` |
-| Client Range | `192.168.10.100–192.168.10.200` |
+| Address Range | `192.168.10.100–192.168.10.200` |
 | Option 003 Router | `192.168.10.2` |
 | Option 006 DNS Server | `192.168.10.10` |
-| Option 015 DNS Domain Name | `steencorp.local` |
-| VMware DHCP | Disabled |
+| Option 015 DNS Domain | `steencorp.local` |
 
-![DHCP Scope](../../Evidence/Networking/DHCP_Scope_Exclusion_Pool.png)
+I also created a DHCP reservation to practice assigning a predictable address to a specific device.
 
----
+I created a DHCP reservation for `SC-WIN11-WK01`, mapping the workstation’s MAC address to `192.168.10.101`. This allows the workstation to keep a predictable IP address while still receiving its network configuration from DHCP.
 
-## DNS Configuration
+![DHCP reservation for SC-WIN11-WK01](../../Evidence/Networking/DHCP_Workstation_Reservation.png)
 
-DNS was configured to support the Active Directory domain and allow internal hostname resolution.
+![DHCP scope and exclusion ranges](../../Evidence/Networking/DHCP_Scope_Exclusion_Pool.png)
 
-Configured zones:
+### DNS
 
-- Forward Lookup Zone: `steencorp.local`
-- Reverse Lookup Zone: `192.168.10.0/24`
+I configured DNS for the Active Directory domain with:
 
-The reverse lookup zone allowed IP addresses to resolve back to hostnames, which helped validate DNS from both directions.
+- A forward lookup zone for `steencorp.local`
+- A reverse lookup zone for `192.168.10.0/24`
+- PTR records for reverse resolution
+- Forwarders for external DNS requests
 
-![DNS Reverse Lookup](../../Evidence/Networking/DNS_Reverse_Lookup_PTR_Record.png)
-
----
-
-## DHCP Reservation
-
-I also configured a DHCP reservation for a workstation to simulate a common business use case where a specific device needs to keep the same IP address.
-
-![DHCP Reservation](../../Evidence/Networking/Windows_Server_DHCP_Reservation_Config.png)
+![DNS reverse lookup zone and PTR record](../../Evidence/Networking/DNS_Reverse_Lookup_PTR_Record.png)
 
 ---
 
-## Issue 1 – Client Received the Wrong IP Address
+## 2. Troubleshooting the Wrong DHCP Source
 
-During testing, the Windows client received an unexpected IP address in this range:
+After renewing the workstation lease, the client received:
 
 ```text
-192.168.217.x
+IP address: 192.168.217.128
+DHCP server: 192.168.217.254
+Default gateway: 192.168.217.2
 ```
 
-This was not part of the planned SteenCorp subnet.
+Those values did not belong to the planned SteenCorp network. The output showed that the workstation was attached to VMware's NAT network and receiving a lease from VMware instead of DC01.
 
-Expected subnet:
+![Client receiving a lease from the wrong DHCP server](../../Evidence/Validation/DHCP_Validation_VMware_Conflict.png)
 
-```text
-192.168.10.0/24
-```
-
-The incorrect address showed that the client was receiving DHCP from the wrong source.
-
-![VMware Conflict](../../Evidence/Validation/DHCP_Validation_VMware_Conflict.png)
-
----
-
-## Troubleshooting Steps
-
-I started with basic DHCP troubleshooting from the client:
+I used the following commands to release the existing lease, request a new one, and review the complete client configuration:
 
 ```cmd
 ipconfig /release
@@ -188,282 +97,123 @@ ipconfig /renew
 ipconfig /all
 ```
 
-During troubleshooting, I found that the client adapter configuration was not behaving as expected and the workstation was not cleanly receiving its address from the SteenCorp DHCP scope.
+During testing, the DHCP console also displayed a `BAD_ADDRESS` entry for `192.168.10.101`. This confirmed that Windows DHCP conflict detection had quarantined that address. The entry alone did not identify the conflicting device, so I treated it as supporting evidence rather than the complete root cause.
 
-![Static Adapter Issue](../../Evidence/Validation/DHCP_Validation_Fail_Static_Adapter.png)
+![DHCP BAD_ADDRESS conflict detection](../../Evidence/Networking/DHCP_Server_Bad_Address_Quarantine.png)
 
----
+### Initial Correction
 
-## Issue 2 – DHCP IP Conflict
+I first moved the domain controller and workstation onto an isolated VMware LAN Segment. This removed VMware DHCP from the client path and allowed DC01 to become the only DHCP and DNS source on the internal network.
 
-While validating DHCP, the DHCP server detected a conflict involving:
+![VMware internal LAN Segment configuration](../../Evidence/Infrastructure/VMware_Internal_LAN_Segment_Isolation.png)
 
-```text
-192.168.10.101
-```
+After renewing the lease, the workstation received an address in the correct subnet and used DC01 for both DHCP and DNS:
 
-The DHCP console showed a `BAD_ADDRESS` entry.
-
-This indicated that the DHCP server detected an address conflict and quarantined the address instead of assigning it normally.
-
-![DHCP Conflict](../../Evidence/Networking/DHCP_IP_Conflict_Detection.png)
-
-![BAD ADDRESS](../../Evidence/Networking/DHCP_Server_Bad_Address_Quarantine.png)
-
----
-
-## Root Cause – DHCP Conflict
-
-The DHCP and addressing issues were caused by virtualization network configuration.
-
-Root causes included:
-
-- VMware NAT networking was still active
-- A secondary DHCP source was present
-- The client was not isolated to the intended lab network
-- Multiple virtual networks were interfering with the SteenCorp DHCP scope
-
-This created a realistic troubleshooting scenario where the server-side DHCP configuration was not the only thing that mattered. The virtual network underneath the lab also had to be configured correctly.
-
----
-
-## Solution Stage 1 – Network Isolation
-
-To resolve the DHCP conflict, I originally moved the lab onto an isolated internal VMware LAN Segment.
-
-This allowed DC01 to become the controlled DHCP and DNS source for the lab network.
-
-Actions taken:
-
-- Switched the lab to an internal LAN Segment
-- Removed VMware NAT DHCP interference
-- Renewed the client DHCP lease
-- Confirmed the client received an address from the correct subnet
-- Confirmed DC01 was handling DHCP and DNS for the client workstation
-
-![LAN Isolation](../../Evidence/Infrastructure/VMware_Internal_LAN_Segment_Isolation.png)
-
-![NAT Conflict](../../Evidence/Infrastructure/VMware_NAT_Configuration_Conflict.png)
-
-This solved the DHCP conflict and created a stable internal domain network. However, the isolated LAN Segment did not provide a working internet route for domain clients. That limitation was later discovered and corrected during SteenDesk Ticket #006.
-
----
-
-## DHCP Result After Initial Isolation
-
-After isolating the network and renewing the lease, DHCP worked as intended.
-
-Initial DHCP result:
-
-| Setting | Value |
+| Setting | Initial Internal Result |
 |---|---|
 | Client IP | `192.168.10.101` |
 | DHCP Server | `192.168.10.10` |
 | DNS Server | `192.168.10.10` |
-| Subnet | `192.168.10.0/24` |
+| Default Gateway | `192.168.10.1` |
 
-At this point, DC01 was correctly handling DHCP for the client workstation.
-
----
-
-## DNS Troubleshooting
-
-After DHCP was working, I still needed to validate DNS.
-
-DNS resolution was inconsistent during testing, so I restarted and refreshed DNS-related services and records.
-
-Commands used:
-
-```powershell
-Stop-Service DNS
-ipconfig /flushdns
-Start-Service DNS
-ipconfig /registerdns
-```
-
-![DNS Reset](../../Evidence/Validation/PowerShell_DNS_Reset_Script.png)
+This stabilized internal domain connectivity, but the LAN Segment was isolated and did not provide a working route to the internet. That limitation was discovered later through SteenDesk Ticket #006.
 
 ---
 
-## DNS Forwarders
+## 3. DNS Validation
 
-DNS forwarders were configured so DC01 could forward external DNS requests.
+I validated DNS from a domain workstation instead of relying only on the server console.
 
-Configured forwarders:
-
-- `8.8.8.8`
-- `1.1.1.1`
-
-![DNS Forwarders](../../Evidence/Networking/DNS_Forwarders_Validated.png)
-
----
-
-## DNS Validation
-
-I validated DNS by testing both hostname and reverse lookup behavior.
-
-Commands used:
+The first reverse lookup failed. After refreshing the DNS registration and client resolver cache, the workstation successfully resolved:
 
 ```cmd
 nslookup dc01
 nslookup 192.168.10.10
 ```
 
-Successful DNS validation confirmed that the client could resolve the domain controller by name and that the reverse lookup record was working.
+This confirmed both forward and reverse name resolution for DC01.
 
-![NSLookup](../../Evidence/Validation/NSLookup_Internal_External_Success.png)
+![Forward and reverse DNS validation](../../Evidence/Validation/NSLookup_Internal_External_Success.png)
+
+I also configured DNS forwarders so DC01 could handle external name-resolution requests without assigning public DNS directly to domain clients.
+
+![DNS forwarders configured on DC01](../../Evidence/Networking/DNS_Forwarders_Validated.png)
+
+The original internal validation showed that the client received its address from DC01 and used DC01 for DNS. The screenshot still shows the original `192.168.10.1` gateway, which was corrected during the later routing investigation.
+
+![Original internal DHCP and DNS validation](../../Evidence/Validation/Final_VIP_Workstation_IP_Verification.png)
 
 ---
 
-## Post-Phase Update – Ticket #006 Internet Connectivity Remediation
+## 4. Routing Issue Discovered Through Ticket #006
 
-After Phase 3 was completed, the SteenDesk Help Desk Simulation introduced Ticket #006: Mike Ross could sign into the domain and reach internal resources, but could not access the internet.
+After the initial Phase 3 build, Mike Ross reported that he could sign in to the domain and reach internal resources but could not access the internet.
 
-Troubleshooting confirmed:
+Testing from his workstation showed:
 
-- The workstation received a valid DHCP lease from DC01
-- The workstation used DC01 as its DNS server
-- The workstation could ping DC01 at `192.168.10.10`
-- `nslookup google.com` resolved through `dc01.steencorp.local`
-- Ping to the configured gateway failed
-- Ping to external IP `8.8.8.8` failed
-- Google resolved to an IP address, but traffic could not route externally
+- A valid DHCP lease from DC01
+- DC01 assigned as the DNS server
+- Successful connectivity to DC01 at `192.168.10.10`
+- Successful external DNS resolution through DC01
+- Failed connectivity to the configured gateway
+- Failed connectivity to external IP address `8.8.8.8`
 
-This showed that DNS was working, but routing/NAT was failing.
+The key result was that `google.com` resolved to an IP address, but external traffic still failed. This separated DNS from routing and showed that name resolution was not the root cause.
 
-### Ticket #006 Root Cause
+### Root Cause
 
-The VMware review showed the cause:
+The virtual machines were configured like this:
 
-| System | Adapter Configuration Before Ticket #006 Fix |
+| System | Network Connection |
 |---|---|
-| DC01 | LAN Segment + separate NAT adapter |
-| Workstation 1 | LAN Segment only |
-| Workstation 2 | LAN Segment only |
+| DC01 | Internal LAN Segment plus a separate NAT adapter |
+| Workstation 1 | Internal LAN Segment only |
+| Workstation 2 | Internal LAN Segment only |
 
-DC01 had internet access through its own NAT adapter, but that did not automatically route internet access for client workstations.
+DC01 could reach the internet through its own NAT adapter, but it was not configured to route or translate traffic for the workstations. The isolated clients therefore had no valid path to the internet.
 
-Because DC01 was not configured as a router/NAT server, the domain clients had no valid internet path.
+---
 
-### Ticket #006 Network Correction
+## 5. Final Network Correction
 
-The lab was updated from an isolated LAN Segment to VMware NAT-backed `VMnet8`.
+I moved DC01 and both workstations from the isolated LAN Segment to a custom NAT-backed `VMnet8`.
 
-| Setting | Updated Value |
-|---|---|
-| VMware Network | `VMnet8` |
-| VMware Network Type | NAT |
-| VMware DHCP | Disabled |
-| Lab Subnet | `192.168.10.0/24` |
-| VMware NAT Gateway | `192.168.10.2` |
-| DC01 Static IP | `192.168.10.10` |
-| DC01 Role | DHCP and DNS |
-| DHCP Option 003 Router | `192.168.10.2` |
-| DHCP Option 006 DNS | `192.168.10.10` |
+The corrected design used:
 
-This preserved the original lab subnet and DC01 services while adding working internet access for domain clients.
+- `VMnet8` configured for `192.168.10.0/24`
+- VMware NAT gateway `192.168.10.2`
+- VMware DHCP disabled
+- DC01 retained as the DHCP and DNS server
+- DHCP Option 003 updated to `192.168.10.2`
+- DHCP Option 006 retained as `192.168.10.10`
 
-### Ticket #006 Validation
+This preserved centralized Windows Server DHCP and DNS while giving every virtual machine a valid route through VMware NAT.
 
-Validation after the Ticket #006 correction confirmed:
+After renewing the client leases, I validated the correction from DC01 and two workstations:
 
-- DC01 could reach the VMware NAT gateway
-- DC01 could reach external IP `8.8.8.8`
-- DC01 could resolve and ping `google.com`
-- Mike Ross's workstation received gateway `192.168.10.2`
-- Mike Ross's workstation continued using DC01 for DNS
-- Mike Ross's workstation could reach internal and external resources
-- Browser internet access worked from Mike Ross's workstation
-- Workstation 2 was also validated to confirm the fix applied beyond one user
-- A secondary manual DNS issue on Workstation 2 was found and corrected
-- Browser internet access worked from both tested workstations
+- Clients received addresses from the SteenCorp DHCP scope
+- Clients received gateway `192.168.10.2`
+- Clients continued using DC01 for DNS
+- Internal domain resources remained reachable
+- External IP connectivity worked
+- External DNS resolution worked
+- Browser internet access worked
 
+Testing a second workstation exposed one additional issue: its adapter had been manually configured to use `8.8.8.8` for DNS. I returned it to automatic DNS assignment, renewed the lease, and confirmed that it received `192.168.10.10` from DHCP.
 
-Related Help Desk Ticket:
+The complete troubleshooting record and current-state screenshots are documented here:
 
 [SteenDesk Ticket #006 – Mike Ross Cannot Access Internet](https://github.com/CSteen57/SteenDesk_Help_Desk_Simulation/blob/main/Helpdesk_Tickets/Tickets/Ticket006_Mike_Ross_Cannot_Access_Internet.md)
 
 ---
 
-## Current Final Network State
+## What I Learned
 
-The original Phase 3 final state validated internal domain networking. After Ticket #006, the network was updated to support both internal domain connectivity and external internet access.
-
-| Setting | Value |
-|---|---|
-| Client IP Example | `192.168.10.101` |
-| DHCP Server | `192.168.10.10` |
-| DNS Server | `192.168.10.10` |
-| Default Gateway | `192.168.10.2` |
-| Domain | `steencorp.local` |
-| VMware Network | NAT-backed `VMnet8` |
-| VMware DHCP | Disabled |
-
-The original planned gateway was `192.168.10.1`, but VMware NAT settings confirmed the active NAT gateway as `192.168.10.2` after the Ticket #006 remediation.
-
-The screenshot below shows the original internal DHCP/DNS validation from Phase 3. The final gateway value was later updated during Ticket #006.
-
-![Final Validation](../../Evidence/Validation/Final_VIP_Workstation_IP_Verification.png)
-
----
-
-## Validation Summary
-
-Final validation confirmed:
-
-- DC01 had a static IP address
-- DHCP scope was configured
-- Client received an IP from the correct DHCP range
-- VMware NAT DHCP interference was identified
-- DHCP conflict detection was observed and documented
-- DNS forward lookup was configured
-- DNS reverse lookup was configured
-- DNS forwarders were configured
-- Client workstation used DC01 for DNS
-- The original isolated LAN Segment supported controlled internal domain communication
-- Ticket #006 later identified that the isolated LAN Segment did not provide client internet access
-- The lab was updated to VMware NAT-backed `VMnet8`
-- VMware DHCP remained disabled
-- DC01 remained the DHCP and DNS server
-- DHCP Scope Option 003 Router was updated to `192.168.10.2`
-- Domain clients could reach both internal domain resources and external internet resources
-- The lab network was ready for later security and help desk troubleshooting scenarios
-
----
-
-## Why This Matters
-
-This phase showed that Active Directory depends heavily on healthy networking.
-
-Even when the domain controller, users, and policies are configured correctly, the environment can still fail if DHCP, DNS, virtual networking, or routing are misconfigured.
-
-The DHCP issue showed that a client can receive an address from the wrong source if the virtualization layer is not controlled.
-
-The Ticket #006 internet issue showed that a working internal domain network does not automatically mean clients have a valid route to the internet.
-
-This phase also helped support later help desk scenarios, especially DNS, hostname troubleshooting, gateway troubleshooting, and internet connectivity testing.
-
----
-
-## Outcome
-
-By the end of Phase 3 and the later Ticket #006 update, the SteenCorp lab had a stable internal network foundation with working internet access for domain clients.
-
-Completed outcome:
-
-- Planned IP addressing scheme implemented
-- DC01 configured with a static IP
-- DHCP deployed and validated
-- DHCP reservation configured
-- DNS forward and reverse lookup configured
-- DNS forwarders configured
-- VMware NAT DHCP conflict identified
-- Network isolation implemented to stabilize DHCP/DNS
-- Client workstation received the correct DHCP lease
-- Internal domain network settings validated from the client side
-- Later Ticket #006 identified missing internet routing from the isolated LAN Segment
-- Lab network updated to VMware NAT-backed `VMnet8`
-- VMware DHCP remained disabled
-- DC01 remained the DHCP and DNS server
-- DHCP Scope Option 003 Router updated to the validated VMware NAT gateway `192.168.10.2`
-- Domain clients validated with both internal domain connectivity and external internet access
+- A valid IP address does not prove that the client received it from the intended DHCP server.
+- `ipconfig /all` is essential because it identifies the DHCP server, DNS server, gateway, and lease information in one place.
+- A `BAD_ADDRESS` entry confirms DHCP conflict detection, but additional evidence is needed to identify the cause.
+- Active Directory clients should use the domain DNS server rather than public DNS directly.
+- Successful DNS resolution does not prove that routing or internet connectivity works.
+- A server having internet access does not automatically make it a router for other systems.
+- VMware network settings are part of the infrastructure and must be included in troubleshooting.
+- Testing the final correction on more than one workstation can reveal device-specific configuration problems.
