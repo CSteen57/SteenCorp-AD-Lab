@@ -49,7 +49,7 @@ I installed DHCP on DC01 and created a scope for domain workstations. The final 
 
 | DHCP Option | Value |
 |---|---|
-| Address Range | `192.168.10.100–192.168.10.254x` |
+| Address Range | `192.168.10.100–192.168.10.254` |
 | Option 003 Router | `192.168.10.2` |
 | Option 006 DNS Server | `192.168.10.10` |
 | Option 015 DNS Domain | `steencorp.local` |
