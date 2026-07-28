@@ -66,11 +66,11 @@ Key focus areas:
 - DNS forward and reverse lookup configuration
 - DNS forwarders
 - VMware NAT/DHCP conflict troubleshooting
-- Internal LAN segment isolation
+- Internal LAN Segment isolation
 - Post-ticket VMware NAT gateway correction
 - DHCP Scope Option 003 Router update
 - Client-side network and internet validation
-  
+
 ---
 
 ### Phase 4 – Security & Enterprise Controls
@@ -93,7 +93,7 @@ Key focus areas:
 
 ---
 
-### Phase 5 – PowerShell Identity Lifecycle Automation
+### Phase 5 – PowerShell Identity Lifecycle Automation *(In Progress)*
 
 📄 [View Phase 5](./Phase%205/)
 
@@ -154,13 +154,14 @@ Together, these phases created the reusable SteenCorp domain environment used fo
 
 ## Related Follow-Up Project
 
-After completing this lab, I used the same SteenCorp domain environment to build a help desk simulation project.
+After completing the core infrastructure phases, I used the same SteenCorp domain environment to build a help desk simulation project.
 
 📄 [SteenDesk Help Desk Simulation](https://github.com/CSteen57/SteenDesk_Help_Desk_Simulation)
 
 The help desk project builds on this lab by using the same domain, users, groups, shared folders, DNS configuration, and Windows workstation environment to simulate real support tickets.
 
-The help desk project also created a documented infrastructure change. Ticket #006 identified that the original isolated LAN Segment supported internal domain communication but did not provide a working internet route for clients. The environment was updated to VMware NAT-backed `VMnet8`, with DC01 remaining the DHCP/DNS server and VMware DHCP disabled.
+The help desk project also led to a documented infrastructure change. Ticket #006 identified that the original isolated LAN Segment supported internal domain communication but did not provide a working internet route for clients. The environment was updated to VMware NAT-backed `VMnet8`, with DC01 remaining the DHCP/DNS server and VMware DHCP disabled.
+
 Example scenarios include:
 
 - Shared drive access issues
