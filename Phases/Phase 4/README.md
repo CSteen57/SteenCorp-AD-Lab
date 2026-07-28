@@ -33,7 +33,7 @@ I created a dedicated administrative account instead of using my standard domain
 
 ```text
 Account: adm_christian
-Location: SteenCorp_HQ → IT OU
+Location: SteenCorp_HQ → Departments → IT
 Group: Domain Admins
 ```
 
@@ -126,7 +126,7 @@ Computer Configuration
                 └── Account Lockout Policy
 ```
 
-Because this setting controls domain user accounts, it must be applied through a domain-level account policy rather than only through a GPO linked to the `Workstations` OU.
+Because this setting controls domain accounts, the account lockout policy must be defined in the Default Domain Policy or another GPO linked to the root of `steencorp.local` with appropriate precedence. A policy linked only to the `Workstations` OU would not establish the domain-wide account lockout policy.
 
 ---
 
@@ -161,7 +161,7 @@ The account was locked after reaching the configured threshold and could no long
 
 ### 2. Administrative Recovery
 
-I used the dedicated administrative account to locate the user in Active Directory and unloxck the account.
+I used the dedicated administrative account to locate the user in Active Directory and unlock the account.
 
 ```text
 User reports sign-in failure
@@ -177,7 +177,7 @@ User tests access again
 
 ### 3. Password Change and Access Restoration
 
-As part of the recovery process, I reset the user’s password and selected **User must change password at next logon**. When `STEENCORP\mross` attempted to sign in, Windows required the user to create a new password. After completing the password change, the user successfully regained access to the workstation.
+For this recovery scenario, I also reset the user’s password and selected **User must change password at next logon**. When `STEENCORP\mross` attempted to sign in, Windows required the user to create a new password. After completing the password change, the user successfully regained access to the workstation.
 
 ![User access restored after account unlock](../../Evidence/Validation/Account_Access_Restored.png)
 
