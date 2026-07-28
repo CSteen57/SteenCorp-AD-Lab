@@ -46,7 +46,7 @@ The script:
 5. Stops if the generated username already exists.
 6. Securely collects a temporary password.
 7. Creates and enables the account with a required password change at first sign-in.
-8. Assigns department access and displays the finished account for verification.
+8. Adds the account to the appropriate department security group and displays the completed configuration for verification.
 
 ### PowerShell Concepts Practiced
 
@@ -81,7 +81,7 @@ I tested both the successful workflow and conditions that should stop it:
 
 - An existing username stops the script before password collection or account creation.
 - An unsupported department stops the script before an OU or security group is selected.
-- The script only reports successful onboarding after account creation and group assignment complete.
+- The script only reports successful onboarding after account creation and group assignment are complete.
 
 <details>
 <summary>View validation evidence</summary>
